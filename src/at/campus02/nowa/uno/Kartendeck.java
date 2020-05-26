@@ -5,7 +5,7 @@ public class Kartendeck {
     public static void main(String[] args) {
 
         String[] farben = {"grün", "gelb", "blau", "rot"};
-        String[] karten = new String[100];
+        String[] karten = new String[108];
 
         kartenZuweisung(farben, karten);
         for (int i= 0; i < karten.length; i++){
@@ -51,6 +51,17 @@ public class Kartendeck {
                 index++;                                                                                        // kartenindex 25                                                           | kartenindex 50
             }                                                                                                   // j=13 --> schleife fertig --> zurück zu äußerer FOR                       | j=13 --> schleife fertig --> äußere FOR
 
+        }
+        // schwarze Farbwahlkarte
+        for (int i = 0; i<4; i++){
+            karten[index] = "schwarz FWK";
+            index++;
+        }
+
+        // schwarze Plus 4
+        for (int i = 0; i<4; i++){
+            karten[index] = "schwarz Plus4";
+            index++;
         }
     }
 }
