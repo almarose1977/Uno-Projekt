@@ -1,0 +1,14 @@
+zum Kartendeck befüllen:
+
+String[] karten = new String[76];
+String[] farben = {"rot", "grün", "gelb", "blau"};
+
+int index = 0;
+
+for(int i = 0; i < farben.length; i++){
+    karten[index++] = farben[i] + " 0";
+    for(int j = 1; j < 10; j++){
+        karten[index++] = farben[i] + " " + j;
+        karten[index++] = farben[i] + " " + j;
+    }
+}
