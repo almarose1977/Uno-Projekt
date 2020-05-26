@@ -16,16 +16,16 @@ public class Kartendeck {
     // die 0 gibt's jeweils nur 1x, die nummern 1-9 gibt's 2x ( plus 2, richtungswechsel, aussetzen je 2x)
     public static void kartenZuweisung(String[] farben, String[] karten) {
         int index = 0;
-        for (int i = 0; i < farben.length; i++) {   // farbindex auf 0                                                                  | farbindex = 1
-            karten[index] = farben[i] + " 0";           //todo: karten[0] = grün 0                                                      | karten[25] = gelb 0
-            index++;                                // kartenindex 1                                                                    | kartenindex 26
-            for (int j = 1; j < 10; j++) {          // nummernindex 1                   | j=2                   ..| j=9                 | j=1                   | j=2                   ..| j=9
-                karten[index] = farben[i] + " " + j;    // todo: karten[1] = grün 1     | karten[3] = grün 2    ..| karten[17] = grün 9 | karten[26] = gelb 1   | karten[28] = gelb 2   ..| karten[42] = gelb 9
-                index++;                            //kartenindex 2                     | kartenindex 4         ..| kartenindex 18       | kartenindex 27        | kartenindex 29       ..| kartenindex 43
-                karten[index] = farben[i] + " " + j;    // todo: karten[2] = grün 1     | karten[4] = grün 2    ..| karten[18] = grün 9 | karten[27] = gelb 1   | karten[29] = gelb 2   ..| karten[43] = gelb 9
-                index++;                            //kartenindex 3                     | kartenindex 5         ..| kartenindex 19       | kartenindex 28        | kartenindex 30       ..| kartenindex 44
+        for (int i = 0; i < farben.length; i++) {   // farbindex auf 0                                                                  | farbindex = 1                                                                 | farbindex = 2
+            karten[index] = farben[i] + " 0";           //todo: karten[0] = grün 0                                                      | karten[25] = gelb 0                                                           | karten[50] = blau 0
+            index++;                                // kartenindex 1                                                                    | kartenindex 26                                                                | kartenindex 51
+            for (int j = 1; j < 10; j++) {          // nummernindex 1                   | j=2                   ..| j=9                 | j=1                   | j=2                   ..| j=9                         |j=1
+                karten[index] = farben[i] + " " + j;    // todo: karten[1] = grün 1     | karten[3] = grün 2    ..| karten[17] = grün 9 | karten[26] = gelb 1   | karten[28] = gelb 2   ..| karten[42] = gelb 9         | karten[51] = blau 1
+                index++;                            //kartenindex 2                     | kartenindex 4         ..| kartenindex 18       | kartenindex 27        | kartenindex 29       ..| kartenindex 43              | kartenindex 52
+                karten[index] = farben[i] + " " + j;    // todo: karten[2] = grün 1     | karten[4] = grün 2    ..| karten[18] = grün 9 | karten[27] = gelb 1   | karten[29] = gelb 2   ..| karten[43] = gelb 9         | karten[52] = blau 1
+                index++;                            //kartenindex 3                     | kartenindex 5         ..| kartenindex 19       | kartenindex 28        | kartenindex 30       ..| kartenindex 44              | kartenindex 53
                                                     // gehen in der 1. inneren for-schleife weiter
-                                                    //--> j=2                           | j=3                   ..| j=10                 | j=2                  | j=3                   ..| j=10 --> fertig
+                                                    //--> j=2                           | j=3                   ..| j=10                 | j=2                  | j=3                   ..| j=10 --> fertig             |..
             }                                                                                                   //  --> 1.innere for schleife fertig
             // Schleife für Plus 2                                                                             // jetzt kommt diese Schleife dran
             for (int j = 10; j< 11; j++) {
