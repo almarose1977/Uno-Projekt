@@ -34,8 +34,11 @@ public class App {
         }
     }
 
-    private void initializeGame() {
+    private void initializeGame() { // todo: Spielernamen eingeben 4x, Karten mischen, Karten verteilen 7x/Spieler,
+                                    // 1 UnoKarte aufdecken, Aktionskarte prüfen, Startspieler auslosen, Anzeige Spieler
 
+        KartenDeck kd = new KartenDeck();
+        kd.makeDeck();
     }
 
     private void initializeRound() {
