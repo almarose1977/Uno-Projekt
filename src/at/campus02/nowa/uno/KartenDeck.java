@@ -1,7 +1,9 @@
 package at.campus02.nowa.uno;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /* Definition der Karten:
  108 Karten: 4 Farben Rot, Grün, Yellow, Blau zu je 1x 0, 2x 1-9, 2x +2, 2x Richtungswechsel RW, 2x Aussetzen OUT
@@ -15,6 +17,7 @@ public class KartenDeck {
     private int index = 0;                                  // ein kartenindex wird erstellt
 
     public KartenDeck() {                                   // Konstruktor
+
         kartenDeck = new ArrayList<>();                     // die ArrayListe wird initialisiert
     }
 
@@ -58,8 +61,36 @@ public class KartenDeck {
         }*/
 
         //Ausgabe nur karte
-        /*for (UnoKarte u : kartenDeck) {
+        for (UnoKarte u : kartenDeck) {
             System.out.println(u);
-        }*/
+        }
+    }
+
+    public void shuffleDeck(){
+        Collections.shuffle(kartenDeck);
+
+        for (UnoKarte u : kartenDeck) {
+            System.out.println(u);
+        }
+    }
+
+    // todo: random rausfinden
+    public ArrayList<UnoKarte> makePlayerDeck(ArrayList<UnoKarte> kartenDeck, int count){
+        /*
+        nimm die gemischten Karte und ziehe zufällig 7 Karten daraus und steck sie in die ArrayListe HandKarten
+        */
+        Random random = new Random();
+        if (kartenDeck.isEmpty()){
+            throw new IllegalArgumentException("Kartenstapel ist leer, mischen Sie die Karten des Ablagestapels neu.");
+        }
+        if (count > kartenDeck.size()){
+            throw new IllegalArgumentException("Es sind nicht genug Karten am Stapel. Mischen Sie die Karten des " +
+                    "Ablagestapels neu.");
+        }
+        ArrayList<UnoKarte> handKarten = new ArrayList<>();
+        for (int i = 0; i < count; i++){
+           // handKarten.add(getRandomItem(kartenDeck));
+        }
+        return handKarten;
     }
 }

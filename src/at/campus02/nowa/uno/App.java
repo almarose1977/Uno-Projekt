@@ -1,6 +1,7 @@
 package at.campus02.nowa.uno;
 
 import java.io.PrintStream;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class App {
@@ -37,8 +38,14 @@ public class App {
     private void initializeGame() { // todo: Spielernamen eingeben 4x, Karten mischen, Karten verteilen 7x/Spieler,
                                     // 1 UnoKarte aufdecken, Aktionskarte prüfen, Startspieler auslosen, Anzeige Spieler
 
-        KartenDeck kd = new KartenDeck();
-        kd.makeDeck();
+        KartenDeck spielkarten = new KartenDeck();
+        spielkarten.makeDeck();
+        spielkarten.shuffleDeck();
+        Spieler aiste = new Spieler("Aiste",7, 0);
+        Spieler britta = new Spieler("Britta",7, 0);
+        Spieler leo = new Spieler("Leo", 7,0);
+        Spieler lena = new Spieler("Lena",7,0);
+
     }
 
     private void initializeRound() {
