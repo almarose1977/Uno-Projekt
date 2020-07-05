@@ -172,12 +172,13 @@ public class App {
 
                 if (u != null) {
                     // prüfen, ob Karte gespielt werden darf
-                    spielerListe.get(indexCurrentSpieler).getHandKarten().remove(u);
-                    ablagestapel.add(u);
+                    if (validTurn(u)) {
+                        spielerListe.get(indexCurrentSpieler).getHandKarten().remove(u);
+                        ablagestapel.add(u);
 
                         System.out.println("Anzahl Handkarten: " + spielerListe.get(indexCurrentSpieler).getHandKarten().size());
                         korrekteEingabe = true;
-
+                    }
                     }
                 }
 
@@ -189,8 +190,16 @@ public class App {
 
     private boolean validTurn(UnoKarte gespielteKarte){
 
+        boolean isValid = false;
         UnoKarte currentCard = ablagestapel.getLast();
-        //if currentCard.getFARBE()
+        if (gespielteKarte.getFARBE() == Farbe.SCHWARZ){
+            isValid = true;
+        }
+        if (currentCard.getFARBE() == gespielteKarte.getFARBE() || currentCard.getKARTENWERT() == gespielteKarte.getKARTENWERT()){
+            isValid = true;
+        }
+
+        return isValid;
     }
 
     private void updateState() {
