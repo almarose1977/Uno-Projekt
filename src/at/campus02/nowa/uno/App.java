@@ -10,7 +10,6 @@ public class App {
     private LinkedList<UnoKarte> ablagestapel = new LinkedList<>();
     private ArrayList<Spieler> spielerListe = new ArrayList<>();
     private int indexCurrentSpieler;
-    //private UnoKarte currentCard;
 
 
     public App(Scanner input, PrintStream output) {
@@ -50,14 +49,13 @@ public class App {
         // Spieler eingeben
         for (int i = 1; i <= 4; i++) {
             System.out.println("Name Spieler " + i + ": ");
-            //Scanner scan = new Scanner(System.in);
+
             String name = input.next();
             Spieler s = new Spieler(name);
             addSpieler(s);
         }
-
-
     }
+
 
     private void initializeRound() {    // todo: 4x 7 Karten verteilen, 1 Karte aufdecken, Startspieler auslosen
 
@@ -173,6 +171,7 @@ public class App {
                 UnoKarte u = spielerListe.get(indexCurrentSpieler).getKarte(kW, f);
 
                 if (u != null) {
+                    // prüfen, ob Karte gespielt werden darf
                     spielerListe.get(indexCurrentSpieler).getHandKarten().remove(u);
                     ablagestapel.add(u);
 
@@ -185,6 +184,13 @@ public class App {
         } while (!korrekteEingabe);
 
 
+    }
+
+
+    private boolean validTurn(UnoKarte gespielteKarte){
+
+        UnoKarte currentCard = ablagestapel.getLast();
+        //if currentCard.getFARBE()
     }
 
     private void updateState() {
