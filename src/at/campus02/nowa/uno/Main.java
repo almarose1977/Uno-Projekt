@@ -6,12 +6,13 @@ public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        App app = new App(input, System.out);
+         App app = new App(input, System.out);
 
-        System.out.println("UNO wird nun gestartet ...");
-        app.Run();
+         System.out.println("UNO wird nun gestartet ...");
+         app.Run();
 
-        input.close();
+         input.close();
         System.out.println("UNO wird beendet ...");
+
     }
 }
