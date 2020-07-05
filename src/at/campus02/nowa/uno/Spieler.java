@@ -19,6 +19,20 @@ public class Spieler {
     }
 
 
+
+    // Vergleich der zu spielenden Karte mit dem Handkartenset
+    public UnoKarte getKarte(Kartenwert kw, Farbe f)
+    {
+        for (UnoKarte handKarte:handKarten) {
+            if(handKarte.getFARBE() == f && handKarte.getKARTENWERT() == kw)
+            {
+                return handKarte;
+            }
+        }
+        return null;
+    }
+
+
     public LinkedList<UnoKarte> getHandKarten(){
 
         return handKarten;
@@ -54,4 +68,3 @@ public class Spieler {
                 '}';
     }
 }
-
