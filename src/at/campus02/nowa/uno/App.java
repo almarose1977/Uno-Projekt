@@ -9,7 +9,7 @@ public class App {
     private KartenDeck kartenDeck = new KartenDeck();
     private LinkedList<UnoKarte> ablagestapel = new LinkedList<>();
     private ArrayList<Spieler> spielerListe = new ArrayList<>();
-    private int currentSpieler;
+    private int indexCurrentSpieler;
     private UnoKarte currentCard;
 
 
@@ -71,9 +71,9 @@ public class App {
         Random random = new Random();
         int max = 4;
         int min = 1;
-        currentSpieler = random.nextInt((max-min) + 1) + min;
+        indexCurrentSpieler = random.nextInt((max-min) + 1) + min;
         System.out.println(spielerListe.toString());
-        System.out.println("Startspieler: " + currentSpieler);
+        System.out.println("Startspieler: " + indexCurrentSpieler);
     }
 
     public void addSpieler(Spieler s){
@@ -93,6 +93,85 @@ public class App {
 
     private void readUserInput() {
 
+        System.out.println("bitte gib deine Karte bekannt.");
+
+        String s = input.next();
+        String values[] = s.split("-");
+        Farbe f = null;
+        Kartenwert kW = null;
+        boolean korrekteEingabe = false;
+        do{
+        switch (values[0]){
+            case "R": f= Farbe.ROT;
+            break;
+            case "B": f = Farbe.BLAU;
+            break;
+            case "G": f = Farbe.GRÜN;
+            break;
+            case "Y": f = Farbe.YELLOW;
+            break;
+            case "S": f = Farbe.SCHWARZ;
+            break;
+        }
+        switch (values[1]) {
+            case "0":
+                kW = Kartenwert.ZERO;
+                break;
+            case "1":
+                kW = Kartenwert.EINS;
+                break;
+            case "2":
+                kW = Kartenwert.ZWEI;
+                break;
+            case "3":
+                kW = Kartenwert.DREI;
+                break;
+            case "4":
+                kW = Kartenwert.VIER;
+                break;
+            case "5":
+                kW = Kartenwert.FÜNF;
+                break;
+            case "6":
+                kW = Kartenwert.SECHS;
+                break;
+            case "7":
+                kW = Kartenwert.SIEBEN;
+                break;
+            case "8":
+                kW = Kartenwert.ACHT;
+                break;
+            case "9":
+                kW = Kartenwert.NEUN;
+                break;
+            case "RW":
+                kW = Kartenwert.RW;
+                break;
+            case "OUT":
+                kW = Kartenwert.OUT;
+                break;
+            case "+2":
+                kW = Kartenwert.PLUS2;
+                break;
+            case "+4":
+                kW = Kartenwert.PLUS4;
+                break;
+            case "WILD":
+                kW = Kartenwert.WILD;
+                break;
+        }
+        if (f == null || kW == null) {
+            UnoKarte u = new UnoKarte(f, kW);
+
+            if (spielerListe.get(indexCurrentSpieler).getHandKarten().contains(u)) {
+                ablagestapel.add(u);
+                spielerListe.get(indexCurrentSpieler).getHandKarten().remove(u);
+                korrekteEingabe = true;
+
+            }
+        }
+        } while(!korrekteEingabe);
+
 
     }
 
@@ -102,6 +181,10 @@ public class App {
 
     private void printState() {
 
+        System.out.println("aktuelle Karte am Stack: " + currentCard.toString());
+        Spieler s = spielerListe.get(indexCurrentSpieler);
+        System.out.println("Aktueller Spieler: " + s.getName());
+        System.out.println("Deine aktuellen Karten:" + s.getHandKarten());
     }
 
     private boolean roundEnded(){
