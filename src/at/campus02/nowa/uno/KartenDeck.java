@@ -75,9 +75,9 @@ public class KartenDeck {
     }
 
     // todo: aus den gemischten Karte 7 zufällige Karten ziehen und sie in die ArrayListe HandKarten adden
-    public ArrayList<UnoKarte> makePlayerDeck(Spieler spieler){
+    public LinkedList<UnoKarte> makePlayerDeck(){
 
-        ArrayList<UnoKarte> handKarten = new ArrayList<>();
+        LinkedList<UnoKarte> handKarten = new LinkedList<>();
         int count = 7;
 
         /*if (spielKartenDeck.isEmpty()){              // wenn der Stapel leer ist
@@ -90,9 +90,7 @@ public class KartenDeck {
         for (int i = 0; i < count; i++){
             // aus dem geshuffelten Kartendeck werden die obersten 7 Karten genommen und dem handkarten-deck zugewiesen
             UnoKarte obersteKarte = spielKartenDeck.remove();
-
             handKarten.add(obersteKarte);  // dieses zufällige Element wird dem HandKarten-Set hinzugefügt
-
         }
 
         for (UnoKarte u : handKarten) {

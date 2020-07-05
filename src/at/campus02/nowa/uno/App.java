@@ -43,7 +43,7 @@ public class App {
                                     // 1 UnoKarte aufdecken, Aktionskarte prüfen, Startspieler auslosen, Anzeige Spieler
 
         spielkarten.makeDeck();
-        System.out.println(".............");
+
 
         // Spieler eingeben
         for(int i = 1; i <= 4;i++){
@@ -54,27 +54,33 @@ public class App {
             addSpieler(s);
         }
 
-        // zufälligen Spieler bestimmen
+    }
+
+    private void initializeRound() {    // todo: 4x 7 Karten verteilen, 1 Karte aufdecken, Startspieler auslosen
+
+        verteileHandkarten();
+        chooseRandomPlayer();
+
+    }
+
+    public void chooseRandomPlayer() {  // zufälligen Spieler bestimmen
         Random random = new Random();
         int max = 4;
         int min = 1;
         currentSpieler = random.nextInt((max-min) + 1) + min;
         System.out.println(spielerListe.toString());
         System.out.println("Startspieler: " + currentSpieler);
-
-
     }
 
     public void addSpieler(Spieler s){
         spielerListe.add(s);
     }
 
-    private void initializeRound() {    // todo: Karten mischen, 4x 7 Karten verteilen, 1 Karte aufdecken, Startspieler auslosen
-
-        //spielkarten.shuffleDeck();
-
+    public void verteileHandkarten(){
+        for(Spieler s : spielerListe){
+            s.setHandKarten(spielkarten.makePlayerDeck());
+        }
     }
-
     private void readUserInput() {
 
 
