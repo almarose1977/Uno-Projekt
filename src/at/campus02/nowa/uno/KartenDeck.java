@@ -1,20 +1,15 @@
 package at.campus02.nowa.uno;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /* Definition der Karten:
  108 Karten: 4 Farben Rot, Grün, Yellow, Blau zu je 1x 0, 2x 1-9, 2x +2, 2x Richtungswechsel RW, 2x Aussetzen OUT
  zusätzlich 4x Schwarz Wild und 4x Schwarz +4
  */
 
-public class KartenDeck {
+public class KartenDeck extends ArrayList<UnoKarte> {
 
-    private List<UnoKarte> kartenDeck;                      // eine Liste vom Typ UnoKarte wird deklariert
-
-    private int index = 0;                                  // ein kartenindex wird erstellt
+    private ArrayList<UnoKarte> kartenDeck;                      // eine Liste vom Typ UnoKarte wird deklariert
 
     public KartenDeck() {                                   // Konstruktor
 
@@ -26,6 +21,7 @@ public class KartenDeck {
                                                             // (Rot, Grün, Blau, Yellow, Schwarz)
         Kartenwert[] values = Kartenwert.values();          // ein Kartenarray mit den Werten der Enums erstellen
 
+        int index = 0;                                      // ein kartenindex wird erstellt
         // i = Farbindex = 0, length-1, weil schwarz nicht mit iteriert werden soll, i = 0 bedeutet ROT
         for (int i = 0; i < colors.length - 1; i++) {
 
@@ -72,25 +68,36 @@ public class KartenDeck {
         for (UnoKarte u : kartenDeck) {
             System.out.println(u);
         }
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
     }
 
-    // todo: random rausfinden
-    public ArrayList<UnoKarte> makePlayerDeck(ArrayList<UnoKarte> kartenDeck, int count){
-        /*
-        nimm die gemischten Karte und ziehe zufällig 7 Karten daraus und steck sie in die ArrayListe HandKarten
-        */
+    // todo: aus den gemischten Karte 7 zufällige Karten ziehen und sie in die ArrayListe HandKarten adden
+    public ArrayList<UnoKarte> makePlayerDeck1(Spieler spieler){
+
+        ArrayList<UnoKarte> handKarten = new ArrayList<>();
+        int count = 7;
         Random random = new Random();
-        if (kartenDeck.isEmpty()){
+
+        /*if (kartenDeck.isEmpty()){              // wenn der Stapel leer ist
             throw new IllegalArgumentException("Kartenstapel ist leer, mischen Sie die Karten des Ablagestapels neu.");
         }
-        if (count > kartenDeck.size()){
+        if (count > kartenDeck.size()){         // wenn der Stapel nicht mehr genug Karten hat
             throw new IllegalArgumentException("Es sind nicht genug Karten am Stapel. Mischen Sie die Karten des " +
                     "Ablagestapels neu.");
-        }
-        ArrayList<UnoKarte> handKarten = new ArrayList<>();
+        }*/
         for (int i = 0; i < count; i++){
-           // handKarten.add(getRandomItem(kartenDeck));
+            // aus dem bestehenden Kartendeck wird ein zufälliges Element ausgewählt, das nicht größer sein darf
+            // als die Größe des Kartendecks
+            UnoKarte randomElement = kartenDeck.get(random.nextInt(kartenDeck.size()));
+            handKarten.add(randomElement);  // dieses zufällige Element wird dem HandKarten-Set hinzugefügt
         }
+
+        for (UnoKarte u : handKarten) {
+            System.out.println(u);
+        }
+        System.out.println(".............");
         return handKarten;
+
     }
 }
+
