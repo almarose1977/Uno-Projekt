@@ -10,7 +10,7 @@ public class App {
     private LinkedList<UnoKarte> ablagestapel = new LinkedList<>();
     private ArrayList<Spieler> spielerListe = new ArrayList<>();
     private int indexCurrentSpieler;
-    private UnoKarte currentCard;
+    //private UnoKarte currentCard;
 
 
     public App(Scanner input, PrintStream output) {
@@ -88,7 +88,8 @@ public class App {
 
     public void startKarteFestlegen() {
 
-        currentCard = kartenDeck.spielKartenDeck.remove();
+        UnoKarte startCard = kartenDeck.spielKartenDeck.remove();
+        ablagestapel.add(startCard);
     }
 
     private void readUserInput() {
@@ -172,14 +173,13 @@ public class App {
                 UnoKarte u = spielerListe.get(indexCurrentSpieler).getKarte(kW, f);
 
                 if (u != null) {
+                    spielerListe.get(indexCurrentSpieler).getHandKarten().remove(u);
+                    ablagestapel.add(u);
 
-                    if (spielerListe.get(indexCurrentSpieler).getHandKarten().contains(u)) {
-                        ablagestapel.add(u);
-                        spielerListe.get(indexCurrentSpieler).getHandKarten().remove(u);
-                        System.out.println("Anzahl Handkarten: " + spielerListe.get(indexCurrentSpieler).getHandKarten().size());
-                        korrekteEingabe = true;
+                    System.out.println("Anzahl Handkarten: " + spielerListe.get(indexCurrentSpieler).getHandKarten().size());
+                    korrekteEingabe = true;
 
-                    }
+
                 }
 //            if (spielerListe.get(indexCurrentSpieler).hasCard(u)){
 //                ablagestapel.add(u);
@@ -195,11 +195,18 @@ public class App {
     }
 
     private void updateState() {
-
+       if(indexCurrentSpieler == 3)
+       {
+           indexCurrentSpieler = 0;
+       }
+       else{
+           indexCurrentSpieler++;
+       }
     }
 
     private void printState() {
 
+        UnoKarte currentCard = ablagestapel.getLast();
         System.out.println("aktuelle Karte am Stack: " + currentCard.toString());
         Spieler s = spielerListe.get(indexCurrentSpieler);
         System.out.println("Aktueller Spieler: " + s.getName());
