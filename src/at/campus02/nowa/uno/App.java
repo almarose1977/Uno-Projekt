@@ -1,17 +1,16 @@
 package at.campus02.nowa.uno;
 
 import java.io.PrintStream;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
     private final Scanner input;
     private final PrintStream output;
-    KartenDeck spielkarten = new KartenDeck();
-    Spieler aiste;
-    Spieler britta;
-    Spieler lena;
-    Spieler leo;
+    private KartenDeck spielkarten = new KartenDeck();
+    private LinkedList<UnoKarte> ablagestapel = new LinkedList<>();
+    private ArrayList<Spieler> spielerListe = new ArrayList<>();
+    private int currentSpieler;
+
 
     public App(Scanner input, PrintStream output){
         this.input = input;
@@ -46,27 +45,33 @@ public class App {
         spielkarten.makeDeck();
         System.out.println(".............");
 
-        aiste = new Spieler("Aiste",7, 0);
-        britta = new Spieler("Britta",7, 0);
-        leo = new Spieler("Leo", 7,0);
-        lena = new Spieler("Lena",7,0);
+        // Spieler eingeben
+        for(int i = 1; i <= 4;i++){
+            System.out.println("Name Spieler " + i + ": ");
+            Scanner scan = new Scanner(System.in);
+            String name = scan.next();
+            Spieler s = new Spieler(name);
+            addSpieler(s);
+        }
 
+        // zufälligen Spieler bestimmen
+        Random random = new Random();
+        int max = 4;
+        int min = 1;
+        currentSpieler = random.nextInt((max-min) + 1) + min;
+        System.out.println(spielerListe.toString());
+        System.out.println("Startspieler: " + currentSpieler);
+
+
+    }
+
+    public void addSpieler(Spieler s){
+        spielerListe.add(s);
     }
 
     private void initializeRound() {    // todo: Karten mischen, 4x 7 Karten verteilen, 1 Karte aufdecken, Startspieler auslosen
 
-        spielkarten.shuffleDeck();
-
-        aiste.makePlayerDeck(spielkarten);
-        System.out.println("iiiiiiiiiiiiiiiiii");
-        britta.makePlayerDeck(spielkarten);
-        lena.makePlayerDeck(spielkarten);
-        leo.makePlayerDeck(spielkarten);
-
-
-
-
-
+        //spielkarten.shuffleDeck();
 
     }
 

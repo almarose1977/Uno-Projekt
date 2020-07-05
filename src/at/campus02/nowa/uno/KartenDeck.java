@@ -7,13 +7,15 @@ import java.util.*;
  zusätzlich 4x Schwarz Wild und 4x Schwarz +4
  */
 
-public class KartenDeck extends ArrayList<UnoKarte> {
+public class KartenDeck {
 
-    private ArrayList<UnoKarte> kartenDeck;                      // eine Liste vom Typ UnoKarte wird deklariert
+    private ArrayList<UnoKarte> kartenDeck;                 // eine Liste vom Typ UnoKarte wird deklariert
+    private Queue<UnoKarte> spielKartenDeck;
 
     public KartenDeck() {                                   // Konstruktor
 
-        kartenDeck = new ArrayList<>();                     // die ArrayListe wird initialisiert
+        kartenDeck = new ArrayList<>();
+        spielKartenDeck = new LinkedList<>();                     // die ArrayListe wird initialisiert
     }
 
     public void makeDeck() {                                // Methode zum Befüllen des Karten-Arrays
@@ -51,11 +53,6 @@ public class KartenDeck extends ArrayList<UnoKarte> {
             index++;
         }
 
-        // Ausgabe index + Karte
-        /*for (int i = 0; i < kartenDeck.size(); i++){
-            System.out.println(i + " " + kartenDeck.get(i).toString());
-        }*/
-
         //Ausgabe nur karte
         for (UnoKarte u : kartenDeck) {
             System.out.println(u);
@@ -65,31 +62,37 @@ public class KartenDeck extends ArrayList<UnoKarte> {
     public void shuffleDeck(){
         Collections.shuffle(kartenDeck);
 
-        for (UnoKarte u : kartenDeck) {
+        // nur für Testzwecke, ob die Ausgabe funktioniert
+        /*for (UnoKarte u : kartenDeck) {
             System.out.println(u);
         }
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");*/
+        spielKartenDeck.addAll(kartenDeck);     // ArrayList in die Queue überführt
+
+        for (UnoKarte u : spielKartenDeck){     // Queue ausgeben lassen
+            System.out.println(u);
+        }
     }
 
     // todo: aus den gemischten Karte 7 zufällige Karten ziehen und sie in die ArrayListe HandKarten adden
-    public ArrayList<UnoKarte> makePlayerDeck1(Spieler spieler){
+    public ArrayList<UnoKarte> makePlayerDeck(Spieler spieler){
 
         ArrayList<UnoKarte> handKarten = new ArrayList<>();
         int count = 7;
-        Random random = new Random();
 
-        /*if (kartenDeck.isEmpty()){              // wenn der Stapel leer ist
+        /*if (spielKartenDeck.isEmpty()){              // wenn der Stapel leer ist
             throw new IllegalArgumentException("Kartenstapel ist leer, mischen Sie die Karten des Ablagestapels neu.");
         }
-        if (count > kartenDeck.size()){         // wenn der Stapel nicht mehr genug Karten hat
+        if (count > spielKartenDeck.size()){         // wenn der Stapel nicht mehr genug Karten hat
             throw new IllegalArgumentException("Es sind nicht genug Karten am Stapel. Mischen Sie die Karten des " +
                     "Ablagestapels neu.");
         }*/
         for (int i = 0; i < count; i++){
-            // aus dem bestehenden Kartendeck wird ein zufälliges Element ausgewählt, das nicht größer sein darf
-            // als die Größe des Kartendecks
-            UnoKarte randomElement = kartenDeck.get(random.nextInt(kartenDeck.size()));
-            handKarten.add(randomElement);  // dieses zufällige Element wird dem HandKarten-Set hinzugefügt
+            // aus dem geshuffelten Kartendeck werden die obersten 7 Karten genommen und dem handkarten-deck zugewiesen
+            UnoKarte obersteKarte = spielKartenDeck.remove();
+
+            handKarten.add(obersteKarte);  // dieses zufällige Element wird dem HandKarten-Set hinzugefügt
+
         }
 
         for (UnoKarte u : handKarten) {
