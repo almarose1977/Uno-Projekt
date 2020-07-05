@@ -6,10 +6,11 @@ import java.util.*;
 public class App {
     private final Scanner input;
     private final PrintStream output;
-    private KartenDeck spielkarten = new KartenDeck();
+    private KartenDeck kartenDeck = new KartenDeck();
     private LinkedList<UnoKarte> ablagestapel = new LinkedList<>();
     private ArrayList<Spieler> spielerListe = new ArrayList<>();
     private int currentSpieler;
+    private UnoKarte currentCard;
 
 
     public App(Scanner input, PrintStream output){
@@ -35,24 +36,26 @@ public class App {
 
             printFinalScore();
         }catch (Exception ex){
+            ex.printStackTrace();
             output.println(ex);
         }
     }
 
-    private void initializeGame() { // todo: Spielernamen eingeben 4x, Karten mischen, Karten verteilen 7x/Spieler,
-                                    // 1 UnoKarte aufdecken, Aktionskarte prüfen, Startspieler auslosen, Anzeige Spieler
+    private void initializeGame() { // todo: Spielernamen eingeben 4x, Karten mischen,
+                                    // 1 UnoKarte aufdecken, Aktionskarte prüfen, Anzeige Spieler
 
-        spielkarten.makeDeck();
-
+        kartenDeck.makeDeck();
+        kartenDeck.shuffleDeck();
 
         // Spieler eingeben
         for(int i = 1; i <= 4;i++){
             System.out.println("Name Spieler " + i + ": ");
-            Scanner scan = new Scanner(System.in);
-            String name = scan.next();
+            //Scanner scan = new Scanner(System.in);
+            String name = input.next();
             Spieler s = new Spieler(name);
             addSpieler(s);
         }
+
 
     }
 
@@ -60,6 +63,7 @@ public class App {
 
         verteileHandkarten();
         chooseRandomPlayer();
+        startKarteFestlegen();
 
     }
 
@@ -78,9 +82,15 @@ public class App {
 
     public void verteileHandkarten(){
         for(Spieler s : spielerListe){
-            s.setHandKarten(spielkarten.makePlayerDeck());
+            s.setHandKarten(kartenDeck.makePlayerDeck());
         }
     }
+
+    public void startKarteFestlegen(){
+
+        currentCard = kartenDeck.spielKartenDeck.remove();
+    }
+
     private void readUserInput() {
 
 
