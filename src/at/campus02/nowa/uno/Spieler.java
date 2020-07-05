@@ -18,6 +18,30 @@ public class Spieler {
         handKarten = new LinkedList<>();
     }
 
+    public boolean hasCard(UnoKarte k)
+    {
+        boolean hasCard = false;
+        for (UnoKarte handKarte:handKarten) {
+            if(handKarte.getFARBE() == k.getFARBE() && handKarte.getKARTENWERT() == k.getKARTENWERT())
+            {
+                hasCard = true;
+            }
+        }
+        return hasCard;
+    }
+
+
+    public UnoKarte getKarte(Kartenwert kw, Farbe f)
+    {
+        for (UnoKarte handKarte:handKarten) {
+            if(handKarte.getFARBE() == f && handKarte.getKARTENWERT() == kw)
+            {
+                return handKarte;
+            }
+        }
+        return null;
+    }
+
 
     public LinkedList<UnoKarte> getHandKarten(){
 
