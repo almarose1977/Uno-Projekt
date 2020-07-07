@@ -1,29 +1,23 @@
 package at.campus02.nowa.uno;
 
-import java.util.ArrayList;
-
 import java.util.LinkedList;
-import java.util.Random;
 
 public class Spieler {
     private String name;
-    //private int counterRestkarten;
-    private int punkte;
-    private LinkedList<UnoKarte> handKarten;
+    private int points;
+    private LinkedList<UnoKarte> handCardDeck;
 
     public Spieler(String name) {
         this.name = name;
 
-        this.punkte = 0;    //anfänglich immer 0
-        handKarten = new LinkedList<>();
+        this.points = 0;    //anfänglich immer 0
+        handCardDeck = new LinkedList<>();
     }
 
-
-
-    // Vergleich der zu spielenden Karte mit dem Handkartenset
-    public UnoKarte getKarte(Kartenwert kw, Farbe f)
+    // Vergleich der eingegebenen Karte mit dem Handkartenset
+    public UnoKarte getKarte(Farbe f, Kartenwert kw)
     {
-        for (UnoKarte handKarte:handKarten) {
+        for (UnoKarte handKarte: handCardDeck) {
             if(handKarte.getFARBE() == f && handKarte.getKARTENWERT() == kw)
             {
                 return handKarte;
@@ -33,9 +27,9 @@ public class Spieler {
     }
 
 
-    public LinkedList<UnoKarte> getHandKarten(){
+    public LinkedList<UnoKarte> getHandCardDeck(){
 
-        return handKarten;
+        return handCardDeck;
     }
 
     public String getName() {
@@ -46,25 +40,21 @@ public class Spieler {
         this.name = name;
     }
 
-    public int getPunkte() {
-        return punkte;
+    public int getPoints() {
+        return points;
     }
 
-
-    public void setPunkte(int punkte) {
-        this.punkte = punkte;
+    public void setPoints(int points) {
+        this.points = points;
     }
 
-    public void setHandKarten(LinkedList<UnoKarte> handKarten) {
-        this.handKarten = handKarten;
+    public void setHandCardDeck(LinkedList<UnoKarte> handCardDeck) {
+        this.handCardDeck = handCardDeck;
     }
 
     @Override
     public String toString() {
-        return "Spieler{" +
-                "name='" + name + '\'' +
-                ", punkte=" + punkte +
-                ", handKarten=" + handKarten +
-                '}';
+        return "Spieler Name: " + name + ", Punkte = " + points +
+                ", Handkarten: " + handCardDeck + '\n';
     }
 }
