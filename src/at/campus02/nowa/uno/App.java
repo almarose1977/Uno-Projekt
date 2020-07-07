@@ -6,9 +6,9 @@ import java.util.*;
 public class App {
     private final Scanner input;
     private final PrintStream output;
-    private KartenDeck kartenDeck = new KartenDeck();
-    private LinkedList<UnoKarte> ablagestapel = new LinkedList<>();
-    private ArrayList<Spieler> spielerListe = new ArrayList<>();
+    private KartenDeck spielKarten = new KartenDeck();
+    private LinkedList<UnoKarte> stack = new LinkedList<>();        // Ablagestapel
+    private ArrayList<Spieler> playersList = new ArrayList<>();
     private int indexCurrentSpieler;
 
 
@@ -29,7 +29,7 @@ public class App {
                     updateState();
                     printState();
 
-                    Thread.sleep(100); // diese zeile sollen wir ignorieren - BRISCH
+                    Thread.sleep(100);
                 }
             } while (!gameEnded());
 
@@ -40,13 +40,13 @@ public class App {
         }
     }
 
-    private void initializeGame() { // todo: Spielernamen eingeben 4x, Karten mischen,
-        // 1 UnoKarte aufdecken, Aktionskarte prüfen, Anzeige Spieler
+    private void initializeGame() { // todo: Karten erstellen und mischen, Spielernamen eingeben 4x, Anzeige Spieler
 
-        kartenDeck.makeDeck();
-        kartenDeck.shuffleDeck();
+        spielKarten.makeDeck();
+        spielKarten.shuffleDeck();
 
         // Spieler eingeben
+        System.out.println("Bitte geben Sie die 4 Spielernamen ein: ");
         for (int i = 1; i <= 4; i++) {
             System.out.println("Name Spieler " + i + ": ");
 
@@ -56,146 +56,166 @@ public class App {
         }
     }
 
+    private void initializeRound() {    // todo: 4x 7 Karten verteilen, 1 Karte aufdecken, Aktionskarte prüfen, Startspieler auslosen
 
-    private void initializeRound() {    // todo: 4x 7 Karten verteilen, 1 Karte aufdecken, Startspieler auslosen
-
-        verteileHandkarten();
+        dealOutCards();
         chooseRandomPlayer();
-        startKarteFestlegen();
+        determineStartCard();
 
     }
 
-    public void chooseRandomPlayer() {  // zufälligen Spieler bestimmen
+    // Methode, um die Spieler der Spielerliste hinzuzufügen
+    public void addSpieler(Spieler s) {
+        playersList.add(s);
+    }
+
+    // Methode, um die Handkarten den Spielern "auszuteilen"
+    public void dealOutCards() {
+        for (Spieler s : playersList) {
+            s.setHandCardDeck(spielKarten.makePlayerDeck());
+        }
+    }
+
+    // Methode, um Start-Spieler zu bestimmen
+    public void chooseRandomPlayer() {
         Random random = new Random();
         int max = 3;
         int min = 0;
         indexCurrentSpieler = random.nextInt((max - min) + 1) + min;
-        System.out.println(spielerListe.toString());
-        System.out.println("Startspieler: " + indexCurrentSpieler);
+        //System.out.println(playersList.toString());       // zur Ausgabe der Spielerliste
+        Spieler s = playersList.get(indexCurrentSpieler);
+        System.out.println("Startspieler: " + s.getName());
+        System.out.println("Los geht's!");
+
     }
 
-    public void addSpieler(Spieler s) {
-        spielerListe.add(s);
+    // Methode, um die erste Karte "aufzudecken"
+    public void determineStartCard() {
+
+        UnoKarte startCard = spielKarten.gameCardDeck.remove();
+        stack.add(startCard);
     }
 
-    public void verteileHandkarten() {
-        for (Spieler s : spielerListe) {
-            s.setHandKarten(kartenDeck.makePlayerDeck());
-        }
-    }
-
-    public void startKarteFestlegen() {
-
-        UnoKarte startCard = kartenDeck.spielKartenDeck.remove();
-        ablagestapel.add(startCard);
-    }
-
+    // Methode, um die Karteneingabe zu verarbeiten
     private void readUserInput() {
-
 
         Farbe f = null;
         Kartenwert kW = null;
         boolean korrekteEingabe = false;
+
         do {
-            System.out.println("bitte gib deine Karte bekannt.");
+            System.out.println("Wähle eine Karte...");
 
             String s = input.next();
-            String values[] = s.split("-");
+            String[] values = s.split("-");
 
-            switch (values[0]) {
-                case "R":
-                    f = Farbe.ROT;
-                    break;
-                case "B":
-                    f = Farbe.BLAU;
-                    break;
-                case "G":
-                    f = Farbe.GRÜN;
-                    break;
-                case "Y":
-                    f = Farbe.YELLOW;
-                    break;
-                case "S":
-                    f = Farbe.SCHWARZ;
-                    break;
-            }
-            switch (values[1]) {
-                case "0":
-                    kW = Kartenwert.ZERO;
-                    break;
-                case "1":
-                    kW = Kartenwert.EINS;
-                    break;
-                case "2":
-                    kW = Kartenwert.ZWEI;
-                    break;
-                case "3":
-                    kW = Kartenwert.DREI;
-                    break;
-                case "4":
-                    kW = Kartenwert.VIER;
-                    break;
-                case "5":
-                    kW = Kartenwert.FÜNF;
-                    break;
-                case "6":
-                    kW = Kartenwert.SECHS;
-                    break;
-                case "7":
-                    kW = Kartenwert.SIEBEN;
-                    break;
-                case "8":
-                    kW = Kartenwert.ACHT;
-                    break;
-                case "9":
-                    kW = Kartenwert.NEUN;
-                    break;
-                case "RW":
-                    kW = Kartenwert.RW;
-                    break;
-                case "OUT":
-                    kW = Kartenwert.OUT;
-                    break;
-                case "+2":
-                    kW = Kartenwert.PLUS2;
-                    break;
-                case "+4":
-                    kW = Kartenwert.PLUS4;
-                    break;
-                case "WILD":
-                    kW = Kartenwert.WILD;
-                    break;
-            }
-            if (f != null && kW != null) {
-                //UnoKarte u =  new UnoKarte(f, kW);
-                UnoKarte u = spielerListe.get(indexCurrentSpieler).getKarte(kW, f);
-
-                if (u != null) {
-                    // prüfen, ob Karte gespielt werden darf
-                    if (validTurn(u)) {
-                        spielerListe.get(indexCurrentSpieler).getHandKarten().remove(u);
-                        ablagestapel.add(u);
-
-                        System.out.println("Anzahl Handkarten: " + spielerListe.get(indexCurrentSpieler).getHandKarten().size());
-                        korrekteEingabe = true;
-                    }
-                    }
+            try {                           // IndexOutOfBoundsException wird geworfen, wenn die Eingabe nicht richtig erfolgt
+                                            // z.B. nur R anstelle von R-9, dann ist das values[] nicht vollständig
+                switch (values[0]) {
+                    case "R":
+                        f = Farbe.ROT;
+                        break;
+                    case "B":
+                        f = Farbe.BLAU;
+                        break;
+                    case "G":
+                        f = Farbe.GRÜN;
+                        break;
+                    case "Y":
+                        f = Farbe.YELLOW;
+                        break;
+                    case "S":
+                        f = Farbe.SCHWARZ;
+                        break;
+                    default:
+                        System.out.println("Keine gültige Eingabe.");
+                        break;
                 }
 
+                switch (values[1]) {
+                    case "0":
+                        kW = Kartenwert.ZERO;
+                        break;
+                    case "1":
+                        kW = Kartenwert.EINS;
+                        break;
+                    case "2":
+                        kW = Kartenwert.ZWEI;
+                        break;
+                    case "3":
+                        kW = Kartenwert.DREI;
+                        break;
+                    case "4":
+                        kW = Kartenwert.VIER;
+                        break;
+                    case "5":
+                        kW = Kartenwert.FÜNF;
+                        break;
+                    case "6":
+                        kW = Kartenwert.SECHS;
+                        break;
+                    case "7":
+                        kW = Kartenwert.SIEBEN;
+                        break;
+                    case "8":
+                        kW = Kartenwert.ACHT;
+                        break;
+                    case "9":
+                        kW = Kartenwert.NEUN;
+                        break;
+                    case "RW":
+                        kW = Kartenwert.RW;
+                        break;
+                    case "OUT":
+                        kW = Kartenwert.OUT;
+                        break;
+                    case "+2":
+                        kW = Kartenwert.PLUS2;
+                        break;
+                    case "+4":
+                        kW = Kartenwert.PLUS4;
+                        break;
+                    case "WILD":
+                        kW = Kartenwert.WILD;
+                        break;
+                    default:
+                        System.out.println("Keine gültige Eingabe.");
+                        break;
+                }
+            } catch (IndexOutOfBoundsException e){
+                System.out.println("Sie haben die Karte falsch eingegeben. ");
+            }
+
+            if (f != null && kW != null) {      // Prüfung, ob die eingegebene Karte im Handkartenset vorhanden ist
+
+                UnoKarte u = playersList.get(indexCurrentSpieler).getKarte(f, kW);
+
+                if (u != null) {                // wenn es die Karte im Handkartenset gibt
+
+                    if (validTurn(u)) {         // prüfen, ob Karte gespielt werden darf
+                        playersList.get(indexCurrentSpieler).getHandCardDeck().remove(u);
+                        stack.add(u);
+
+                        System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());        // für Testzwecke
+                        korrekteEingabe = true;
+                    } else
+                        System.out.print("Diese Karte darf nicht gespielt werden. ");
+                }
+            }
+
         } while (!korrekteEingabe);
-
-
     }
 
 
-    private boolean validTurn(UnoKarte gespielteKarte){
+    // Methode, um zu prüfen, ob die gewünschte Karte gespielt werden darf
+    private boolean validTurn(UnoKarte gespielteKarte) {
 
         boolean isValid = false;
-        UnoKarte currentCard = ablagestapel.getLast();
-        if (gespielteKarte.getFARBE() == Farbe.SCHWARZ){
+        UnoKarte currentCard = stack.getLast();
+        if (gespielteKarte.getFARBE() == Farbe.SCHWARZ) {       // schwarze Karten dürfen immer gespielt werden
             isValid = true;
         }
-        if (currentCard.getFARBE() == gespielteKarte.getFARBE() || currentCard.getKARTENWERT() == gespielteKarte.getKARTENWERT()){
+        if (currentCard.getFARBE() == gespielteKarte.getFARBE() || currentCard.getKARTENWERT() == gespielteKarte.getKARTENWERT()) {
             isValid = true;
         }
 
@@ -204,20 +224,20 @@ public class App {
 
     private void updateState() {
 
-        if(indexCurrentSpieler == 3){
+        if (indexCurrentSpieler == 3) {
             indexCurrentSpieler = 0;
-        }
-        else
+        } else
             indexCurrentSpieler++;
     }
 
+    // aktueller Status wird ausgegeben: welcher Spieler ist dran, welche Karte liegt oben, verfügbare Handkarten
     private void printState() {
 
-        UnoKarte currentCard = ablagestapel.getLast();
-        System.out.println("aktuelle Karte am Stack: " + currentCard.toString());
-        Spieler s = spielerListe.get(indexCurrentSpieler);
-        System.out.println("Aktueller Spieler: " + s.getName());
-        System.out.println("Deine aktuellen Karten:" + s.getHandKarten());
+        System.out.println("........");
+        System.out.println("oberste Karte am Ablagestapel: " + stack.getLast().toString());
+        Spieler s = playersList.get(indexCurrentSpieler);
+        System.out.println("aktueller Spieler: " + s.getName());
+        System.out.println("Deine aktuellen Karten: " + s.getHandCardDeck());
     }
 
     private boolean roundEnded() {
