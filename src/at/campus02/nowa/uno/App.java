@@ -98,7 +98,7 @@ public class App {
 
         UnoKarte startCard = spielKarten.drawPile.remove();
         stack.add(startCard);
-        if (startCard.getKARTENWERT().equals(Kartenwert.PLUS4)) {     // falls +4 Startkarte wäre
+        if (startCard.getKARTENWERT().equals(Kartenwert.plus4)) {     // falls +4 Startkarte wäre
             startCard = spielKarten.drawPile.remove();
             stack.add(startCard);
         }
@@ -178,34 +178,34 @@ public class App {
 
                     switch (values[1]) {
                         case "0":
-                            kW = Kartenwert.ZERO;
+                            kW = Kartenwert.zero;
                             break;
                         case "1":
-                            kW = Kartenwert.EINS;
+                            kW = Kartenwert.eins;
                             break;
                         case "2":
-                            kW = Kartenwert.ZWEI;
+                            kW = Kartenwert.zwei;
                             break;
                         case "3":
-                            kW = Kartenwert.DREI;
+                            kW = Kartenwert.drei;
                             break;
                         case "4":
-                            kW = Kartenwert.VIER;
+                            kW = Kartenwert.vier;
                             break;
                         case "5":
-                            kW = Kartenwert.FÜNF;
+                            kW = Kartenwert.fünf;
                             break;
                         case "6":
-                            kW = Kartenwert.SECHS;
+                            kW = Kartenwert.sechs;
                             break;
                         case "7":
-                            kW = Kartenwert.SIEBEN;
+                            kW = Kartenwert.sieben;
                             break;
                         case "8":
-                            kW = Kartenwert.ACHT;
+                            kW = Kartenwert.acht;
                             break;
                         case "9":
-                            kW = Kartenwert.NEUN;
+                            kW = Kartenwert.neun;
                             break;
                         case "RW":
                         case "rw":
@@ -216,10 +216,10 @@ public class App {
                             kW = Kartenwert.OUT;
                             break;
                         case "+2":
-                            kW = Kartenwert.PLUS2;
+                            kW = Kartenwert.plus2;
                             break;
                         case "+4":
-                            kW = Kartenwert.PLUS4;
+                            kW = Kartenwert.plus4;
                             break;
                         case "WILD":
                         case "wild":
@@ -275,9 +275,8 @@ public class App {
         return isValid;
     }
 
+    // TODO: Sonderkarten implementieren
     private void updateState() {
-
-        System.out.println("Der nächste Spieler ist dran...");
 
         // wenn "OUT" geschmissen wird, wird der nächste übersprungen
         if (stack.getLast().getKARTENWERT() == Kartenwert.OUT) {
@@ -285,10 +284,9 @@ public class App {
             clockWise();
         }
 
-
         // wenn +2 geschmissen wird --> nächster Spieler bekommt 2 Karten und muss aussetzen, d.h. übernächster Spieler ist an der Reihe
         // todo: was ist, wenn der nächste spieler eine weitere +2 wirft
-        else if (stack.getLast().getKARTENWERT() == Kartenwert.PLUS2) {
+        else if (stack.getLast().getKARTENWERT() == Kartenwert.plus2) {
 
             clockWise();    // zuerst einen Spieler weiterspringen
             playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());  // 2 Karten vom Nachziehstapel hinzufügen
@@ -297,11 +295,42 @@ public class App {
 
         }
 
-        // +4 geworfen
-        else if (stack.getLast().getKARTENWERT() == Kartenwert.PLUS4) {
+        // plus 4 TODO loop integrieren, wenn falsche eingabe
+        else if (stack.getLast().getKARTENWERT() == Kartenwert.plus4) {
 
-            System.out.println("gib deine gewünschte Farbe an: ");
-            String farbwunsch = input.next();
+            chooseColor();
+
+            clockWise();    // zuerst einen Spieler weiterspringen
+            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
+            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
+            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
+            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
+            clockWise();    // noch einen Spieler weiter gehen
+        }
+
+        // Farbwunsch
+        else if (stack.getLast().getKARTENWERT() == Kartenwert.WILD) {
+            chooseColor();
+            clockWise();
+        }
+
+
+        // Richtungswechsel todo: --> bleibt im Moment nur 1 Runde so
+        else if (stack.getLast().getKARTENWERT() == Kartenwert.RW) {
+            counterClockWise();
+        } else {  // weiter im Uhrzeigersinn
+            clockWise();
+        }
+
+        System.out.println("Der nächste Spieler ist dran...");
+    }
+
+    private void chooseColor() {
+        boolean correctInput = false;
+        System.out.println("gib deine gewünschte Farbe an: ");
+        String farbwunsch = input.next();
+
+        try {
             switch (farbwunsch) {
                 case "R":
                 case "r":
@@ -319,26 +348,15 @@ public class App {
                 case "y":
                     farbwunsch = String.valueOf(Farbe.YELLOW);
                     break;
+                /*default:
+                    farbwunsch = null;
+                    System.out.println("Falsche Eingabe");
+                    break;*/
             }
-            stack.getLast().setFARBE(Farbe.valueOf(String.valueOf(farbwunsch)));
-
-            clockWise();    // zuerst einen Spieler weiterspringen
-            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
-            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
-            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
-            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
-            clockWise();    // noch einen Spieler weiter gehen
+            stack.getLast().setFARBE(Farbe.valueOf(farbwunsch));
+        } catch (IllegalArgumentException e) {
+            System.out.println("Falsche Eingabe");
         }
-
-        // todo: Falls ein RW geworfen wird --> bleibt im Moment nur 1 Runde so
-
-        else if (stack.getLast().getKARTENWERT() == Kartenwert.RW) {
-            counterClockWise();
-        } else {  // weiter im Uhrzeigersinn
-            clockWise();
-        }
-
-
     }
 
     private void clockWise() {

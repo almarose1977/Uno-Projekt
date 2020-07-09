@@ -1,7 +1,8 @@
-wenn die Eingabe falsch erfolgt ohne Bindestrich, dann ist das Stringarray nur bei index[0] gefüllt, bei index[1] ist nix drin --> Exception
-____________________________________
+wenn die Eingabe falsch erfolgt ohne Bindestrich, dann ist das Stringarray nur bei index[0] gefüllt,
+bei index[1] ist nix drin --> Exception
+__________________________________________________________________________________
 
-testen:
+TESTEN:
 alle möglichen abwegigen kombinationen
 b4
 B4
@@ -11,17 +12,36 @@ b-14
 etc.
 auf die Fehlerausgaben achten --> passen die mit dem Spielzug überein?
 
-____________________
-Eingabe auch mit Kleinbuchstaben zulassen??
+__________________________________________________________________________________
+Frage: Eingabe auch mit Kleinbuchstaben zulassen?? --> wäre einfacher zum eingeben
+
+__________________________________________________________________________________
++4 und WILD: Farbwunsch
+----
+gewünschte farbe wird erkannt, karte auf stack heißt dann z.b. ROT "PLUS4" --> PROBLEM:
+wenn der nächste spieler keine passende farbe zum drauflegen hat auf die gewünschte farbe, dann bleibt der Kartenwert
+"PLUS4" erhalten und es kommt erneut zum Farbwunsch
+--> müssen "Standard-Wert" für KartenWERT setzen (Anmerkung: angenommen, Standardwert ist 0, könnte dann aber zum
+Problem werden, weil man dann ja auch passend zum Wert und nicht passend zur Farbe legen kann!!!!)
+----
+loop für falscheingabe der farbe muss noch implementiert werden
+
+__________________________________________________________________________________
++2:
+was ist, wenn der nächste Spieler eine weitere +2 drauflegen kann... implementieren
 
 
-____________________
-heben --> danach nochmalige prüfung, ob karte gelegt werden kann. wenn dann wieder nicht gelegt werden kann --> nächster spieler --> ERLEDIGT
-
+__________________________________________________________________________________
+heben
+--> danach nochmalige prüfung, ob karte gelegt werden kann. wenn dann wieder nicht gelegt werden kann
+--> nächster spieler --> ERLEDIGT
+-----
 man könnte auch mehrmals hintereinander heben... muss verhindert werden
 
-_________________
-RW passt noch nicht, verliert nach einer Runde den counterClockWise
+__________________________________________________________________________________
+RichtungsWechsel
+-----
+passt noch nicht, verliert nach einer Runde den counterClockWise
 
-___________________
+__________________________________________________________________________________
 Spieler - Bots vs. Menschen
