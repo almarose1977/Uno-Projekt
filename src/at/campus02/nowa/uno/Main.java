@@ -8,8 +8,8 @@ public class Main {
 
         App app = new App(input, System.out);
 
-        System.out.println("Herzlich willkommen zu einer neuen Partie UNO!");
-        System.out.println("Das Spiel wird nun gestartet ...");
+        System.out.println("\n******* Herzlich willkommen zu einer neuen Partie UNO! *******");
+        System.out.println("\nDas Spiel wird nun gestartet ...");
         System.out.println();
         app.Run();
 

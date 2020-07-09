@@ -27,9 +27,10 @@ public class App {
                 while (!roundEnded()) {
                     readUserInput();
                     updateState();
+                    Thread.sleep(1000);
                     printState();
 
-                    Thread.sleep(100);
+                    Thread.sleep(1000);
                 }
             } while (!gameEnded());
 
@@ -103,107 +104,119 @@ public class App {
         Kartenwert kW = null;
         boolean korrekteEingabe = false;
 
-        do {
-            System.out.println("Wähle eine Karte...");
+        System.out.println("Wähle eine Karte oder hebe eine Karte vom Nachziehstapel...");
+        String userInput = input.next();
+        if (userInput.equals("Heben")) {
+            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.gameCardDeck.remove());
+            System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());
+            System.out.println("Der nächste Spieler ist an der Reihe!");
+        }
+        else {
 
-            String s = input.next();
-            String[] values = s.split("-");
+            do {
+                String[] values = userInput.split("-");
 
-            try {                           // IndexOutOfBoundsException wird geworfen, wenn die Eingabe nicht richtig erfolgt
-                                            // z.B. nur R anstelle von R-9, dann ist das values[] nicht vollständig
-                switch (values[0]) {
-                    case "R":
-                        f = Farbe.ROT;
-                        break;
-                    case "B":
-                        f = Farbe.BLAU;
-                        break;
-                    case "G":
-                        f = Farbe.GRÜN;
-                        break;
-                    case "Y":
-                        f = Farbe.YELLOW;
-                        break;
-                    case "S":
-                        f = Farbe.SCHWARZ;
-                        break;
-                    default:
-                        System.out.println("Keine gültige Eingabe.");
-                        break;
+                try {                           // IndexOutOfBoundsException wird geworfen, wenn die Eingabe nicht richtig erfolgt
+                    // z.B. nur R anstelle von R-9, dann ist das values[] nicht vollständig
+                    switch (values[0]) {
+                        case "R":
+                            f = Farbe.ROT;
+                            break;
+                        case "B":
+                            f = Farbe.BLAU;
+                            break;
+                        case "G":
+                            f = Farbe.GRÜN;
+                            break;
+                        case "Y":
+                            f = Farbe.YELLOW;
+                            break;
+                        case "S":
+                            f = Farbe.SCHWARZ;
+                            break;
+                        default:
+                            //System.out.println("Keine gültige Farbeingabe.");
+                            values[0] = null;
+                            break;
+                    }
+
+                    switch (values[1]) {
+                        case "0":
+                            kW = Kartenwert.ZERO;
+                            break;
+                        case "1":
+                            kW = Kartenwert.EINS;
+                            break;
+                        case "2":
+                            kW = Kartenwert.ZWEI;
+                            break;
+                        case "3":
+                            kW = Kartenwert.DREI;
+                            break;
+                        case "4":
+                            kW = Kartenwert.VIER;
+                            break;
+                        case "5":
+                            kW = Kartenwert.FÜNF;
+                            break;
+                        case "6":
+                            kW = Kartenwert.SECHS;
+                            break;
+                        case "7":
+                            kW = Kartenwert.SIEBEN;
+                            break;
+                        case "8":
+                            kW = Kartenwert.ACHT;
+                            break;
+                        case "9":
+                            kW = Kartenwert.NEUN;
+                            break;
+                        case "RW":
+                            kW = Kartenwert.RW;
+                            break;
+                        case "OUT":
+                            kW = Kartenwert.OUT;
+                            break;
+                        case "+2":
+                            kW = Kartenwert.PLUS2;
+                            break;
+                        case "+4":
+                            kW = Kartenwert.PLUS4;
+                            break;
+                        case "WILD":
+                            kW = Kartenwert.WILD;
+                            break;
+                        default:
+                            //System.out.println("Werteingabe falsch.");
+                            values[1] = null;
+                            break;
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Du hast die Karte falsch eingegeben. Richtige Eingabe z.B. \"R-7\". ");
                 }
 
-                switch (values[1]) {
-                    case "0":
-                        kW = Kartenwert.ZERO;
-                        break;
-                    case "1":
-                        kW = Kartenwert.EINS;
-                        break;
-                    case "2":
-                        kW = Kartenwert.ZWEI;
-                        break;
-                    case "3":
-                        kW = Kartenwert.DREI;
-                        break;
-                    case "4":
-                        kW = Kartenwert.VIER;
-                        break;
-                    case "5":
-                        kW = Kartenwert.FÜNF;
-                        break;
-                    case "6":
-                        kW = Kartenwert.SECHS;
-                        break;
-                    case "7":
-                        kW = Kartenwert.SIEBEN;
-                        break;
-                    case "8":
-                        kW = Kartenwert.ACHT;
-                        break;
-                    case "9":
-                        kW = Kartenwert.NEUN;
-                        break;
-                    case "RW":
-                        kW = Kartenwert.RW;
-                        break;
-                    case "OUT":
-                        kW = Kartenwert.OUT;
-                        break;
-                    case "+2":
-                        kW = Kartenwert.PLUS2;
-                        break;
-                    case "+4":
-                        kW = Kartenwert.PLUS4;
-                        break;
-                    case "WILD":
-                        kW = Kartenwert.WILD;
-                        break;
-                    default:
-                        System.out.println("Keine gültige Eingabe.");
-                        break;
-                }
-            } catch (IndexOutOfBoundsException e){
-                System.out.println("Sie haben die Karte falsch eingegeben. ");
-            }
+                if (f != null && kW != null) {      // Prüfung, ob die eingegebene Karte im Handkartenset vorhanden ist
 
-            if (f != null && kW != null) {      // Prüfung, ob die eingegebene Karte im Handkartenset vorhanden ist
+                    UnoKarte u = playersList.get(indexCurrentSpieler).getKarte(f, kW);
 
-                UnoKarte u = playersList.get(indexCurrentSpieler).getKarte(f, kW);
+                    if (u != null) {                // wenn es die Karte im Handkartenset gibt
 
-                if (u != null) {                // wenn es die Karte im Handkartenset gibt
+                        if (validTurn(u)) {         // prüfen, ob Karte gespielt werden darf
+                            playersList.get(indexCurrentSpieler).getHandCardDeck().remove(u);
+                            stack.add(u);
 
-                    if (validTurn(u)) {         // prüfen, ob Karte gespielt werden darf
-                        playersList.get(indexCurrentSpieler).getHandCardDeck().remove(u);
-                        stack.add(u);
-
-                        System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());        // für Testzwecke
-                        korrekteEingabe = true;
+                            System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());        // für Testzwecke
+                            korrekteEingabe = true;
+                        } else
+                            System.out.print("Diese Karte darf nicht gespielt werden. ");
                     } else
-                        System.out.print("Diese Karte darf nicht gespielt werden. ");
+                        System.out.print("Diese Karte ist nicht in den Handkarten vorhanden. ");
                 }
-            }
+            /*else
+                System.out.println("FALSCHE EINGABE, Farbe oder Wert sind null.");*/
 
-        } while (!korrekteEingabe);
+            } while (!korrekteEingabe);
+        }
     }
 
 

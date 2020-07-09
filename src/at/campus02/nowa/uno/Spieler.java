@@ -26,10 +26,12 @@ public class Spieler {
         return null;
     }
 
-
     public LinkedList<UnoKarte> getHandCardDeck(){
-
         return handCardDeck;
+    }
+
+    public void setHandCardDeck(LinkedList<UnoKarte> handCardDeck) {
+        this.handCardDeck = handCardDeck;
     }
 
     public String getName() {
@@ -46,10 +48,6 @@ public class Spieler {
 
     public void setPoints(int points) {
         this.points = points;
-    }
-
-    public void setHandCardDeck(LinkedList<UnoKarte> handCardDeck) {
-        this.handCardDeck = handCardDeck;
     }
 
     @Override
