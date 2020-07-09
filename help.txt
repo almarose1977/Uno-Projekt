@@ -1,0 +1,20 @@
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Es können nur Karten auf die vorgegebene Karte gelegt werden,
+wenn entweder die Farbe die gleiche ist oder der Kartenwert derselbe.
+Z.B. auf eine ROT DREI darf entweder eine ROT ZWEI oder eine BLAU DREI gelegt werden.
+Die Eingabe der Kartenwerte erfolgt auf diese Weise:
+ 
+ROT:    R-Wert
+GRÜN:   G-Wert
+BLAU:   B-Wert
+GELB:   Y-Wert
+SCHWARZ: S-Wert
+
+Richtungswechsel: RW
+Aussetzen: OUT
+PLUS2: +2
+Farbwahl: WILD
+PLUS4: +4
+
+... Beispiele für eine richtige Eingabe sind: R-9 oder S-+4
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

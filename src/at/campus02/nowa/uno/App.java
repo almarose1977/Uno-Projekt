@@ -1,5 +1,8 @@
 package at.campus02.nowa.uno;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
 
@@ -30,7 +33,7 @@ public class App {
                     Thread.sleep(1000);
                     printState();
 
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 }
             } while (!gameEnded());
 
@@ -95,6 +98,10 @@ public class App {
 
         UnoKarte startCard = spielKarten.gameCardDeck.remove();
         stack.add(startCard);
+        if (startCard.getKARTENWERT().equals(Kartenwert.PLUS4)) {     // falls +4 Startkarte wäre
+            startCard = spielKarten.gameCardDeck.remove();
+            stack.add(startCard);
+        }
     }
 
     // Methode, um die Karteneingabe zu verarbeiten
@@ -104,38 +111,73 @@ public class App {
         Kartenwert kW = null;
         boolean korrekteEingabe = false;
 
-        System.out.println("Wähle eine Karte oder hebe eine Karte vom Nachziehstapel...");
-        String userInput = input.next();
-        if (userInput.equals("Heben")) {
-            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.gameCardDeck.remove());
-            System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());
-            System.out.println("Der nächste Spieler ist an der Reihe!");
-        }
-        else {
+        int drawCardCounter = 0;
 
-            do {
+        while (!korrekteEingabe) {
+            System.out.println("Wähle eine Karte aus deiner Hand oder hebe eine Karte vom Nachziehstapel...");
+            System.out.println("Wenn du dir nicht sicher bist, gib \"Hilfe\" ein.");
+            String userInput = input.next();
+            if (userInput.equals("Hilfe") || userInput.equals("hilfe")) {
+                try {
+                    BufferedReader helpReader = new BufferedReader(new FileReader("help.txt"));
+
+                    String line;
+                    while ((line = helpReader.readLine()) != null) {
+                        System.out.println(line);
+                    }
+                    helpReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (userInput.equals("Heben") || userInput.equals("heben")) {
+
+                    // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
+                    playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.gameCardDeck.remove());
+                    // die aktuellen Karten werden angezeigt
+                    System.out.println("Deine " + playersList.get(indexCurrentSpieler).getHandCardDeck().size() + " aktuellen Karten: " + playersList.get(indexCurrentSpieler).getHandCardDeck());
+                    drawCardCounter++;
+                    //System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());
+                    //System.out.println("Der nächste Spieler ist an der Reihe!");
+
+            }
+
+            else if(userInput.equals("Weiter") || userInput.equals("weiter")){  // nur wenn bereits 1x gehoben wurde, darf man "weiter sagen"
+                if (drawCardCounter == 1){
+                    korrekteEingabe = true;
+                    drawCardCounter = 0;
+                }
+            }
+
+
+            else {
+
                 String[] values = userInput.split("-");
 
                 try {                           // IndexOutOfBoundsException wird geworfen, wenn die Eingabe nicht richtig erfolgt
                     // z.B. nur R anstelle von R-9, dann ist das values[] nicht vollständig
                     switch (values[0]) {
                         case "R":
+                        case "r":
                             f = Farbe.ROT;
                             break;
                         case "B":
+                        case "b":
                             f = Farbe.BLAU;
                             break;
                         case "G":
+                        case "g":
                             f = Farbe.GRÜN;
                             break;
                         case "Y":
+                        case "y":
                             f = Farbe.YELLOW;
                             break;
                         case "S":
+                        case "s":
                             f = Farbe.SCHWARZ;
                             break;
                         default:
-                            //System.out.println("Keine gültige Farbeingabe.");
                             values[0] = null;
                             break;
                     }
@@ -172,9 +214,11 @@ public class App {
                             kW = Kartenwert.NEUN;
                             break;
                         case "RW":
+                        case "rw":
                             kW = Kartenwert.RW;
                             break;
                         case "OUT":
+                        case "out":
                             kW = Kartenwert.OUT;
                             break;
                         case "+2":
@@ -184,16 +228,17 @@ public class App {
                             kW = Kartenwert.PLUS4;
                             break;
                         case "WILD":
+                        case "wild":
                             kW = Kartenwert.WILD;
                             break;
                         default:
-                            //System.out.println("Werteingabe falsch.");
                             values[1] = null;
                             break;
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println("Du hast die Karte falsch eingegeben. Richtige Eingabe z.B. \"R-7\". ");
+                }catch (IndexOutOfBoundsException e) {
+                    //System.out.println("Du hast die Karte falsch eingegeben. Richtige Eingabe z.B. \"R-7\". ");
                 }
+
 
                 if (f != null && kW != null) {      // Prüfung, ob die eingegebene Karte im Handkartenset vorhanden ist
 
@@ -202,20 +247,23 @@ public class App {
                     if (u != null) {                // wenn es die Karte im Handkartenset gibt
 
                         if (validTurn(u)) {         // prüfen, ob Karte gespielt werden darf
-                            playersList.get(indexCurrentSpieler).getHandCardDeck().remove(u);
-                            stack.add(u);
+                            playersList.get(indexCurrentSpieler).getHandCardDeck().remove(u);   // gültig: entferne sie aus handkarten
+                            stack.add(u);                                                       // füge sie zum stack hinzu
+                            System.out.println("Korrekte Eingabe.");
+                            System.out.println("Der nächste Spieler ist dran...");
+                            //System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());        // für Testzwecke
 
-                            System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());        // für Testzwecke
-                            korrekteEingabe = true;
-                        } else
-                            System.out.print("Diese Karte darf nicht gespielt werden. ");
-                    } else
-                        System.out.print("Diese Karte ist nicht in den Handkarten vorhanden. ");
-                }
-            /*else
-                System.out.println("FALSCHE EINGABE, Farbe oder Wert sind null.");*/
+                            korrekteEingabe = true;         // while Schleife verlassen, methode readuserinput verlassen --> weiter zu updateState
+                        } else {
+                            System.out.println("Diese Karte darf nicht gespielt werden. ");
+                        }
+                    } else {
+                        System.out.println("Diese Karte ist nicht in den Handkarten vorhanden. ");
+                    }
+                } else
+                    System.out.println("FALSCHE EINGABE!");
 
-            } while (!korrekteEingabe);
+            }
         }
     }
 
@@ -250,7 +298,7 @@ public class App {
         System.out.println("oberste Karte am Ablagestapel: " + stack.getLast().toString());
         Spieler s = playersList.get(indexCurrentSpieler);
         System.out.println("aktueller Spieler: " + s.getName());
-        System.out.println("Deine aktuellen Karten: " + s.getHandCardDeck());
+        System.out.println("Deine " + playersList.get(indexCurrentSpieler).getHandCardDeck().size() + " aktuellen Karten: " + s.getHandCardDeck());
     }
 
     private boolean roundEnded() {
