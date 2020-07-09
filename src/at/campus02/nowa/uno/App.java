@@ -96,10 +96,10 @@ public class App {
     // Methode, um die erste Karte "aufzudecken"
     public void determineStartCard() {
 
-        UnoKarte startCard = spielKarten.gameCardDeck.remove();
+        UnoKarte startCard = spielKarten.drawPile.remove();
         stack.add(startCard);
         if (startCard.getKARTENWERT().equals(Kartenwert.PLUS4)) {     // falls +4 Startkarte wäre
-            startCard = spielKarten.gameCardDeck.remove();
+            startCard = spielKarten.drawPile.remove();
             stack.add(startCard);
         }
     }
@@ -129,28 +129,22 @@ public class App {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-            else if (userInput.equals("Heben") || userInput.equals("heben")) {
+            } else if (userInput.equals("Heben") || userInput.equals("heben")) {
 
-                    // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
-                    playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.gameCardDeck.remove());
-                    // die aktuellen Karten werden angezeigt
-                    System.out.println("Deine " + playersList.get(indexCurrentSpieler).getHandCardDeck().size() + " aktuellen Karten: " + playersList.get(indexCurrentSpieler).getHandCardDeck());
-                    drawCardCounter++;
-                    //System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());
-                    //System.out.println("Der nächste Spieler ist an der Reihe!");
-
-            }
-
-            else if(userInput.equals("Weiter") || userInput.equals("weiter")){  // nur wenn bereits 1x gehoben wurde, darf man "weiter sagen"
-                if (drawCardCounter == 1){
+                // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
+                playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
+                // die aktuellen Karten werden angezeigt
+                System.out.println("Deine " + playersList.get(indexCurrentSpieler).getHandCardDeck().size() + " aktuellen Karten: " + playersList.get(indexCurrentSpieler).getHandCardDeck());
+                drawCardCounter++;
+                //System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());
+                //System.out.println("Der nächste Spieler ist an der Reihe!");
+            } else if (userInput.equals("Weiter") || userInput.equals("weiter")) {  // nur wenn bereits 1x gehoben wurde, darf man "weiter sagen"
+                if (drawCardCounter >= 1) {
                     korrekteEingabe = true;
                     drawCardCounter = 0;
-                }
-            }
-
-
-            else {
+                } else
+                    System.out.println("Du musst erst eine Karte vom Nachziehstapel nehmen, bevor du \"weiter\" sagen kannst.");
+            } else {
 
                 String[] values = userInput.split("-");
 
@@ -235,10 +229,9 @@ public class App {
                             values[1] = null;
                             break;
                     }
-                }catch (IndexOutOfBoundsException e) {
+                } catch (IndexOutOfBoundsException e) {
                     //System.out.println("Du hast die Karte falsch eingegeben. Richtige Eingabe z.B. \"R-7\". ");
                 }
-
 
                 if (f != null && kW != null) {      // Prüfung, ob die eingegebene Karte im Handkartenset vorhanden ist
 
@@ -250,7 +243,8 @@ public class App {
                             playersList.get(indexCurrentSpieler).getHandCardDeck().remove(u);   // gültig: entferne sie aus handkarten
                             stack.add(u);                                                       // füge sie zum stack hinzu
                             System.out.println("Korrekte Eingabe.");
-                            System.out.println("Der nächste Spieler ist dran...");
+
+                            //System.out.println("Der nächste Spieler ist dran...");
                             //System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());        // für Testzwecke
 
                             korrekteEingabe = true;         // while Schleife verlassen, methode readuserinput verlassen --> weiter zu updateState
@@ -262,11 +256,9 @@ public class App {
                     }
                 } else
                     System.out.println("FALSCHE EINGABE!");
-
             }
         }
     }
-
 
     // Methode, um zu prüfen, ob die gewünschte Karte gespielt werden darf
     private boolean validTurn(UnoKarte gespielteKarte) {
@@ -285,10 +277,83 @@ public class App {
 
     private void updateState() {
 
+        System.out.println("Der nächste Spieler ist dran...");
+
+        // wenn "OUT" geschmissen wird, wird der nächste übersprungen
+        if (stack.getLast().getKARTENWERT() == Kartenwert.OUT) {
+            clockWise();
+            clockWise();
+        }
+
+
+        // wenn +2 geschmissen wird --> nächster Spieler bekommt 2 Karten und muss aussetzen, d.h. übernächster Spieler ist an der Reihe
+        // todo: was ist, wenn der nächste spieler eine weitere +2 wirft
+        else if (stack.getLast().getKARTENWERT() == Kartenwert.PLUS2) {
+
+            clockWise();    // zuerst einen Spieler weiterspringen
+            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());  // 2 Karten vom Nachziehstapel hinzufügen
+            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
+            clockWise();    // noch einen Spieler weiter gehen
+
+        }
+
+        // +4 geworfen
+        else if (stack.getLast().getKARTENWERT() == Kartenwert.PLUS4) {
+
+            System.out.println("gib deine gewünschte Farbe an: ");
+            String farbwunsch = input.next();
+            switch (farbwunsch) {
+                case "R":
+                case "r":
+                    farbwunsch = String.valueOf(Farbe.ROT);
+                    break;
+                case "B":
+                case "b":
+                    farbwunsch = String.valueOf(Farbe.BLAU);
+                    break;
+                case "G":
+                case "g":
+                    farbwunsch = String.valueOf(Farbe.GRÜN);
+                    break;
+                case "Y":
+                case "y":
+                    farbwunsch = String.valueOf(Farbe.YELLOW);
+                    break;
+            }
+            stack.getLast().setFARBE(Farbe.valueOf(String.valueOf(farbwunsch)));
+
+            clockWise();    // zuerst einen Spieler weiterspringen
+            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
+            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
+            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
+            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
+            clockWise();    // noch einen Spieler weiter gehen
+        }
+
+        // todo: Falls ein RW geworfen wird --> bleibt im Moment nur 1 Runde so
+
+        else if (stack.getLast().getKARTENWERT() == Kartenwert.RW) {
+            counterClockWise();
+        } else {  // weiter im Uhrzeigersinn
+            clockWise();
+        }
+
+
+    }
+
+    private void clockWise() {
         if (indexCurrentSpieler == 3) {
             indexCurrentSpieler = 0;
         } else
             indexCurrentSpieler++;
+    }
+
+    private void counterClockWise() {
+        if (indexCurrentSpieler == 0) {
+            indexCurrentSpieler = 3;
+        } else {
+            indexCurrentSpieler--;
+        }
     }
 
     // aktueller Status wird ausgegeben: welcher Spieler ist dran, welche Karte liegt oben, verfügbare Handkarten

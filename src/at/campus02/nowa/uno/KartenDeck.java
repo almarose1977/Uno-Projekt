@@ -10,12 +10,12 @@ import java.util.*;
 public class KartenDeck {
 
     private final ArrayList<UnoKarte> CardDeck;         // die kompletten Karten werden in eine AL gespeichert
-    public Queue<UnoKarte> gameCardDeck;                // für die jeweiligen Runden werden die gemischten Karten in eine Queue gespeichert
+    public Queue<UnoKarte> drawPile;                // für die jeweiligen Runden werden die gemischten Karten in eine Queue gespeichert
 
     public KartenDeck() {
 
         CardDeck = new ArrayList<>();
-        gameCardDeck = new LinkedList<>();
+        drawPile = new LinkedList<>();
     }
 
     // ~~~~~~ Methode zum Befüllen des Karten-Arrays ~~~~~~
@@ -68,7 +68,7 @@ public class KartenDeck {
         }
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");*/
 
-        gameCardDeck.addAll(CardDeck);     // alle gemischten Karten aus der ArrayList werden der Queue hinzugefügt
+        drawPile.addAll(CardDeck);     // alle gemischten Karten aus der ArrayList werden der Queue hinzugefügt
 
         // nur für Testzwecke
         /*for (UnoKarte u : gameCardDeck){     // gemischte Karten ausgeben lassen
@@ -92,7 +92,7 @@ public class KartenDeck {
         }*/
         for (int i = 0; i < count; i++){
             // aus dem geshuffelten Kartendeck werden die obersten 7 Karten genommen und dem handkarten-deck zugewiesen
-            UnoKarte obersteKarte = gameCardDeck.remove();
+            UnoKarte obersteKarte = drawPile.remove();
             handCards.add(obersteKarte);
         }
 

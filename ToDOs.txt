@@ -1,0 +1,27 @@
+wenn die Eingabe falsch erfolgt ohne Bindestrich, dann ist das Stringarray nur bei index[0] gefüllt, bei index[1] ist nix drin --> Exception
+____________________________________
+
+testen:
+alle möglichen abwegigen kombinationen
+b4
+B4
+b-4
+BB-4
+b-14
+etc.
+auf die Fehlerausgaben achten --> passen die mit dem Spielzug überein?
+
+____________________
+Eingabe auch mit Kleinbuchstaben zulassen??
+
+
+____________________
+heben --> danach nochmalige prüfung, ob karte gelegt werden kann. wenn dann wieder nicht gelegt werden kann --> nächster spieler --> ERLEDIGT
+
+man könnte auch mehrmals hintereinander heben... muss verhindert werden
+
+_________________
+RW passt noch nicht, verliert nach einer Runde den counterClockWise
+
+___________________
+Spieler - Bots vs. Menschen
