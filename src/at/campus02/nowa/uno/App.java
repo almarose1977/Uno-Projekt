@@ -28,10 +28,10 @@ public class App {
                 printState();
 
                 while (!roundEnded()) {
-                    readUserInput();
-                    updateState();
+                    readUserInput();                // Eingabe der Karten, Heben, Weiter
+                    updateState();                  // nächster Spieler unter Berücksichtigung der Sonderkarten
                     Thread.sleep(1000);
-                    printState();
+                    printState();                   // Ausgabe der aktuellen Situation: welcher Spieler ist dran, welche Karte liegt oben
 
                     Thread.sleep(100);
                 }
@@ -44,7 +44,7 @@ public class App {
         }
     }
 
-    private void initializeGame() { // todo: Karten erstellen und mischen, Spielernamen eingeben 4x, Anzeige Spieler
+    private void initializeGame() { //  Karten erstellen und mischen, Spielernamen eingeben 4x
 
         spielKarten.makeDeck();
         spielKarten.shuffleDeck();
@@ -60,7 +60,7 @@ public class App {
         }
     }
 
-    private void initializeRound() {    // todo: 4x 7 Karten verteilen, 1 Karte aufdecken, Aktionskarte prüfen, Startspieler auslosen
+    private void initializeRound() {    // 4x 7 Karten verteilen, 1 Karte aufdecken, Aktionskarte prüfen, Startspieler auslosen
 
         dealOutCards();
         chooseRandomPlayer();
@@ -90,12 +90,10 @@ public class App {
         Spieler s = playersList.get(indexCurrentSpieler);
         System.out.println("Startspieler: " + s.getName());
         System.out.println("Los geht's!");
-
     }
 
     // Methode, um die erste Karte "aufzudecken"
     public void determineStartCard() {
-
         UnoKarte startCard = spielKarten.drawPile.remove();
         stack.add(startCard);
         if (startCard.getKARTENWERT().equals(Kartenwert.plus4)) {     // falls +4 Startkarte wäre
@@ -116,8 +114,10 @@ public class App {
         while (!korrekteEingabe) {
             System.out.println("Wähle eine Karte aus deiner Hand oder hebe eine Karte vom Nachziehstapel...");
             System.out.println("Wenn du dir nicht sicher bist, gib \"Hilfe\" ein.");
-            String userInput = input.next();
-            if (userInput.equals("Hilfe") || userInput.equals("hilfe")) {
+            String consoleInput = input.next();
+            String userInput = consoleInput.toUpperCase();
+
+            if (userInput.equals("HILFE")) {
                 try {
                     BufferedReader helpReader = new BufferedReader(new FileReader("help.txt"));
 
@@ -125,11 +125,11 @@ public class App {
                     while ((line = helpReader.readLine()) != null) {
                         System.out.println(line);
                     }
-                    helpReader.close();
+                    helpReader.close(); // todo: finally einbauen
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else if (userInput.equals("Heben") || userInput.equals("heben")) {
+            } else if (userInput.equals("HEBEN")) {
 
                 // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
                 playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
@@ -138,7 +138,7 @@ public class App {
                 drawCardCounter++;
                 //System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());
                 //System.out.println("Der nächste Spieler ist an der Reihe!");
-            } else if (userInput.equals("Weiter") || userInput.equals("weiter")) {  // nur wenn bereits 1x gehoben wurde, darf man "weiter sagen"
+            } else if (userInput.equals("WEITER")) {  // nur wenn bereits 1x gehoben wurde, darf man "weiter sagen"
                 if (drawCardCounter >= 1) {
                     korrekteEingabe = true;
                     drawCardCounter = 0;
@@ -152,23 +152,18 @@ public class App {
                     // z.B. nur R anstelle von R-9, dann ist das values[] nicht vollständig
                     switch (values[0]) {
                         case "R":
-                        case "r":
                             f = Farbe.ROT;
                             break;
                         case "B":
-                        case "b":
                             f = Farbe.BLAU;
                             break;
                         case "G":
-                        case "g":
                             f = Farbe.GRÜN;
                             break;
                         case "Y":
-                        case "y":
                             f = Farbe.YELLOW;
                             break;
                         case "S":
-                        case "s":
                             f = Farbe.SCHWARZ;
                             break;
                         default:
@@ -208,11 +203,9 @@ public class App {
                             kW = Kartenwert.neun;
                             break;
                         case "RW":
-                        case "rw":
                             kW = Kartenwert.RW;
                             break;
                         case "OUT":
-                        case "out":
                             kW = Kartenwert.OUT;
                             break;
                         case "+2":
@@ -222,7 +215,6 @@ public class App {
                             kW = Kartenwert.plus4;
                             break;
                         case "WILD":
-                        case "wild":
                             kW = Kartenwert.WILD;
                             break;
                         default:
@@ -328,24 +320,21 @@ public class App {
     private void chooseColor() {
         boolean correctInput = false;
         System.out.println("gib deine gewünschte Farbe an: ");
-        String farbwunsch = input.next();
+        String farbEingabe = input.next();
+        String farbwunsch = farbEingabe.toUpperCase();
 
         try {
             switch (farbwunsch) {
                 case "R":
-                case "r":
                     farbwunsch = String.valueOf(Farbe.ROT);
                     break;
                 case "B":
-                case "b":
                     farbwunsch = String.valueOf(Farbe.BLAU);
                     break;
                 case "G":
-                case "g":
                     farbwunsch = String.valueOf(Farbe.GRÜN);
                     break;
                 case "Y":
-                case "y":
                     farbwunsch = String.valueOf(Farbe.YELLOW);
                     break;
                 /*default:
@@ -360,7 +349,7 @@ public class App {
     }
 
     private void clockWise() {
-        if (indexCurrentSpieler == 3) {
+        if (indexCurrentSpieler == 3) {     // Variable definieren +1 oder -1
             indexCurrentSpieler = 0;
         } else
             indexCurrentSpieler++;

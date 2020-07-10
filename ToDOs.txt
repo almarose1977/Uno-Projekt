@@ -2,7 +2,7 @@ wenn die Eingabe falsch erfolgt ohne Bindestrich, dann ist das Stringarray nur b
 bei index[1] ist nix drin --> Exception
 __________________________________________________________________________________
 
-TESTEN:
+todo: TESTEN:
 alle möglichen abwegigen kombinationen
 b4
 B4
@@ -14,6 +14,7 @@ auf die Fehlerausgaben achten --> passen die mit dem Spielzug überein?
 
 __________________________________________________________________________________
 Frage: Eingabe auch mit Kleinbuchstaben zulassen?? --> wäre einfacher zum eingeben
+--> ERLEDIGT
 
 __________________________________________________________________________________
 +4 und WILD: Farbwunsch
@@ -24,11 +25,11 @@ wenn der nächste spieler keine passende farbe zum drauflegen hat auf die gewün
 --> müssen "Standard-Wert" für KartenWERT setzen (Anmerkung: angenommen, Standardwert ist 0, könnte dann aber zum
 Problem werden, weil man dann ja auch passend zum Wert und nicht passend zur Farbe legen kann!!!!)
 ----
-loop für falscheingabe der farbe muss noch implementiert werden
+todo: loop für falscheingabe der farbe muss noch implementiert werden
 
 __________________________________________________________________________________
 +2:
-was ist, wenn der nächste Spieler eine weitere +2 drauflegen kann... implementieren
+was ist, wenn der nächste Spieler eine weitere +2 drauflegen kann... todo: implementieren
 
 
 __________________________________________________________________________________
@@ -36,12 +37,12 @@ heben
 --> danach nochmalige prüfung, ob karte gelegt werden kann. wenn dann wieder nicht gelegt werden kann
 --> nächster spieler --> ERLEDIGT
 -----
-man könnte auch mehrmals hintereinander heben... muss verhindert werden
+man könnte auch mehrmals hintereinander heben... todo: muss verhindert werden!!!
 
 __________________________________________________________________________________
 RichtungsWechsel
 -----
-passt noch nicht, verliert nach einer Runde den counterClockWise
+todo: passt noch nicht, verliert nach einer Runde den counterClockWise
 
 __________________________________________________________________________________
-Spieler - Bots vs. Menschen
+todo: Spieler - Bots vs. Menschen
