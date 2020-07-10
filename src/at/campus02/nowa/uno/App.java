@@ -116,19 +116,27 @@ public class App {
             System.out.println("Wenn du dir nicht sicher bist, gib \"Hilfe\" ein.");
             String consoleInput = input.next();
             String userInput = consoleInput.toUpperCase();
+            BufferedReader helpReader = null;
 
             if (userInput.equals("HILFE")) {
                 try {
-                    BufferedReader helpReader = new BufferedReader(new FileReader("help.txt"));
+                    helpReader = new BufferedReader(new FileReader("help.txt"));
 
                     String line;
                     while ((line = helpReader.readLine()) != null) {
                         System.out.println(line);
                     }
-                    helpReader.close(); // todo: finally einbauen
                 } catch (IOException e) {
                     e.printStackTrace();
+                } finally {
+                    try {
+                        if (helpReader != null)
+                            helpReader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+
             } else if (userInput.equals("HEBEN")) {
 
                 // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
