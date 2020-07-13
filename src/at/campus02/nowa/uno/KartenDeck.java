@@ -52,28 +52,15 @@ public class KartenDeck {
             cardIndex++;
         }
 
-        //Ausgabe nur benötigt zur Prüfung, ob die Kartenerstellung funktioniert hat
-        /*for (UnoKarte u : CardDeck) {
-            System.out.println(u);
-        }*/
     }
 
     // Methode zum Mischen der Karten
     public void shuffleDeck(){
         Collections.shuffle(CardDeck);
 
-        // nur für Testzwecke, ob die Methode funktioniert
-        /*for (UnoKarte u : kartenDeck) {
-            System.out.println(u);
-        }
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");*/
-
         drawPile.addAll(CardDeck);     // alle gemischten Karten aus der ArrayList werden der Queue hinzugefügt
 
-        // nur für Testzwecke
-        /*for (UnoKarte u : gameCardDeck){     // gemischte Karten ausgeben lassen
-            System.out.println(u);
-        }*/
+
     }
 
     // Methode: von den gemischten Karten die 7 obersten Karten nehmen und sie der Liste HandKarten hinzufügen
@@ -95,12 +82,6 @@ public class KartenDeck {
             UnoKarte obersteKarte = drawPile.remove();
             handCards.add(obersteKarte);
         }
-
-        // Ausgabe der Handkarten
-        /*for (UnoKarte u : handCards) {
-            System.out.println(u);
-        }
-        System.out.println(".............");*/
 
         return handCards;
 

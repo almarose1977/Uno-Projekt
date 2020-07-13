@@ -14,7 +14,7 @@ public class Spieler {
         handCardDeck = new LinkedList<>();
     }
 
-    // Vergleich der eingegebenen Karte mit dem Handkartenset
+    // Vergleich der eingegebenen Karte mit dem Handkartenset. Ist die Karte im Handkartenset enthalten?
     public UnoKarte getKarte(Farbe f, Kartenwert kw)
     {
         for (UnoKarte handKarte: handCardDeck) {
