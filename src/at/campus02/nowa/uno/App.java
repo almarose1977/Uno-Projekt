@@ -13,12 +13,18 @@ public class App {
     private LinkedList<UnoKarte> stack = new LinkedList<>();        // Ablagestapel
     private ArrayList<Spieler> playersList = new ArrayList<>();
     private int indexCurrentSpieler;
+    private int test1;
+
+    public void test() {
+        test1 = 15;
+    }
 
 
     public App(Scanner input, PrintStream output) {
         this.input = input;
         this.output = output;
     }
+
 
     public void Run() {
         initializeGame();
@@ -351,6 +357,7 @@ public class App {
                     break;*/
             }
             stack.getLast().setFARBE(Farbe.valueOf(farbwunsch));
+
         } catch (IllegalArgumentException e) {
             System.out.println("Falsche Eingabe");
         }
