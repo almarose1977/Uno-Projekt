@@ -3,7 +3,7 @@ package at.campus02.nowa.uno;
 public class UnoKarte {
 
     private Farbe FARBE;    // darf ich nicht final machen, weil ich sonst keine farbwünsche vergeben kann
-    private final Kartenwert KARTENWERT;
+    private Kartenwert KARTENWERT;
 
     public UnoKarte(Farbe FARBE, Kartenwert KARTENWERT) {
         this.FARBE = FARBE;
@@ -22,8 +22,12 @@ public class UnoKarte {
         this.FARBE = FARBE;
     }
 
+    public void setKARTENWERT(Kartenwert KARTENWERT) {
+        this.KARTENWERT = KARTENWERT;
+    }
+
     @Override
     public String toString() {
-        return FARBE +" " + "\"" + KARTENWERT + "\"";
+        return FARBE + " " + "\"" + KARTENWERT + "\"";
     }
 }
