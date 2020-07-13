@@ -20,6 +20,7 @@ public class App {
         this.output = output;
     }
 
+
     public void Run() {
         initializeGame();
         try {
@@ -351,6 +352,7 @@ public class App {
                     break;*/
             }
             stack.getLast().setFARBE(Farbe.valueOf(farbwunsch));
+
         } catch (IllegalArgumentException e) {
             System.out.println("Falsche Eingabe");
         }
