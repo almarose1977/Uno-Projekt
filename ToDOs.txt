@@ -1,5 +1,6 @@
-wenn die Eingabe falsch erfolgt ohne Bindestrich, dann ist das Stringarray nur bei index[0] gefüllt,
-bei index[1] ist nix drin --> Exception
+
+__________________________________________________________________________________
+todo: Spieler - Bots vs. Menschen
 __________________________________________________________________________________
 
 todo: TESTEN:
@@ -13,8 +14,29 @@ etc.
 auf die Fehlerausgaben achten --> passen die mit dem Spielzug überein?
 
 __________________________________________________________________________________
-Frage: Eingabe auch mit Kleinbuchstaben zulassen?? --> wäre einfacher zum eingeben
---> ERLEDIGT
++2:
+was ist, wenn der nächste Spieler eine weitere +2 drauflegen kann... todo: implementieren
+
+
+__________________________________________________________________________________
+
+RichtungsWechsel
+-----
+todo: passt noch nicht, verliert nach einer Runde den counterClockWise
+
+__________________________________________________________________________________
+__________________________________________________________________________________
+BEREITS ERLEDIGT/IMPLEMENTIERT
+
+wenn die Eingabe falsch erfolgt ohne Bindestrich, dann ist das Stringarray nur bei index[0] gefüllt,
+bei index[1] ist nix drin --> Exception
+__________________________________________________________________________________
+
+heben
+--> danach nochmalige prüfung, ob karte gelegt werden kann. wenn dann wieder nicht gelegt werden kann
+--> nächster spieler --> ERLEDIGT ("weiter" Funktion)
+-----
+man könnte auch mehrmals hintereinander heben... muss verhindert werden!!! --> ERLEDIGT
 
 __________________________________________________________________________________
 +4 und WILD: Farbwunsch
@@ -22,27 +44,8 @@ ________________________________________________________________________________
 gewünschte farbe wird erkannt, karte auf stack heißt dann z.b. ROT "PLUS4" --> PROBLEM:
 wenn der nächste spieler keine passende farbe zum drauflegen hat auf die gewünschte farbe, dann bleibt der Kartenwert
 "PLUS4" erhalten und es kommt erneut zum Farbwunsch
---> müssen "Standard-Wert" für KartenWERT setzen (Anmerkung: angenommen, Standardwert ist 0, könnte dann aber zum
-Problem werden, weil man dann ja auch passend zum Wert und nicht passend zur Farbe legen kann!!!!)
+--> müssen "Standard-Wert" für KartenWERT setzen, Standardwert ist 0 --> ERLEDIGT
+(könnte dann aber zum Problem werden, weil man dann ja auch passend zum Wert und nicht passend zur Farbe
+legen kann!!!!) --> bleibt derweil so
 ----
-todo: loop für falscheingabe der farbe muss noch implementiert werden
-
-__________________________________________________________________________________
-+2:
-was ist, wenn der nächste Spieler eine weitere +2 drauflegen kann... todo: implementieren
-
-
-__________________________________________________________________________________
-heben
---> danach nochmalige prüfung, ob karte gelegt werden kann. wenn dann wieder nicht gelegt werden kann
---> nächster spieler --> ERLEDIGT
------
-man könnte auch mehrmals hintereinander heben... todo: muss verhindert werden!!!
-
-__________________________________________________________________________________
-RichtungsWechsel
------
-todo: passt noch nicht, verliert nach einer Runde den counterClockWise
-
-__________________________________________________________________________________
-todo: Spieler - Bots vs. Menschen
+loop für falscheingabe der farbe muss noch implementiert werden --> ERLEDIGT
