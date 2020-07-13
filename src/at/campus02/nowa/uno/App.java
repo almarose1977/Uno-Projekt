@@ -221,11 +221,8 @@ public class App {
                             playersList.get(indexCurrentSpieler).getHandCardDeck().remove(u);   // gültig: entferne sie aus handkarten
                             stack.add(u);                                                       // füge sie zum stack hinzu
                             System.out.println("Korrekte Eingabe.");
-
-                            //System.out.println("Der nächste Spieler ist dran...");
-                            //System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());        // für Testzwecke
-
                             korrekteEingabe = true;         // while Schleife verlassen, methode readuserinput verlassen --> weiter zu updateState
+
                         } else {
                             System.out.println("Diese Karte darf nicht gespielt werden. Du bekommst eine Strafkarte. ");
                             // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
