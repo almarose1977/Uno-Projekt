@@ -94,8 +94,9 @@ public class App {
 
     // Methode, um die erste Karte "aufzudecken"
     public void determineStartCard() {
-        UnoKarte startCard = spielKarten.drawPile.remove();
-        stack.add(startCard);
+        UnoKarte startCard = spielKarten.drawPile.remove();     // oberste Karte vom Nachziehstapel wird der Startkarte zugewiesen
+        stack.add(startCard);                                   // und dem Stack zugefügt
+
         if (startCard.getKARTENWERT().equals(Kartenwert.plus4)) {     // falls +4 Startkarte wäre
             startCard = spielKarten.drawPile.remove();
             stack.add(startCard);
@@ -117,41 +118,12 @@ public class App {
             System.out.println("Wenn du dir nicht sicher bist, gib \"Hilfe\" ein.");
             String consoleInput = input.next();
             String userInput = consoleInput.toUpperCase();
-            BufferedReader helpReader = null;
+            //BufferedReader helpReader = null;
 
             if (userInput.equals("HILFE")) {
-                try {
-                    helpReader = new BufferedReader(new FileReader("help.txt"));
-
-                    String line;
-                    while ((line = helpReader.readLine()) != null) {
-                        System.out.println(line);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (helpReader != null)
-                            helpReader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
+                callHelp();
             } else if (userInput.equals("HEBEN")) {
-
-                // wenn bereits 1x gehoben wurde
-                if (drawCardCounter == 1){
-                    System.out.println("Es kann nur 1x eine Karte gehoben werden. Gib bei der nächsten Eingabe \"weiter\" ein.\n");
-                }
-                else {
-                    drawCardCounter++;
-                    // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
-                    playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
-                    // die aktuellen Karten werden angezeigt
-                    System.out.println("Deine " + playersList.get(indexCurrentSpieler).getHandCardDeck().size() + " aktuellen Karten: " + playersList.get(indexCurrentSpieler).getHandCardDeck());
-                }
-
+                drawCardCounter = drawCard(drawCardCounter);
             } else if (userInput.equals("WEITER")) {  // nur wenn bereits 1x gehoben wurde, darf man "weiter sagen"
                 if (drawCardCounter >= 1) {
                     korrekteEingabe = true;
@@ -255,7 +227,11 @@ public class App {
 
                             korrekteEingabe = true;         // while Schleife verlassen, methode readuserinput verlassen --> weiter zu updateState
                         } else {
-                            System.out.println("Diese Karte darf nicht gespielt werden. ");
+                            System.out.println("Diese Karte darf nicht gespielt werden. Du bekommst eine Strafkarte. ");
+                            // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
+                            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
+                            korrekteEingabe = true;
+
                         }
                     } else {
                         System.out.println("Diese Karte ist nicht in den Handkarten vorhanden. ");
@@ -264,6 +240,43 @@ public class App {
                     System.out.println("FALSCHE EINGABE!");
             }
         }
+    }
+
+    // Methode "HILFE"
+    private void callHelp() {
+        BufferedReader helpReader = null;
+        try {
+            helpReader = new BufferedReader(new FileReader("help.txt"));
+
+            String line;
+            while ((line = helpReader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (helpReader != null)
+                    helpReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Methode "HEBEN"
+    private int drawCard(int drawCardCounter) {
+        // wenn bereits 1x gehoben wurde
+        if (drawCardCounter == 1) {
+            System.out.println("Es kann nur 1x eine Karte gehoben werden. Gib bei der nächsten Eingabe \"weiter\" ein.\n");
+        } else {
+            drawCardCounter++;
+            // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
+            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
+            // die aktuellen Karten werden angezeigt
+            System.out.println("Deine " + playersList.get(indexCurrentSpieler).getHandCardDeck().size() + " aktuellen Karten: " + playersList.get(indexCurrentSpieler).getHandCardDeck());
+        }
+        return drawCardCounter;
     }
 
     // Methode, um zu prüfen, ob die gewünschte Karte gespielt werden darf
