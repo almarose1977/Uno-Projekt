@@ -20,7 +20,6 @@ public class App {
         this.output = output;
     }
 
-
     public void Run() {
         initializeGame();
         try {
@@ -101,6 +100,7 @@ public class App {
             startCard = spielKarten.drawPile.remove();
             stack.add(startCard);
         }
+
     }
 
     // Methode, um die Karteneingabe zu verarbeiten
@@ -140,13 +140,18 @@ public class App {
 
             } else if (userInput.equals("HEBEN")) {
 
-                // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
-                playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
-                // die aktuellen Karten werden angezeigt
-                System.out.println("Deine " + playersList.get(indexCurrentSpieler).getHandCardDeck().size() + " aktuellen Karten: " + playersList.get(indexCurrentSpieler).getHandCardDeck());
-                drawCardCounter++;
-                //System.out.println("Anzahl Handkarten: " + playersList.get(indexCurrentSpieler).getHandCardDeck().size());
-                //System.out.println("Der nächste Spieler ist an der Reihe!");
+                // wenn bereits 1x gehoben wurde
+                if (drawCardCounter == 1){
+                    System.out.println("Es kann nur 1x eine Karte gehoben werden. Gib bei der nächsten Eingabe \"weiter\" ein.\n");
+                }
+                else {
+                    drawCardCounter++;
+                    // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
+                    playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
+                    // die aktuellen Karten werden angezeigt
+                    System.out.println("Deine " + playersList.get(indexCurrentSpieler).getHandCardDeck().size() + " aktuellen Karten: " + playersList.get(indexCurrentSpieler).getHandCardDeck());
+                }
+
             } else if (userInput.equals("WEITER")) {  // nur wenn bereits 1x gehoben wurde, darf man "weiter sagen"
                 if (drawCardCounter >= 1) {
                     korrekteEingabe = true;
@@ -276,7 +281,7 @@ public class App {
         return isValid;
     }
 
-    // TODO: Sonderkarten implementieren
+    // hier werden die Sonderkarten implementiert
     private void updateState() {
 
         // wenn "OUT" geschmissen wird, wird der nächste übersprungen
@@ -296,7 +301,7 @@ public class App {
 
         }
 
-        // plus 4 TODO loop integrieren, wenn falsche eingabe
+        // plus 4
         else if (stack.getLast().getKARTENWERT() == Kartenwert.plus4) {
 
             chooseColor();
@@ -328,33 +333,38 @@ public class App {
 
     private void chooseColor() {
         boolean correctInput = false;
-        System.out.println("gib deine gewünschte Farbe an: ");
-        String farbEingabe = input.next();
-        String farbwunsch = farbEingabe.toUpperCase();
 
-        try {
-            switch (farbwunsch) {
-                case "R":
-                    farbwunsch = String.valueOf(Farbe.ROT);
-                    break;
-                case "B":
-                    farbwunsch = String.valueOf(Farbe.BLAU);
-                    break;
-                case "G":
-                    farbwunsch = String.valueOf(Farbe.GRÜN);
-                    break;
-                case "Y":
-                    farbwunsch = String.valueOf(Farbe.YELLOW);
-                    break;
-                /*default:
-                    farbwunsch = null;
-                    System.out.println("Falsche Eingabe");
-                    break;*/
+        while (!correctInput) {
+            System.out.println("gib deine gewünschte Farbe an: ");
+            String farbEingabe = input.next();
+            String farbwunsch = farbEingabe.toUpperCase();
+
+                switch (farbwunsch) {
+                    case "R":
+                        farbwunsch = String.valueOf(Farbe.ROT);
+                        break;
+                    case "B":
+                        farbwunsch = String.valueOf(Farbe.BLAU);
+                        break;
+                    case "G":
+                        farbwunsch = String.valueOf(Farbe.GRÜN);
+                        break;
+                    case "Y":
+                        farbwunsch = String.valueOf(Farbe.YELLOW);
+                        break;
+                    default:
+                        farbwunsch = null;
+                        System.out.println("Falsche Eingabe! Nur R, G, B und Y sind erlaubt.");
+                        break;
+                }
+
+            if (farbwunsch != null) {
+                correctInput = true;
+
+                stack.getLast().setFARBE(Farbe.valueOf(farbwunsch));
+                stack.getLast().setKARTENWERT(Kartenwert.zero);     // Karten-WERT wird standarfmäßig auf "0" gesetzt
             }
-            stack.getLast().setFARBE(Farbe.valueOf(farbwunsch));
 
-        } catch (IllegalArgumentException e) {
-            System.out.println("Falsche Eingabe");
         }
     }
 
