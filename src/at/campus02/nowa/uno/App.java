@@ -307,20 +307,11 @@ public class App {
         // todo: was ist, wenn der nächste spieler eine weitere +2 wirft
         else if (stack.getLast().getKARTENWERT() == Kartenwert.plus2) {
 
-            UnoKarte u = playersList.get(indexCurrentPlayer).getKarte(stack.getLast().getFARBE(), Kartenwert.plus2);
-
             nextPlayer();   // zuerst einen Spieler weiter gehen
-            // Für Testzwecke
-            System.out.println(playersList.get(indexCurrentPlayer).getHandCardDeck().toString());
+            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  // 2 Karten vom Nachziehstapel hinzufügen
+            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+            nextPlayer();   // noch einen Spieler weiter gehen
 
-            if (!playersList.get(indexCurrentPlayer).getHandCardDeck().contains(Kartenwert.plus2)) { // wenn der Spieler keine +2 in seinen Handkarten hat
-                playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  // 2 Karten vom Nachziehstapel hinzufügen
-                playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
-                nextPlayer();   // noch einen Spieler weiter gehen
-            } else {
-                playersList.get(indexCurrentPlayer).getHandCardDeck().remove(playersList.get(indexCurrentPlayer).getHandCardDeck().contains(Kartenwert.plus2));   // wenn die Handkarten eine +2 enthalten, wird diese gespielt
-                //stack.add(playersList.get(indexCurrentSpieler).getHandCardDeck().(Kartenwert.plus2));                                                       // und dem stack hinzugefügt
-            }
         }
 
         // plus 4
