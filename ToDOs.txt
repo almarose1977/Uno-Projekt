@@ -29,6 +29,16 @@ ________________________________________________________________________________
 Hilfe nur 1x einlesen --> in Stringbuilder abspeichern und nur mehr Stringbuilder ausgeben lassen
 --> ressourcenschonender als jedes Mal BufferedReader aufzurufen
 TODO: Stringbuilder implementieren
+
+__________________________________________________________________________________
++2: wenn man als nächstes bei einer +2 dran ist und nicht kann (auch nicht nach heben), bleibt die +2 aufrecht und der
+nächste spieler wird ebenfalls übersprungen und bekommt 2 karten
+--> ACHTUNG passiert bei jeder Sonderkarte!!!!
+__________________________________________________________________________________
+Uno rufen: wenn nur mehr 1 Karte im Handkartenset eines Spielers vorhanden ist, muss er die Möglichkeit haben, "UNO
+zu rufen".
+sollen wir das mit einem Timer machen? wenn in dieser Zeit ein input erfolgt, hat er uno gerufen, ansonsten nicht?
+
 __________________________________________________________________________________
 __________________________________________________________________________________
 BEREITS ERLEDIGT/IMPLEMENTIERT
