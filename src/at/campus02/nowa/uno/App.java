@@ -12,7 +12,8 @@ public class App {
     private KartenDeck spielKarten = new KartenDeck();
     private LinkedList<UnoKarte> stack = new LinkedList<>();        // Ablagestapel
     private ArrayList<Spieler> playersList = new ArrayList<>();
-    private int indexCurrentSpieler;
+    private int indexCurrentPlayer;
+    private int direction = 1;
 
 
     public App(Scanner input, PrintStream output) {
@@ -85,9 +86,9 @@ public class App {
         Random random = new Random();
         int max = 3;
         int min = 0;
-        indexCurrentSpieler = random.nextInt((max - min) + 1) + min;
+        indexCurrentPlayer = random.nextInt((max - min) + 1) + min;
         //System.out.println(playersList.toString());       // zur Ausgabe der Spielerliste
-        Spieler s = playersList.get(indexCurrentSpieler);
+        Spieler s = playersList.get(indexCurrentPlayer);
         System.out.println("Startspieler: " + s.getName());
         System.out.println("Los geht's!");
     }
@@ -213,20 +214,22 @@ public class App {
 
                 if (f != null && kW != null) {      // Prüfung, ob die eingegebene Karte im Handkartenset vorhanden ist
 
-                    UnoKarte u = playersList.get(indexCurrentSpieler).getKarte(f, kW);
+                    UnoKarte u = playersList.get(indexCurrentPlayer).getKarte(f, kW);
 
                     if (u != null) {                // wenn es die Karte im Handkartenset gibt
 
                         if (validTurn(u)) {         // prüfen, ob Karte gespielt werden darf
-                            playersList.get(indexCurrentSpieler).getHandCardDeck().remove(u);   // gültig: entferne sie aus handkarten
+                            playersList.get(indexCurrentPlayer).getHandCardDeck().remove(u);   // gültig: entferne sie aus handkarten
                             stack.add(u);                                                       // füge sie zum stack hinzu
+
                             System.out.println("Korrekte Eingabe.");
+
                             korrekteEingabe = true;         // while Schleife verlassen, methode readuserinput verlassen --> weiter zu updateState
 
                         } else {
                             System.out.println("Diese Karte darf nicht gespielt werden. Du bekommst eine Strafkarte. ");
                             // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
-                            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
+                            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
                             korrekteEingabe = true;
 
                         }
@@ -237,6 +240,7 @@ public class App {
                     System.out.println("FALSCHE EINGABE!");
             }
         }
+
     }
 
     // Methode "HILFE"
@@ -269,9 +273,9 @@ public class App {
         } else {
             drawCardCounter++;
             // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
-            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
+            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
             // die aktuellen Karten werden angezeigt
-            System.out.println("Deine " + playersList.get(indexCurrentSpieler).getHandCardDeck().size() + " aktuellen Karten: " + playersList.get(indexCurrentSpieler).getHandCardDeck());
+            System.out.println("Deine " + playersList.get(indexCurrentPlayer).getHandCardDeck().size() + " aktuellen Karten: " + playersList.get(indexCurrentPlayer).getHandCardDeck());
         }
         return drawCardCounter;
     }
@@ -296,19 +300,27 @@ public class App {
 
         // wenn "OUT" geschmissen wird, wird der nächste übersprungen
         if (stack.getLast().getKARTENWERT() == Kartenwert.OUT) {
-            clockWise();
-            clockWise();
+            skip();
         }
 
         // wenn +2 geschmissen wird --> nächster Spieler bekommt 2 Karten und muss aussetzen, d.h. übernächster Spieler ist an der Reihe
         // todo: was ist, wenn der nächste spieler eine weitere +2 wirft
         else if (stack.getLast().getKARTENWERT() == Kartenwert.plus2) {
 
-            clockWise();    // zuerst einen Spieler weiterspringen
-            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());  // 2 Karten vom Nachziehstapel hinzufügen
-            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
-            clockWise();    // noch einen Spieler weiter gehen
+            UnoKarte u = playersList.get(indexCurrentPlayer).getKarte(stack.getLast().getFARBE(), Kartenwert.plus2);
 
+            nextPlayer();   // zuerst einen Spieler weiter gehen
+            // Für Testzwecke
+            System.out.println(playersList.get(indexCurrentPlayer).getHandCardDeck().toString());
+
+            if (!playersList.get(indexCurrentPlayer).getHandCardDeck().contains(Kartenwert.plus2)) { // wenn der Spieler keine +2 in seinen Handkarten hat
+                playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  // 2 Karten vom Nachziehstapel hinzufügen
+                playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+                nextPlayer();   // noch einen Spieler weiter gehen
+            } else {
+                playersList.get(indexCurrentPlayer).getHandCardDeck().remove(playersList.get(indexCurrentPlayer).getHandCardDeck().contains(Kartenwert.plus2));   // wenn die Handkarten eine +2 enthalten, wird diese gespielt
+                //stack.add(playersList.get(indexCurrentSpieler).getHandCardDeck().(Kartenwert.plus2));                                                       // und dem stack hinzugefügt
+            }
         }
 
         // plus 4
@@ -316,30 +328,32 @@ public class App {
 
             chooseColor();
 
-            clockWise();    // zuerst einen Spieler weiterspringen
-            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
-            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
-            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
-            playersList.get(indexCurrentSpieler).getHandCardDeck().add(spielKarten.drawPile.remove());
-            clockWise();    // noch einen Spieler weiter gehen
+            nextPlayer();   // zuerst einen Spieler weiterspringen
+            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
+            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+            nextPlayer();   // noch einen Spieler weiter gehen
         }
 
         // Farbwunsch
         else if (stack.getLast().getKARTENWERT() == Kartenwert.WILD) {
             chooseColor();
-            clockWise();
+            nextPlayer();
         }
 
 
         // Richtungswechsel todo: --> bleibt im Moment nur 1 Runde so
         else if (stack.getLast().getKARTENWERT() == Kartenwert.RW) {
-            counterClockWise();
-        } else {  // weiter im Uhrzeigersinn
-            clockWise();
-        }
+            changeDirection();
+            nextPlayer();
+        } else
+            nextPlayer();
 
         System.out.println("Der nächste Spieler ist dran...");
+
     }
+
 
     private void chooseColor() {
         boolean correctInput = false;
@@ -349,24 +363,24 @@ public class App {
             String farbEingabe = input.next();
             String farbwunsch = farbEingabe.toUpperCase();
 
-                switch (farbwunsch) {
-                    case "R":
-                        farbwunsch = String.valueOf(Farbe.ROT);
-                        break;
-                    case "B":
-                        farbwunsch = String.valueOf(Farbe.BLAU);
-                        break;
-                    case "G":
-                        farbwunsch = String.valueOf(Farbe.GRÜN);
-                        break;
-                    case "Y":
-                        farbwunsch = String.valueOf(Farbe.YELLOW);
-                        break;
-                    default:
-                        farbwunsch = null;
-                        System.out.println("Falsche Eingabe! Nur R, G, B und Y sind erlaubt.");
-                        break;
-                }
+            switch (farbwunsch) {
+                case "R":
+                    farbwunsch = String.valueOf(Farbe.ROT);
+                    break;
+                case "B":
+                    farbwunsch = String.valueOf(Farbe.BLAU);
+                    break;
+                case "G":
+                    farbwunsch = String.valueOf(Farbe.GRÜN);
+                    break;
+                case "Y":
+                    farbwunsch = String.valueOf(Farbe.YELLOW);
+                    break;
+                default:
+                    farbwunsch = null;
+                    System.out.println("Falsche Eingabe! Nur R, G, B und Y sind erlaubt.");
+                    break;
+            }
 
             if (farbwunsch != null) {
                 correctInput = true;
@@ -378,19 +392,30 @@ public class App {
         }
     }
 
-    private void clockWise() {
-        if (indexCurrentSpieler == 3) {     // Variable definieren +1 oder -1
-            indexCurrentSpieler = 0;
-        } else
-            indexCurrentSpieler++;
+    private void skip() {
+        nextPlayer();
+        nextPlayer();
     }
 
-    private void counterClockWise() {
-        if (indexCurrentSpieler == 0) {
-            indexCurrentSpieler = 3;
-        } else {
-            indexCurrentSpieler--;
+    private void changeDirection() {
+
+        direction *= -1;
+    }
+
+
+    private Spieler nextPlayer() {
+        indexCurrentPlayer = indexCurrentPlayer + direction;
+        //todo: nie kleiner 0 werden oder größer 3
+        if (direction == 1) {
+            if (indexCurrentPlayer == 4) {     // Variable definieren +1 oder -1
+                indexCurrentPlayer = 0;
+            }
+        } else if (direction == -1) {
+            if (indexCurrentPlayer == -1) {
+                indexCurrentPlayer = 3;
+            }
         }
+        return playersList.get(indexCurrentPlayer);
     }
 
     // aktueller Status wird ausgegeben: welcher Spieler ist dran, welche Karte liegt oben, verfügbare Handkarten
@@ -398,14 +423,19 @@ public class App {
 
         System.out.println("........");
         System.out.println("oberste Karte am Ablagestapel: " + stack.getLast().toString());
-        Spieler s = playersList.get(indexCurrentSpieler);
+        Spieler s = playersList.get(indexCurrentPlayer);
         System.out.println("aktueller Spieler: " + s.getName());
-        System.out.println("Deine " + playersList.get(indexCurrentSpieler).getHandCardDeck().size() + " aktuellen Karten: " + s.getHandCardDeck());
+        System.out.println("Deine " + playersList.get(indexCurrentPlayer).getHandCardDeck().size() + " aktuellen Karten: " + s.getHandCardDeck());
     }
 
     private boolean roundEnded() {
+        // todo: abbruch der runde, wenn keine karten mehr im handkartenset vorhanden ist
+        if (playersList.get(indexCurrentPlayer).getHandCardDeck().size() == 0) {
+            System.out.println("Keine Karten mehr!");
 
-        return false;
+            return true;
+        } else
+            return false;
     }
 
     private boolean gameEnded() {
