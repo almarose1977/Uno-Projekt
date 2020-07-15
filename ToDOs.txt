@@ -22,10 +22,7 @@ Hilfe nur 1x einlesen --> in Stringbuilder abspeichern und nur mehr Stringbuilde
 --> ressourcenschonender als jedes Mal BufferedReader aufzurufen
 TODO: Stringbuilder implementieren
 
-__________________________________________________________________________________
-+2: wenn man als nächstes bei einer +2 dran ist und nicht kann (auch nicht nach heben), bleibt die +2 aufrecht und der
-nächste spieler wird ebenfalls übersprungen und bekommt 2 karten
---> ACHTUNG passiert bei jeder Sonderkarte!!!!
+
 __________________________________________________________________________________
 Uno rufen: wenn nur mehr 1 Karte im Handkartenset eines Spielers vorhanden ist, muss er die Möglichkeit haben, "UNO
 zu rufen".
@@ -37,6 +34,11 @@ BEREITS ERLEDIGT/IMPLEMENTIERT
 
 wenn die Eingabe falsch erfolgt ohne Bindestrich, dann ist das Stringarray nur bei index[0] gefüllt,
 bei index[1] ist nix drin --> Exception
+
+__________________________________________________________________________________
++2: wenn man als nächstes bei einer +2 dran ist und nicht kann (auch nicht nach heben), bleibt die +2 aufrecht und der
+nächste spieler wird ebenfalls übersprungen und bekommt 2 karten
+--> ACHTUNG passiert bei jeder Sonderkarte!!!! --> ERLEDIGT: playedAlready
 __________________________________________________________________________________
 
 RichtungsWechsel
@@ -59,5 +61,6 @@ wenn der nächste spieler keine passende farbe zum drauflegen hat auf die gewün
 --> müssen "Standard-Wert" für KartenWERT setzen, Standardwert ist 0 --> ERLEDIGT
 (könnte dann aber zum Problem werden, weil man dann ja auch passend zum Wert und nicht passend zur Farbe
 legen kann!!!!) --> bleibt derweil so
+--> ERLEDIGT durch Einführung playedAlready --> es gibt kein Standardwert
 ----
 loop für falscheingabe der farbe muss noch implementiert werden --> ERLEDIGT
