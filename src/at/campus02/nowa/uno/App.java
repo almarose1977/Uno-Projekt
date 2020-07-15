@@ -128,6 +128,7 @@ public class App {
             } else if (userInput.equals("WEITER")) {  // nur wenn bereits 1x gehoben wurde, darf man "weiter sagen"
                 if (drawCardCounter >= 1) {
                     korrekteEingabe = true;
+                    stack.getLast().setPlayedAlready();
                     drawCardCounter = 0;
                 } else
                     System.out.println("Du musst erst eine Karte vom Nachziehstapel nehmen, bevor du \"weiter\" sagen kannst.");
@@ -223,7 +224,7 @@ public class App {
                             stack.add(u);                                                       // füge sie zum stack hinzu
 
                             System.out.println("Korrekte Eingabe.");
-
+                            //u.setPlayedAlready();
                             korrekteEingabe = true;         // while Schleife verlassen, methode readuserinput verlassen --> weiter zu updateState
 
                         } else {
@@ -298,47 +299,54 @@ public class App {
     // hier werden die Sonderkarten implementiert
     private void updateState() {
 
-        // wenn "OUT" geschmissen wird, wird der nächste übersprungen
-        if (stack.getLast().getKARTENWERT() == Kartenwert.OUT) {
-            skip();
+        if (stack.getLast().isPlayedAlready() == false) {  // Funktion der Karte wurde noch nicht gespielt
+
+            // wenn "OUT" geschmissen wird, wird der nächste übersprungen
+            if (stack.getLast().getKARTENWERT() == Kartenwert.OUT) {
+                skip();
+            }
+
+            // wenn +2 geschmissen wird --> nächster Spieler bekommt 2 Karten und muss aussetzen, d.h. übernächster Spieler ist an der Reihe
+            // todo: was ist, wenn der nächste spieler eine weitere +2 wirft
+            else if (stack.getLast().getKARTENWERT() == Kartenwert.plus2) {
+
+                nextPlayer();   // zuerst einen Spieler weiter gehen
+                playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  // 2 Karten vom Nachziehstapel hinzufügen
+                playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+                nextPlayer();   // noch einen Spieler weiter gehen
+
+            }
+
+            // plus 4
+            else if (stack.getLast().getKARTENWERT() == Kartenwert.plus4) {
+
+                chooseColor();
+
+                nextPlayer();   // zuerst einen Spieler weiterspringen
+                playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
+                playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+                playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+                playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+                nextPlayer();   // noch einen Spieler weiter gehen
+            }
+
+            // Farbwunsch
+            else if (stack.getLast().getKARTENWERT() == Kartenwert.WILD) {
+                chooseColor();
+                nextPlayer();
+            }
+
+            // Richtungswechsel
+            else if (stack.getLast().getKARTENWERT() == Kartenwert.RW) {
+                changeDirection();
+                nextPlayer();
+            }
+            // falls "normale" Karte gespielt wurde
+            else
+                nextPlayer();
         }
-
-        // wenn +2 geschmissen wird --> nächster Spieler bekommt 2 Karten und muss aussetzen, d.h. übernächster Spieler ist an der Reihe
-        // todo: was ist, wenn der nächste spieler eine weitere +2 wirft
-        else if (stack.getLast().getKARTENWERT() == Kartenwert.plus2) {
-
-            nextPlayer();   // zuerst einen Spieler weiter gehen
-            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  // 2 Karten vom Nachziehstapel hinzufügen
-            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
-            nextPlayer();   // noch einen Spieler weiter gehen
-
-        }
-
-        // plus 4
-        else if (stack.getLast().getKARTENWERT() == Kartenwert.plus4) {
-
-            chooseColor();
-
-            nextPlayer();   // zuerst einen Spieler weiterspringen
-            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
-            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
-            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
-            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
-            nextPlayer();   // noch einen Spieler weiter gehen
-        }
-
-        // Farbwunsch
-        else if (stack.getLast().getKARTENWERT() == Kartenwert.WILD) {
-            chooseColor();
-            nextPlayer();
-        }
-
-
-        // Richtungswechsel todo: --> bleibt im Moment nur 1 Runde so
-        else if (stack.getLast().getKARTENWERT() == Kartenwert.RW) {
-            changeDirection();
-            nextPlayer();
-        } else
+        // Funktion der Karte wurde bereits gespielt, dann kommt einfach der nächste Spieler dran
+        else
             nextPlayer();
 
         System.out.println("Der nächste Spieler ist dran...");
@@ -389,16 +397,15 @@ public class App {
     }
 
     private void changeDirection() {
-
         direction *= -1;
     }
 
 
     private Spieler nextPlayer() {
         indexCurrentPlayer = indexCurrentPlayer + direction;
-        //todo: nie kleiner 0 werden oder größer 3
+
         if (direction == 1) {
-            if (indexCurrentPlayer == 4) {     // Variable definieren +1 oder -1
+            if (indexCurrentPlayer == 4) {
                 indexCurrentPlayer = 0;
             }
         } else if (direction == -1) {
