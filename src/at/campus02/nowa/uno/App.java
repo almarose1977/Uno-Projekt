@@ -321,7 +321,6 @@ public class App {
             else if (stack.getLast().getKARTENWERT() == Kartenwert.plus4) {
 
                 chooseColor();
-
                 nextPlayer();   // zuerst einen Spieler weiterspringen
                 playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
                 playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
@@ -385,7 +384,7 @@ public class App {
                 correctInput = true;
 
                 stack.getLast().setFARBE(Farbe.valueOf(farbwunsch));
-                stack.getLast().setKARTENWERT(Kartenwert.zero);     // Karten-WERT wird standarfmäßig auf "0" gesetzt
+                //stack.getLast().setKARTENWERT(Kartenwert.zero);     // Karten-WERT wird standarfmäßig auf "0" gesetzt --> hinfällig durch playedAlready
             }
 
         }
