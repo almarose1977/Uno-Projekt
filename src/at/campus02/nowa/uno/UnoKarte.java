@@ -4,10 +4,20 @@ public class UnoKarte {
 
     private Farbe FARBE;    // darf ich nicht final machen, weil ich sonst keine farbwünsche vergeben kann
     private Kartenwert KARTENWERT;  // darf ich nicht final machen, weil ich sonst bei farbwünschen den Wert nicht setzen kann
+    private boolean playedAlready;
 
     public UnoKarte(Farbe FARBE, Kartenwert KARTENWERT) {
         this.FARBE = FARBE;
         this.KARTENWERT = KARTENWERT;
+        playedAlready = false;
+    }
+
+    public void setPlayedAlready() {
+        playedAlready = true;
+    }
+
+    public boolean isPlayedAlready() {
+        return playedAlready;
     }
 
     public Farbe getFARBE() {
@@ -30,4 +40,6 @@ public class UnoKarte {
     public String toString() {
         return FARBE + " " + "\"" + KARTENWERT + "\"";
     }
+
+
 }

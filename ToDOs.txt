@@ -17,14 +17,6 @@ ________________________________________________________________________________
 +2:
 was ist, wenn der nächste Spieler eine weitere +2 drauflegen kann... todo: implementieren
 Detailanforderung 21+22
-
-__________________________________________________________________________________
-
-RichtungsWechsel
------
-todo: passt noch nicht, verliert nach einer Runde den counterClockWise
-Detailanforderung 28
-
 __________________________________________________________________________________
 Hilfe nur 1x einlesen --> in Stringbuilder abspeichern und nur mehr Stringbuilder ausgeben lassen
 --> ressourcenschonender als jedes Mal BufferedReader aufzurufen
@@ -45,6 +37,11 @@ BEREITS ERLEDIGT/IMPLEMENTIERT
 
 wenn die Eingabe falsch erfolgt ohne Bindestrich, dann ist das Stringarray nur bei index[0] gefüllt,
 bei index[1] ist nix drin --> Exception
+__________________________________________________________________________________
+
+RichtungsWechsel
+-----
+Detailanforderung 28
 __________________________________________________________________________________
 
 heben
