@@ -102,7 +102,6 @@ public class App {
             startCard = spielKarten.drawPile.remove();
             stack.add(startCard);
         }
-
     }
 
     // Methode, um die Karteneingabe zu verarbeiten
@@ -225,6 +224,7 @@ public class App {
 
                             System.out.println("Korrekte Eingabe.");
                             //u.setPlayedAlready();
+                            System.out.println("Anzahl Nachziehstapel: " + spielKarten.drawPile.size()); // für testzwecke
                             korrekteEingabe = true;         // while Schleife verlassen, methode readuserinput verlassen --> weiter zu updateState
 
                         } else {
@@ -273,10 +273,14 @@ public class App {
             System.out.println("Es kann nur 1x eine Karte gehoben werden. Gib bei der nächsten Eingabe \"weiter\" ein.\n");
         } else {
             drawCardCounter++;
+            if (spielKarten.drawPile.size() <= 1) {  // falls der Nachziehstapel weniger/gleich 1 Karten beinhaltet
+                makeNewDeckWhenPileIsEmpty();
+            }
             // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
             playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
             // die aktuellen Karten werden angezeigt
             System.out.println("Deine " + playersList.get(indexCurrentPlayer).getHandCardDeck().size() + " aktuellen Karten: " + playersList.get(indexCurrentPlayer).getHandCardDeck());
+
         }
         return drawCardCounter;
     }
@@ -311,6 +315,9 @@ public class App {
             else if (stack.getLast().getKARTENWERT() == Kartenwert.plus2) {
 
                 nextPlayer();   // zuerst einen Spieler weiter gehen
+                if (spielKarten.drawPile.size() <= 2) {  // falls der Nachziehstapel weniger/gleich 2 Karten beinhaltet
+                    makeNewDeckWhenPileIsEmpty();
+                }
                 playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  // 2 Karten vom Nachziehstapel hinzufügen
                 playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
                 nextPlayer();   // noch einen Spieler weiter gehen
@@ -322,6 +329,9 @@ public class App {
 
                 chooseColor();
                 nextPlayer();   // zuerst einen Spieler weiterspringen
+                if (spielKarten.drawPile.size() <= 4) {  // falls der Nachziehstapel weniger/gleich 4 Karten beinhaltet
+                    makeNewDeckWhenPileIsEmpty();
+                }
                 playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
                 playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
                 playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
@@ -414,6 +424,29 @@ public class App {
         }
         return playersList.get(indexCurrentPlayer);
     }
+
+    // Nachziehstapel ist fast leer --> Ablagestapel neu mischen und zum Nachziehstapel machen
+    private void makeNewDeckWhenPileIsEmpty() {
+
+        System.out.println("Anzahl der Karten im Ablagestapel: " + stack.size()); // nur für Testzwecke
+
+        UnoKarte oK = stack.removeLast();       // oberste Karte wird "auf die Seite gelegt" (nicht mitgemischt)
+        System.out.println("oberste Karte " + oK.toString());   // nur für Testzwecke
+        System.out.println("Anzahl der Karten im Ablagestapel nach Entfernen der obersten Karte: " + stack.size()); // nur für Testzwecke
+
+        for (UnoKarte u : stack) {           // die Funktion playedAlready wieder auf FALSE setzen
+            u.setPlayedAlreadyToFalse();
+        }
+        Collections.shuffle(stack);                     // Ablagestapel wird gemischt
+
+        spielKarten.drawPile.addAll(stack);             // die gemischten Karten werden dem Nachziehstapel zugefügt
+        System.out.println("Oberste Karte: " + stack.getLast());    // nur für Testzwecke
+
+        stack.add(oK);                   // oberste Karte wird wieder aufgelegt
+        System.out.println("Oberste Karte, nachdem die letzte Karte wieder aufgelegt wurde: " + stack.getLast());   // nur für Testzwecke
+
+    }
+
 
     // aktueller Status wird ausgegeben: welcher Spieler ist dran, welche Karte liegt oben, verfügbare Handkarten
     private void printState() {
