@@ -60,7 +60,6 @@ public class KartenDeck {
 
         drawPile.addAll(CardDeck);     // alle gemischten Karten aus der ArrayList werden der Queue hinzugefügt
 
-
     }
 
     // Methode: von den gemischten Karten die 7 obersten Karten nehmen und sie der Liste HandKarten hinzufügen
@@ -69,7 +68,16 @@ public class KartenDeck {
         LinkedList<UnoKarte> handCards = new LinkedList<>();
         int count = 7;
 
-        // todo: für später
+        for (int i = 0; i < count; i++) {
+            // aus dem geshuffelten Kartendeck werden die obersten 7 Karten genommen und dem handkarten-deck zugewiesen
+            UnoKarte obersteKarte = drawPile.remove();
+            handCards.add(obersteKarte);
+        }
+
+        return handCards;
+    }
+
+    // todo: für später
         /*if (spielKartenDeck.isEmpty()){              // wenn der Stapel leer ist
             throw new IllegalArgumentException("Kartenstapel ist leer, mischen Sie die Karten des Ablagestapels neu.");
         }
@@ -77,14 +85,6 @@ public class KartenDeck {
             throw new IllegalArgumentException("Es sind nicht genug Karten am Stapel. Mischen Sie die Karten des " +
                     "Ablagestapels neu.");
         }*/
-        for (int i = 0; i < count; i++){
-            // aus dem geshuffelten Kartendeck werden die obersten 7 Karten genommen und dem handkarten-deck zugewiesen
-            UnoKarte obersteKarte = drawPile.remove();
-            handCards.add(obersteKarte);
-        }
 
-        return handCards;
-
-    }
 }
 

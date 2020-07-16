@@ -20,6 +20,10 @@ public class UnoKarte {
         return playedAlready;
     }
 
+    public void setPlayedAlreadyToFalse() {
+        playedAlready = false;
+    }
+
     public Farbe getFARBE() {
         return FARBE;
     }
