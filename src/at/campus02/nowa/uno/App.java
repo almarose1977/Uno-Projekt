@@ -90,19 +90,19 @@ public class App {
     }
 
     // Methode, um die Spieler der Spielerliste hinzuzufügen
-    public void addSpieler(Spieler s) {
+    private void addSpieler(Spieler s) {
         playersList.add(s);
     }
 
     // Methode, um die Handkarten den Spielern "auszuteilen"
-    public void dealOutCards() {
+    private void dealOutCards() {
         for (Spieler s : playersList) {
             s.setHandCardDeck(spielKarten.makePlayerDeck());
         }
     }
 
     // Methode, um Start-Spieler zu bestimmen
-    public void chooseRandomPlayer() {
+    private void chooseRandomPlayer() {
         Random random = new Random();
         int max = playersList.size() - 1;
         int min = 0;
@@ -114,7 +114,7 @@ public class App {
     }
 
     // Methode, um die erste Karte "aufzudecken"
-    public void determineStartCard() {
+    private void determineStartCard() {
         UnoKarte startCard = spielKarten.drawPile.remove();     // oberste Karte vom Nachziehstapel wird der Startkarte zugewiesen
         stack.add(startCard);                                   // und dem Stack zugefügt
 
@@ -129,12 +129,13 @@ public class App {
         Bot b = (Bot) playersList.get(indexCurrentPlayer);
         UnoKarte u = b.getFirstValidCard(stack.getLast());
         if (u != null) {
-            System.out.println("Bot legt " + u.toString());
+            System.out.println(b.getName() + " legt " + u.toString());
             b.getHandCardDeck().remove(u);
             stack.add(u);
         } else {
-            System.out.println("Bot hat keine passende Karte und hebt eine neue vom Stapel...");
+            System.out.println(b.getName() + " hat keine passende Karte und hebt eine neue vom Stapel...");
             b.getHandCardDeck().add(spielKarten.drawPile.remove());
+            stack.getLast().setPlayedAlready();
         }
     }
 
@@ -545,8 +546,13 @@ public class App {
     private boolean roundEnded() {
         // todo: abbruch der runde, wenn keine karten mehr im handkartenset vorhanden ist
         if (playersList.get(indexCurrentPlayer).getHandCardDeck().size() == 0) {
-            System.out.println("Keine Karten mehr!");
-
+            System.out.println("Keine Karten mehr! Die Runde ist beendet");
+            System.out.println("...................");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return true;
         } else
             return false;
