@@ -29,7 +29,7 @@ public class App {
                 printState();
 
                 while (!roundEnded()) {
-                    readUserInput();                // Eingabe der Karten, Heben, Weiter
+                    makeTurn();               // Eingabe der Karten, Heben, Weiter
                     updateState();                  // nächster Spieler unter Berücksichtigung der Sonderkarten
                     Thread.sleep(1000);
                     printState();                   // Ausgabe der aktuellen Situation: welcher Spieler ist dran, welche Karte liegt oben
@@ -51,9 +51,29 @@ public class App {
         spielKarten.shuffleDeck();
 
         // Spieler eingeben
-        System.out.println("Bitte geben Sie die 4 Spielernamen ein: ");
-        for (int i = 1; i <= 4; i++) {
-            System.out.println("Name Spieler " + i + ": ");
+
+        System.out.println("Bitte geben Sie die Anzahl der Bots ein (0-4): ");
+
+        int botCount = input.nextInt();
+
+        // Bot eingeben
+        if (botCount < 0 || botCount > 4) {
+            System.out.println("Anzahl muss zwischen 0 bis 4 sein.");
+            return;
+        }
+
+        for (int i = 0; i < botCount; i++) {
+            System.out.println("Name Bot " + (i + 1) + ": ");
+            String name = input.next();
+            Bot b = new Bot(name);
+            addSpieler(b);
+        }
+
+
+        int playerCount = 4 - botCount;
+
+        for (int i = 0; i < playerCount; i++) {
+            System.out.println("Name Spieler " + (i + 1) + ": ");
 
             String name = input.next();
             Spieler s = new Spieler(name);
@@ -84,7 +104,7 @@ public class App {
     // Methode, um Start-Spieler zu bestimmen
     public void chooseRandomPlayer() {
         Random random = new Random();
-        int max = 3;
+        int max = playersList.size() - 1;
         int min = 0;
         indexCurrentPlayer = random.nextInt((max - min) + 1) + min;
         //System.out.println(playersList.toString());       // zur Ausgabe der Spielerliste
@@ -104,8 +124,22 @@ public class App {
         }
     }
 
-    // Methode, um die Karteneingabe zu verarbeiten
-    private void readUserInput() {
+    // Bot macht Turn
+    private void makeBotTurn() {
+        Bot b = (Bot) playersList.get(indexCurrentPlayer);
+        UnoKarte u = b.getFirstValidCard(stack.getLast());
+        if (u != null) {
+            System.out.println("Bot legt " + u.toString());
+            b.getHandCardDeck().remove(u);
+            stack.add(u);
+        } else {
+            System.out.println("Bot hat keine passende Karte und hebt eine neue vom Stapel...");
+            b.getHandCardDeck().add(spielKarten.drawPile.remove());
+        }
+    }
+
+    // Methode, um die Karteneingabe des menschlichen Spielerszu verarbeiten
+    private void readUserInput() { //    makeUserTurn()
 
         Farbe f = null;
         Kartenwert kW = null;
@@ -224,7 +258,7 @@ public class App {
 
                             System.out.println("Korrekte Eingabe.");
                             //u.setPlayedAlready();
-                            System.out.println("Anzahl Nachziehstapel: " + spielKarten.drawPile.size()); // für testzwecke
+
                             korrekteEingabe = true;         // while Schleife verlassen, methode readuserinput verlassen --> weiter zu updateState
 
                         } else {
@@ -242,6 +276,16 @@ public class App {
             }
         }
 
+    }
+
+    // Spielzug abhängig ob Mensch oder BOT
+    private void makeTurn() {
+        Spieler currentPlayer = playersList.get(indexCurrentPlayer);
+
+        if (currentPlayer.isBot())
+            makeBotTurn();
+        else
+            readUserInput();
     }
 
     // Methode "HILFE"
@@ -286,9 +330,10 @@ public class App {
     }
 
     // Methode, um zu prüfen, ob die gewünschte Karte gespielt werden darf
-    private boolean validTurn(UnoKarte gespielteKarte) {
+    private boolean validTurn(UnoKarte currentCard) {
 
-        boolean isValid = false;
+        return validCard(currentCard, stack.getLast());
+        /*boolean isValid = false;
         UnoKarte currentCard = stack.getLast();
         if (gespielteKarte.getFARBE() == Farbe.SCHWARZ) {       // schwarze Karten dürfen immer gespielt werden
             isValid = true;
@@ -297,7 +342,17 @@ public class App {
             isValid = true;
         }
 
-        return isValid;
+        return isValid;*/
+    }
+
+    // Prüfung, ob die Karte gültig ist
+    public static boolean validCard(UnoKarte currentCard, UnoKarte previousCard) {
+        if (currentCard.getFARBE() == Farbe.SCHWARZ)
+            return true;
+        if (currentCard.getFARBE() == previousCard.getFARBE() || currentCard.getKARTENWERT() == previousCard.getKARTENWERT())
+            return true;
+
+        return false;
     }
 
     // hier werden die Sonderkarten implementiert
@@ -307,6 +362,7 @@ public class App {
 
             // wenn "OUT" geschmissen wird, wird der nächste übersprungen
             if (stack.getLast().getKARTENWERT() == Kartenwert.OUT) {
+                System.out.println("[INFO] Nächster Spieler wird übersprungen");
                 skip();
             }
 
@@ -315,6 +371,8 @@ public class App {
             else if (stack.getLast().getKARTENWERT() == Kartenwert.plus2) {
 
                 nextPlayer();   // zuerst einen Spieler weiter gehen
+                System.out.println("[INFO] Nächster Spieler " + playersList.get(indexCurrentPlayer).getName() + " hebt zwei Karten");
+
                 if (spielKarten.drawPile.size() <= 2) {  // falls der Nachziehstapel weniger/gleich 2 Karten beinhaltet
                     makeNewDeckWhenPileIsEmpty();
                 }
@@ -329,6 +387,8 @@ public class App {
 
                 chooseColor();
                 nextPlayer();   // zuerst einen Spieler weiterspringen
+                System.out.println("[INFO] Nächster Spieler " + playersList.get(indexCurrentPlayer).getName() + " hebt vier Karten");
+
                 if (spielKarten.drawPile.size() <= 4) {  // falls der Nachziehstapel weniger/gleich 4 Karten beinhaltet
                     makeNewDeckWhenPileIsEmpty();
                 }
@@ -347,6 +407,8 @@ public class App {
 
             // Richtungswechsel
             else if (stack.getLast().getKARTENWERT() == Kartenwert.RW) {
+                System.out.println("[INFO] Spielrichtung wird geändert");
+
                 changeDirection();
                 nextPlayer();
             }
@@ -358,12 +420,33 @@ public class App {
         else
             nextPlayer();
 
-        System.out.println("Der nächste Spieler ist dran...");
+        System.out.println("[INOF] Der nächste Spieler ist dran...");
 
     }
 
 
     private void chooseColor() {
+        Spieler currentPlayer = playersList.get(indexCurrentPlayer);
+
+        if (currentPlayer.isBot()) {
+            ArrayList<String> colors = new ArrayList<>(
+                    Arrays.asList(
+                            String.valueOf(Farbe.ROT),
+                            String.valueOf(Farbe.BLAU),
+                            String.valueOf(Farbe.GRÜN),
+                            String.valueOf(Farbe.YELLOW)));
+
+            Random rand = new Random();
+
+            String selectedColor = colors.get(rand.nextInt(3) + 1);
+
+            stack.getLast().setFARBE(Farbe.valueOf(selectedColor));
+
+            System.out.println("Bot " + currentPlayer.getName() + " hat die Farbe " + selectedColor + " ausgewählt");
+
+            return;
+        }
+
         boolean correctInput = false;
 
         while (!correctInput) {
@@ -394,7 +477,7 @@ public class App {
                 correctInput = true;
 
                 stack.getLast().setFARBE(Farbe.valueOf(farbwunsch));
-                //stack.getLast().setKARTENWERT(Kartenwert.zero);     // Karten-WERT wird standarfmäßig auf "0" gesetzt --> hinfällig durch playedAlready
+
             }
 
         }
@@ -414,12 +497,12 @@ public class App {
         indexCurrentPlayer = indexCurrentPlayer + direction;
 
         if (direction == 1) {
-            if (indexCurrentPlayer == 4) {
+            if (indexCurrentPlayer == playersList.size()) {
                 indexCurrentPlayer = 0;
             }
         } else if (direction == -1) {
             if (indexCurrentPlayer == -1) {
-                indexCurrentPlayer = 3;
+                indexCurrentPlayer = playersList.size() - 1;
             }
         }
         return playersList.get(indexCurrentPlayer);
@@ -452,6 +535,7 @@ public class App {
     private void printState() {
 
         System.out.println("........");
+        System.out.println("Anzahl Nachziehstapel: " + spielKarten.drawPile.size()); // für testzwecke
         System.out.println("oberste Karte am Ablagestapel: " + stack.getLast().toString());
         Spieler s = playersList.get(indexCurrentPlayer);
         System.out.println("aktueller Spieler: " + s.getName());

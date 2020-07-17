@@ -15,18 +15,16 @@ public class Spieler {
     }
 
     // Vergleich der eingegebenen Karte mit dem Handkartenset. Ist die Karte im Handkartenset enthalten?
-    public UnoKarte getKarte(Farbe f, Kartenwert kw)
-    {
-        for (UnoKarte handKarte: handCardDeck) {
-            if(handKarte.getFARBE() == f && handKarte.getKARTENWERT() == kw)
-            {
+    public UnoKarte getKarte(Farbe f, Kartenwert kw) {
+        for (UnoKarte handKarte : handCardDeck) {
+            if (handKarte.getFARBE() == f && handKarte.getKARTENWERT() == kw) {
                 return handKarte;
             }
         }
         return null;
     }
 
-    public LinkedList<UnoKarte> getHandCardDeck(){
+    public LinkedList<UnoKarte> getHandCardDeck() {
         return handCardDeck;
     }
 
@@ -48,6 +46,10 @@ public class Spieler {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public boolean isBot() {
+        return this instanceof Bot;
     }
 
     @Override
