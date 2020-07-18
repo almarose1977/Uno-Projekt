@@ -131,12 +131,11 @@ public class App {
     // Methode: Bot macht seinen Zug
     private void makeBotTurn() {
         Bot b = (Bot) playersList.get(indexCurrentPlayer);
-        //UnoKarte u = b.getFirstValidCard(spielKarten.stack.getLast());
+
         UnoKarte u = b.getFirstValidCard(stack.lastElement());
         if (u != null) {
             System.out.println(b.getName() + " legt " + u.toString());
             b.getHandCardDeck().remove(u);
-            //spielKarten.stack.add(u);
             stack.push(u);
 
         } else {
@@ -184,6 +183,8 @@ public class App {
 
                 try {                           // IndexOutOfBoundsException wird geworfen, wenn die Eingabe nicht richtig erfolgt
                     // z.B. nur R anstelle von R-9, dann ist das values[] nicht vollständig
+
+
                     switch (values[0]) {
                         case "R":
                             f = Farbe.ROT;
@@ -255,6 +256,16 @@ public class App {
                             values[1] = null;
                             break;
                     }
+                    switch (values[2]) {
+                        case "U":
+                        case "UNO":
+                            System.out.println("UNOoooo!");
+                            break;
+                        default:
+                            values[2] = null;
+                            break;
+                    }
+
                 } catch (IndexOutOfBoundsException e) {
                     //System.out.println("Du hast die Karte falsch eingegeben. Richtige Eingabe z.B. \"R-7\". ");
                 }
@@ -269,10 +280,21 @@ public class App {
                             playersList.get(indexCurrentPlayer).getHandCardDeck().remove(u);   // gültig: entferne sie aus handkarten
                             stack.push(u);                                         // füge sie zum stack hinzu
 
-                            System.out.println("Korrekte Eingabe.");
-
+                            System.out.println("Korrekte Karteneingabe.");
                             korrekteEingabe = true;         // while Schleife verlassen, methode readuserinput verlassen --> weiter zu updateState
-                            //roundEnded();                   // falls es die letzte Karte war, wird die Runde beendet
+
+                            try {
+                                if ((playersList.get(indexCurrentPlayer).getHandCardDeck().size() == 5) && values[2].isEmpty()) {
+                                    System.out.println("hier landets wenn ich was anderes als u oder uno eingebe");
+                                }
+
+                            } catch (ArrayIndexOutOfBoundsException e) {
+                                System.out.println("A- Du hast vergessen, UNO zu rufen und erhälst eine Strafkarte!");
+                                playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+                            } catch (NullPointerException nullPointerException) {
+                                System.out.println("N - Du hast vergessen, UNO zu rufen und erhälst eine Strafkarte!");
+                                playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+                            }
 
                         } else {
                             System.out.println("Diese Karte darf nicht gespielt werden. Du bekommst eine Strafkarte. ");
@@ -360,6 +382,7 @@ public class App {
 
     // hier werden die Sonderkarten implementiert
     private void updateState() {
+
 
         if (playersList.get(indexCurrentPlayer).getHandCardDeck().size() == 0) {
             //System.out.println("[INFO-UpdateState: Rundenende, weiter zu roundEnded()]");
@@ -484,7 +507,7 @@ public class App {
                     break;
                 default:
                     farbwunsch = null;
-                    System.out.println("Falsche Eingabe! Nur R, G, B und Y sind erlaubt.");
+                    System.out.println("Falsche Eingabe! Nur R (rot), G (grün), B (blau) und Y (gelb) sind erlaubt.");
                     break;
             }
 
