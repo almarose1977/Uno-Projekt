@@ -11,11 +11,13 @@ public class KartenDeck {
 
     private final ArrayList<UnoKarte> CardDeck;         // die kompletten Karten werden in eine AL gespeichert
     public Queue<UnoKarte> drawPile;                // für die jeweiligen Runden werden die gemischten Karten in eine Queue gespeichert
+    public Stack<UnoKarte> stack;
 
     public KartenDeck() {
 
         CardDeck = new ArrayList<>();
         drawPile = new LinkedList<>();
+        stack = new Stack<UnoKarte>();
     }
 
     // ~~~~~~ Methode zum Befüllen des Karten-Arrays ~~~~~~
@@ -55,10 +57,12 @@ public class KartenDeck {
     }
 
     // Methode zum Mischen der Karten
-    public void shuffleDeck(){
+    public void shuffleDeck() {
         Collections.shuffle(CardDeck);
 
         drawPile.addAll(CardDeck);     // alle gemischten Karten aus der ArrayList werden der Queue hinzugefügt
+
+        stack.add(drawPile.remove());     // oberste Karte vom Nachziehstapel wird der Startkarte zugewiesen
 
     }
 
@@ -86,5 +90,8 @@ public class KartenDeck {
                     "Ablagestapels neu.");
         }*/
 
+    public int lengthOfCardDeck() {
+        return CardDeck.size();
+    }
 }
 
