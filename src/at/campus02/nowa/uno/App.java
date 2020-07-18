@@ -268,13 +268,13 @@ public class App {
                     //System.out.println("Du hast die Karte falsch eingegeben. Richtige Eingabe z.B. \"R-7\". ");
                 }
 
-                correctInput = isInputCorrect(f, kW, correctInput, values);
+                correctInput = isInputCorrectWithUNO(f, kW, correctInput, values);
             }
         }
 
     }
 
-    private boolean isInputCorrect(Farbe f, Kartenwert kW, boolean korrekteEingabe, String[] values) {
+    private boolean isInputCorrectWithUNO(Farbe f, Kartenwert kW, boolean korrekteEingabe, String[] values) {
         if (f != null && kW != null) {      // Prüfung, ob die eingegebene Karte im Handkartenset vorhanden ist
 
             UnoKarte u = playersList.get(indexCurrentPlayer).getKarte(f, kW);
@@ -457,30 +457,32 @@ public class App {
     private void plus2() { //bei Plus2 Karte
         nextPlayer();
         printState();
+        Spieler currentPlayer = playersList.get(indexCurrentPlayer);
 
-        if (playersList.get(indexCurrentPlayer).isBot()) {
-            Bot b = (Bot) playersList.get(indexCurrentPlayer);
-
-            UnoKarte u = b.getFirstPlus2(stack.lastElement());
-            if (u != null) {
-                System.out.println(b.getName() + " legt " + u.toString());
-                b.getHandCardDeck().remove(u);
-                stack.push(u);
-                counterPlus2++;
-                plus2();
-            } else {
-                drawCardsPlus2();
-            }
+        if (currentPlayer.isBot()) {
+            playAnotherPlus2(currentPlayer);
         } else {
             System.out.println("Hast du eine Plus2 oder hebst du 2 Karten? Dann gib entweder die Karte ein oder \"heben\":");
             String consoleInput = input.next();
             String userInput2 = consoleInput.toUpperCase();
             if (userInput2.equals("HEBEN")) {
                 drawCardsPlus2();
-            } else if (userInput2.contains(Kartenwert.plus2.toString())) {
-                counterPlus2++;
-                plus2();
+            } else {
+                playAnotherPlus2(currentPlayer);
             }
+        }
+    }
+
+    private void playAnotherPlus2(Spieler currentPlayer) {
+        UnoKarte u = currentPlayer.getFirstPlus2(stack.lastElement());
+        if (u != null) {
+            System.out.println(currentPlayer.getName() + " legt " + u.toString());
+            currentPlayer.getHandCardDeck().remove(u);
+            stack.push(u);
+            counterPlus2++;
+            plus2();
+        } else {
+            drawCardsPlus2();
         }
     }
 
@@ -595,10 +597,7 @@ public class App {
 
         spielKarten.drawPile.addAll(stack);             // die gemischten Karten werden dem Nachziehstapel zugefügt
         stack.clear();          // Stack leeren
-        //System.out.println("Oberste Karte: " + stack.getLast());    // nur für Testzwecke
-
         stack.push(oK);                   // oberste Karte wird wieder aufgelegt
-        //System.out.println("Oberste Karte, nachdem die letzte Karte wieder aufgelegt wurde: " + spielKarten.stack.getLast());   // nur für Testzwecke
         System.out.println("Oberste Karte, nachdem die letzte Karte wieder aufgelegt wurde: " + stack.lastElement());   // nur für Testzwecke
 
     }

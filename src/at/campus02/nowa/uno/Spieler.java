@@ -24,6 +24,14 @@ public class Spieler {
         return null;
     }
 
+    public UnoKarte getFirstPlus2(UnoKarte previousCard) {
+        for (UnoKarte u : getHandCardDeck()) {
+            if (App.validPlus2(u, previousCard))
+                return u;
+        }
+        return null;
+    }
+
     public LinkedList<UnoKarte> getHandCardDeck() {
         return handCardDeck;
     }

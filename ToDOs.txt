@@ -40,7 +40,7 @@ Bot-Eingabe falsche Eingabe ausgebessert (while statt if),
 Ablagestapel von Linked List zu Stack geändert
 UNO rufen beim menschlichen Spieler integriert
 Hilfe erweitert
-
+Plus2 auf Plus2 funktioniert sowohl bei Bot als auch Mensch
 _______________
 
 wenn die Eingabe falsch erfolgt ohne Bindestrich, dann ist das Stringarray nur bei index[0] gefüllt,
