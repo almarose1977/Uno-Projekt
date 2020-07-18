@@ -34,6 +34,13 @@ ________________________________________________________________________________
 __________________________________________________________________________________
 BEREITS ERLEDIGT/IMPLEMENTIERT
 
+18.07.
+Rundenende implementiert,
+Bot-Eingabe falsche Eingabe ausgebessert (while statt if),
+Ablagestapel von Linked List zu Stack geändert
+
+_______________
+
 wenn die Eingabe falsch erfolgt ohne Bindestrich, dann ist das Stringarray nur bei index[0] gefüllt,
 bei index[1] ist nix drin --> Exception
 
