@@ -55,7 +55,7 @@ public class KartenDeck {
     }
 
     // Methode zum Mischen der Karten
-    public void shuffleDeck(){
+    public void shuffleDeck() {
         Collections.shuffle(CardDeck);
 
         drawPile.addAll(CardDeck);     // alle gemischten Karten aus der ArrayList werden der Queue hinzugefügt
@@ -86,5 +86,8 @@ public class KartenDeck {
                     "Ablagestapels neu.");
         }*/
 
+    public int lengthOfCardDeck() {
+        return CardDeck.size();
+    }
 }
 
