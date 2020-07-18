@@ -40,6 +40,7 @@ Bot-Eingabe falsche Eingabe ausgebessert (while statt if),
 Ablagestapel von Linked List zu Stack geändert
 UNO rufen beim menschlichen Spieler integriert
 Hilfe erweitert
+Plus2 auf Plus2 funktioniert sowohl bei Bot als auch Mensch
 
 _______________
 
