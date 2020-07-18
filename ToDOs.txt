@@ -38,6 +38,8 @@ BEREITS ERLEDIGT/IMPLEMENTIERT
 Rundenende implementiert,
 Bot-Eingabe falsche Eingabe ausgebessert (while statt if),
 Ablagestapel von Linked List zu Stack geändert
+UNO rufen beim menschlichen Spieler integriert
+Hilfe erweitert
 
 _______________
 
