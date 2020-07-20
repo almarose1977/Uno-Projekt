@@ -653,13 +653,18 @@ public class App {
             System.out.println("*********************************************************");
             System.out.println(winnerRound.getName() + " hat die " + roundCounter + ". Runde gewonnen und " +
                     getCardCount() + " Punkte erreicht!!!");
+            winnerRound.setPoints(+getCardCount());
             System.out.println("Eine neue Runde beginnt.");
             for (Spieler s : playersList) {                      // todo: um die punkte zu prüfen
                 System.out.println(s.getName() + s.getPoints());
-                System.out.println(s.getHandCardDeck().toString());
             }
             System.out.println("*********************************************************");
             makeNewDeckWhenRoundEnded();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return true;
         }
     }
@@ -671,7 +676,7 @@ public class App {
             for (UnoKarte k : s.getHandCardDeck()) {
                 playersPoints += k.getKARTENWERT().cardPoints;
             }
-            s.setPoints(playersPoints);
+            //s.setPoints(playersPoints);
             winnersPoints += playersPoints;
             playersPoints = 0;
         }
