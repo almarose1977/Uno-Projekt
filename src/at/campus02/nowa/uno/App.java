@@ -111,7 +111,7 @@ public class App {
         indexCurrentPlayer = random.nextInt((max - min) + 1) + min;
         //System.out.println(playersList.toString());       // zur Ausgabe der Spielerliste
         Spieler s = playersList.get(indexCurrentPlayer);
-        System.out.println("Startspieler: " + s.getName());
+        System.out.println("[INFO] Startspieler ist: " + s.getName());
         System.out.println("Los geht's!");
     }
 
@@ -119,11 +119,37 @@ public class App {
     private void determineStartCard() {
         UnoKarte startCard = spielKarten.drawPile.remove();     // oberste Karte vom Nachziehstapel wird der Startkarte zugewiesen
         stack.push(startCard);  // und dem Stack zugefügt
+        System.out.println("[iNFO] Startkarte: " + startCard.toString());
 
-        if (startCard.getKARTENWERT().equals(Kartenwert.plus4)) {     // falls +4 Startkarte wäre
-            startCard = spielKarten.drawPile.remove();
-            stack.push(startCard);
-        }
+        if (startCard.getKARTENWERT().equals(Kartenwert.OUT)) {
+            skip();
+            System.out.println("[iNFO] Der Start-Spieler wird übersprungen. Der nächste Spieler ist dran.");
+        } else if (startCard.getKARTENWERT().equals(Kartenwert.RW)) {
+            changeDirection();
+            System.out.println("[iNFO] Spielrichtung wird geändert");
+        } else if (startCard.getKARTENWERT().equals(Kartenwert.plus2))
+            plus2();
+        else if (startCard.getKARTENWERT().equals(Kartenwert.plus4)) {
+            System.out.println("[iNFO] Die Startkarte hat die Farbe " + colorGenerator() + ".");
+            System.out.println("[iNFO] Der Start-Spieler " + playersList.get(indexCurrentPlayer).getName() + " hebt vier Karten. Der nächste Spieler ist dran.");
+            plus4();
+        } else if (startCard.getKARTENWERT().equals(Kartenwert.WILD))
+            System.out.println("[iNFO] Die Startkarte hat die Farbe " + colorGenerator() + ".");
+    }
+
+    private String colorGenerator() {
+        ArrayList<String> colors = new ArrayList<>(Arrays.asList(
+                String.valueOf(Farbe.ROT),
+                String.valueOf(Farbe.BLAU),
+                String.valueOf(Farbe.GRÜN),
+                String.valueOf(Farbe.YELLOW)));
+
+        Random rand = new Random();
+
+        String selectedColor = colors.get(rand.nextInt(3) + 1);
+        stack.lastElement().setFARBE(Farbe.valueOf(selectedColor));
+
+        return selectedColor;
     }
 
     // Methode: Bot macht seinen Zug
@@ -401,33 +427,21 @@ public class App {
 
             if (stack.lastElement().isPlayedAlready() == false) {  // Funktion der Karte wurde noch nicht gespielt
 
-                // wenn "OUT" geschmissen wird, wird der nächste übersprungen
                 if (stack.lastElement().getKARTENWERT() == Kartenwert.OUT) {
-                    System.out.println("[INFO-UpdateState] Nächster Spieler wird übersprungen");
+                    System.out.println("[iNFO] Der nächste Spieler wird übersprungen.");
+                    nextPlayer();
                     skip();
                 }
-
-                // plus2
                 else if (stack.lastElement().getKARTENWERT() == Kartenwert.plus2) {
+                    nextPlayer();
                     plus2();
                 }
-
-                // plus 4
                 else if (stack.lastElement().getKARTENWERT() == Kartenwert.plus4) {
-
                     chooseColor();
                     nextPlayer();   // zuerst einen Spieler weiterspringen
-                    System.out.println("[INFO-UpdateState] Nächster Spieler " + playersList.get(indexCurrentPlayer).getName() + " hebt vier Karten");
-
-                    if (spielKarten.drawPile.size() <= 4) {  // falls der Nachziehstapel weniger/gleich 4 Karten beinhaltet
-                        makeNewDeckWhenPileIsEmpty();
-                    }
-                    for (int i = 0; i < 4; i++) {
-                        playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
-                    }
-                    nextPlayer();   // noch einen Spieler weiter gehen
+                    System.out.println("[iNFO] Der nächste Spieler " + playersList.get(indexCurrentPlayer).getName() + " hebt vier Karten.");
+                    plus4();
                 }
-
                 // Farbwunsch
                 else if (stack.lastElement().getKARTENWERT() == Kartenwert.WILD) {
                     chooseColor();
@@ -454,8 +468,18 @@ public class App {
 
     }
 
+    private void plus4() {
+        if (spielKarten.drawPile.size() <= 4) {  // falls der Nachziehstapel weniger/gleich 4 Karten beinhaltet
+            makeNewDeckWhenPileIsEmpty();
+        }
+        for (int i = 0; i < 4; i++) {
+            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
+        }
+        nextPlayer();   // noch einen Spieler weiter gehen
+    }
+
     private void plus2() { //bei Plus2 Karte
-        nextPlayer();
+        //nextPlayer();     // rausgenommen, damit ich die methode auch bei der startkarte anwenden kann
         printState();
         Spieler currentPlayer = playersList.get(indexCurrentPlayer);
 
@@ -467,10 +491,10 @@ public class App {
             String userInput2 = consoleInput.toUpperCase();
             if (userInput2.equals("HEBEN")) {
                 drawCardsPlus2();
-            } else {
+            } else
                 playAnotherPlus2(currentPlayer);
-            }
         }
+        nextPlayer();
     }
 
     private void playAnotherPlus2(Spieler currentPlayer) {
@@ -480,6 +504,7 @@ public class App {
             currentPlayer.getHandCardDeck().remove(u);
             stack.push(u);
             counterPlus2++;
+            nextPlayer();
             plus2();
         } else {
             drawCardsPlus2();
@@ -494,7 +519,7 @@ public class App {
             playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
         }
         System.out.println("[INFO-UpdateState] Spieler " + playersList.get(indexCurrentPlayer).getName() + " muss " + (counterPlus2 * 2) + " Karten heben.");
-        nextPlayer();
+        //nextPlayer(); rausgenommen wegen startkarte
         counterPlus2 = 1;
     }
 
@@ -502,21 +527,7 @@ public class App {
         Spieler currentPlayer = playersList.get(indexCurrentPlayer);
 
         if (currentPlayer.isBot()) {
-            ArrayList<String> colors = new ArrayList<>(
-                    Arrays.asList(
-                            String.valueOf(Farbe.ROT),
-                            String.valueOf(Farbe.BLAU),
-                            String.valueOf(Farbe.GRÜN),
-                            String.valueOf(Farbe.YELLOW)));
-
-            Random rand = new Random();
-
-            String selectedColor = colors.get(rand.nextInt(3) + 1);
-
-            stack.lastElement().setFARBE(Farbe.valueOf(selectedColor));
-
-            System.out.println(currentPlayer.getName() + " hat die Farbe " + selectedColor + " ausgewählt.");
-
+            System.out.println(currentPlayer.getName() + " hat die Farbe " + colorGenerator() + " ausgewählt.");
             return;
         }
 
@@ -555,7 +566,7 @@ public class App {
     }
 
     private void skip() {
-        nextPlayer();
+        //nextPlayer();
         nextPlayer();
     }
 
