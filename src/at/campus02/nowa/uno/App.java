@@ -651,7 +651,7 @@ public class App {
         System.out.println("........");
     }
 
-    // abbruch der runde, wenn keine karten mehr im handkartenset vorhanden ist
+    // abbruch der runde, wenn keine karten mehr im handkartenset vorhanden sind
     private boolean roundEnded() throws SQLException {
 
         if (playersList.get(indexCurrentPlayer).getHandCardDeck().size() != 0) {
@@ -661,13 +661,13 @@ public class App {
             roundCounter++;
             System.out.println("*********************************************************");
             System.out.println(winnerRound.getName() + " hat die " + roundCounter + ". Runde gewonnen und " +
-                    getCardCount() + " Punkte erreicht!!!");
-            winnerRound.setPoints(winnerRound.getPoints() + getCardCount());
+                    getCardPoints() + " Punkte erreicht!!!");
+            winnerRound.setPoints(winnerRound.getPoints() + getCardPoints());
             client.executeStatement(String.format(INSERT_TEMPLATE, winnerRound.getName(), sessionCounter,
-                    roundCounter, getCardCount()));
+                    roundCounter, getCardPoints()));
             System.out.println("Eine neue Runde beginnt.");
             for (Spieler s : playersList) {                      // todo: um die punkte zu prüfen
-                System.out.println(s.getName() + s.getPoints());
+                System.out.println(s.getName() + ": " + s.getPoints() + " Punkte");
             }
             System.out.println("*********************************************************");
             makeNewDeckWhenRoundEnded();
@@ -680,7 +680,7 @@ public class App {
         }
     }
 
-    private int getCardCount() {
+    private int getCardPoints() {
         int playersPoints = 0;
         int winnersPoints = 0;
         for (Spieler s : playersList) {
@@ -695,7 +695,7 @@ public class App {
 
     private boolean gameEnded() {
 
-        if (playersList.get(indexCurrentPlayer).getPoints() < 200)
+        if (playersList.get(indexCurrentPlayer).getPoints() < 100)
             return false;
         else {
             System.out.println("*********************************************************");
@@ -704,6 +704,34 @@ public class App {
             System.out.println("GRATULATION");
 
             System.out.println("*********************************************************");
+
+            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyso+++osyhdhhhhhhhhh");
+            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyo:          -/shhhhhhhh");
+            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhy+..    .ooo.    .:shhhhhh");
+            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhy:    -/osysso+:.   .+hhhhh");
+            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyso/-.shhhhh:    /yddmddhhys+-    /hhhh");
+            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhys:    -yhhds-   -ydhhhhddmhyho-    shhh");
+            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyyhhhhhhhdhs+-    /hddo.   -hhhhhhhhhmmdh/    :hhh");
+            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhys+:-.-+shhhhdmys+.    +dds-   .shhhhhhhhhmmd/    -hhh");
+            System.out.println("hhhhhhhhhhhhhhhhhhhyso/:shs/-      -+shhdmhy/.   .hhy/   .-yhhhhhhhhdmh-    /hhh");
+            System.out.println("hhhhhhhhhhhhhhhhhhy/-   -hso:         -+sdmhh/    -hs+:.    oyhhhhhhhy:     yhhh");
+            System.out.println("hhhhhhhhyyhhhhhhhdso:    :hs+:    -.`   `-oyhy:    /so+/    -:/oooo/:     /shhhh");
+            System.out.println("hhhhys+:--yhhhhhhmhs+-    oys+-    :/:.    .-+/:    os+++/              /oyhhhhh");
+            System.out.println("hhhhs:   ./hhhhhhdmys/.   .yys/.   .+so+/           -yhssso++         /+shhhhhhh");
+            System.out.println("hhdhy+-   .+hhhhhhdmys:    -hyy/    -yyysso/          dddhyyyyyssssyhdddhhhhhhhh");
+            System.out.println("hhdmhy/-   -shhhhhhddys:    :dys:    :dddhhyyo+/      /hddddddmdmmmmddhhhhhhhhhh");
+            System.out.println("hhhdmys:.   -yhhhhhhmdhs:    .odho    -+hdmmdddhyo+    /shhhhdddddhhhhhhhhhhhhhh");
+            System.out.println("hhhhddyo:.   :hhhhhhdmdd+     .mhh+    -ohhddmmdddhysyyhhhhhhhhhhhhhhhhhhhhhhhhh");
+            System.out.println("hhhhhmhy+:    .+hhhhhhdmd+    .hmdh/    -yhhhhddmmdddddhhhhhhhhhhhhhhhhhhhhhhhhh");
+            System.out.println("hhhhhdmhy+:     +yhhhhhds-     hdmdh/:/++ohhhhhhhddhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+            System.out.println("hhhhhhdms++:     /+o+/:-     shhmddyyhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+            System.out.println("hhhhhhhddoo+/              /+yhhhdmdmmddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+            System.out.println("hhhhhhhhddysso//..      //+shhhhhhhddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+            System.out.println("hhhhhhhhhdmdddhhyyyyyhhdmdhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+            System.out.println("hhhhhhhhhhhdhhhhhhhhhhddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+            System.out.println("hhhhhhhhhhhhhhhdddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+
             return true;
         }
     }
