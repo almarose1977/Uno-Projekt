@@ -22,6 +22,7 @@ public class App {
     private static final String CREATETABLE = "CREATE TABLE Sessions (Player varchar(100) NOT NULL, Session int NOT NULL, Round int NOT NULL, Score int NOT NULL, CONSTRAINT PK_Sessions PRIMARY KEY (Player, Session, Round));";
     private static final String INSERT_TEMPLATE = "INSERT INTO Sessions (Player, Session, Round, Score) VALUES ('%1s', %2d, %3d, %4d);";
     private static final String SELECT_BYPLAYERANDSESSION = "SELECT Player, SUM(Score) AS Score FROM Sessions WHERE Player = '%1s' AND Session = %2d;";
+    private static final String SELECT_MAX = "SELECT MAX(Session) as Session FROM Sessions";
 
 
     public App(Scanner input, PrintStream output) {
@@ -52,11 +53,19 @@ public class App {
     }
 
     private void initializeGame() throws SQLException { //  Karten erstellen und mischen, Spielernamen eingeben 4x
-        sessionCounter++;
         client = new SqliteClient("UnoDatabase.sqlite");
         if (!client.tableExists("Sessions")) {
             client.executeStatement(CREATETABLE);
         }
+        ArrayList<HashMap<String, String>> results = client.executeQuery(SELECT_MAX);
+        try {
+            sessionCounter = Integer.parseInt(results.get(0).get("Session"));
+        } catch (NumberFormatException e) {
+            output.println(e);
+            sessionCounter = 0;
+        }
+        sessionCounter++;
+        System.out.println(sessionCounter);
 
         spielKarten.makeDeck();
         spielKarten.shuffleDeck();
@@ -68,12 +77,6 @@ public class App {
             System.out.println("Anzahl muss zwischen 0 und 4 sein. Gib die Anzahl erneut ein:");
             botCount = input.nextInt();
         }
-        /*
-        // Bot eingeben
-        if (botCount < 0 || botCount > 4) {
-
-            return;
-        }*/
 
         for (int i = 0; i < botCount; i++) {
             System.out.println("Name Bot " + (i + 1) + ": ");
