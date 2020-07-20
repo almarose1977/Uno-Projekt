@@ -32,11 +32,9 @@ public class App {
 
                 while (!roundEnded()) {
                     printState();                   // Ausgabe der aktuellen Situation: welcher Spieler ist dran, welche Karte liegt oben
-                    makeTurn();               // Eingabe der Karten, Heben, Weiter
+                    makeTurn();                     // Eingabe der Karten, Heben, Weiter
                     updateState();                  // nächster Spieler unter Berücksichtigung der Sonderkarten
                     Thread.sleep(1000);
-
-                    Thread.sleep(100);
                 }
             } while (!gameEnded());
 
@@ -653,7 +651,7 @@ public class App {
             System.out.println("*********************************************************");
             System.out.println(winnerRound.getName() + " hat die " + roundCounter + ". Runde gewonnen und " +
                     getCardCount() + " Punkte erreicht!!!");
-            winnerRound.setPoints(+getCardCount());
+            winnerRound.setPoints(winnerRound.getPoints() + getCardCount());
             System.out.println("Eine neue Runde beginnt.");
             for (Spieler s : playersList) {                      // todo: um die punkte zu prüfen
                 System.out.println(s.getName() + s.getPoints());
@@ -676,7 +674,6 @@ public class App {
             for (UnoKarte k : s.getHandCardDeck()) {
                 playersPoints += k.getKARTENWERT().cardPoints;
             }
-            //s.setPoints(playersPoints);
             winnersPoints += playersPoints;
             playersPoints = 0;
         }
