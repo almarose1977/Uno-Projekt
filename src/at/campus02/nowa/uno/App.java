@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.sql.SQLException;
 import java.util.*;
 
 public class App {
@@ -16,6 +17,12 @@ public class App {
     private int direction = 1;
     private int counterPlus2 = 1;
     private int roundCounter = 0;
+    private int sessionCounter = 0;
+    private SqliteClient client;
+    private static final String CREATETABLE = "CREATE TABLE Sessions (Player varchar(100) NOT NULL, Session int NOT NULL, Round int NOT NULL, Score int NOT NULL, CONSTRAINT PK_Sessions PRIMARY KEY (Player, Session, Round));";
+    private static final String INSERT_TEMPLATE = "INSERT INTO Sessions (Player, Session, Round, Score) VALUES ('%1s', %2d, %3d, %4d);";
+    private static final String SELECT_BYPLAYERANDSESSION = "SELECT Player, SUM(Score) AS Score FROM Sessions WHERE Player = '%1s' AND Session = %2d;";
+    private static final String SELECT_MAX = "SELECT MAX(Session) as Session FROM Sessions";
 
 
     public App(Scanner input, PrintStream output) {
@@ -45,25 +52,31 @@ public class App {
         }
     }
 
-    private void initializeGame() { //  Karten erstellen und mischen, Spielernamen eingeben 4x
+    private void initializeGame() throws SQLException { //  Karten erstellen und mischen, Spielernamen eingeben 4x
+        client = new SqliteClient("UnoDatabase.sqlite");
+        if (!client.tableExists("Sessions")) {
+            client.executeStatement(CREATETABLE);
+        }
+        ArrayList<HashMap<String, String>> results = client.executeQuery(SELECT_MAX);
+        try {
+            sessionCounter = Integer.parseInt(results.get(0).get("Session"));
+        } catch (NumberFormatException e) {
+            output.println(e);
+            sessionCounter = 0;
+        }
+        sessionCounter++;
+        System.out.println(sessionCounter);
 
         spielKarten.makeDeck();
         spielKarten.shuffleDeck();
 
         // Spieler eingeben
-
         System.out.println("Bitte gib die Anzahl der Bots ein (0-4): ");
         int botCount = input.nextInt();
         while (botCount < 0 || botCount > 4) {
             System.out.println("Anzahl muss zwischen 0 und 4 sein. Gib die Anzahl erneut ein:");
             botCount = input.nextInt();
         }
-        /*
-        // Bot eingeben
-        if (botCount < 0 || botCount > 4) {
-
-            return;
-        }*/
 
         for (int i = 0; i < botCount; i++) {
             System.out.println("Name Bot " + (i + 1) + ": ");
@@ -639,7 +652,7 @@ public class App {
     }
 
     // abbruch der runde, wenn keine karten mehr im handkartenset vorhanden ist
-    private boolean roundEnded() {
+    private boolean roundEnded() throws SQLException {
 
         if (playersList.get(indexCurrentPlayer).getHandCardDeck().size() != 0) {
             return false;
@@ -650,6 +663,8 @@ public class App {
             System.out.println(winnerRound.getName() + " hat die " + roundCounter + ". Runde gewonnen und " +
                     getCardCount() + " Punkte erreicht!!!");
             winnerRound.setPoints(winnerRound.getPoints() + getCardCount());
+            client.executeStatement(String.format(INSERT_TEMPLATE, winnerRound.getName(), sessionCounter,
+                    roundCounter, getCardCount()));
             System.out.println("Eine neue Runde beginnt.");
             for (Spieler s : playersList) {                      // todo: um die punkte zu prüfen
                 System.out.println(s.getName() + s.getPoints());
@@ -680,7 +695,7 @@ public class App {
 
     private boolean gameEnded() {
 
-        if (playersList.get(indexCurrentPlayer).getPoints() < 500)
+        if (playersList.get(indexCurrentPlayer).getPoints() < 200)
             return false;
         else {
             System.out.println("*********************************************************");
