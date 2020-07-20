@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.sql.SQLException;
 import java.util.*;
 
 public class App {
@@ -15,6 +16,12 @@ public class App {
     private int indexCurrentPlayer;
     private int direction = 1;
     private int counterPlus2 = 1;
+    private int roundCounter = 0;
+    private SqliteClient client;
+    private static final String CREATETABLE = "CREATE TABLE Sessions (Player varchar(100) NOT NULL, Session int NOT NULL, Round int NOT NULL, Score int NOT NULL, CONSTRAINT PK_Sessions PRIMARY KEY (Player, Session, Round));";
+    private static final String INSERT_TEMPLATE= "INSERT INTO Sessions (Player, Session, Round, Score) VALUES ('%1s', %2d, %3d, %4d);";
+    private static final String SELECT_BYPLAYERANDSESSION = "SELECT Player, SUM(Score) AS Score FROM Sessions WHERE Player = '%1s' AND Session = %2d;";
+
 
 
     public App(Scanner input, PrintStream output) {
@@ -23,8 +30,10 @@ public class App {
     }
 
     public void Run() {
-        initializeGame();
         try {
+
+            initializeGame();
+
             do {
                 initializeRound();
                 //printState();
@@ -46,7 +55,11 @@ public class App {
         }
     }
 
-    private void initializeGame() { //  Karten erstellen und mischen, Spielernamen eingeben 4x
+    private void initializeGame() throws SQLException { //  Karten erstellen und mischen, Spielernamen eingeben 4x
+        client = new SqliteClient("UnoDatabase.sqlite");
+        if (!client.tableExists("Sessions")){
+            client.executeStatement(CREATETABLE);
+        }
 
         spielKarten.makeDeck();
         spielKarten.shuffleDeck();
@@ -121,9 +134,44 @@ public class App {
         stack.push(startCard);  // und dem Stack zugefügt
 
         if (startCard.getKARTENWERT().equals(Kartenwert.plus4)) {     // falls +4 Startkarte wäre
-            startCard = spielKarten.drawPile.remove();
-            stack.push(startCard);
+            addHandCardDeck();
+            addHandCardDeck();
+            addHandCardDeck();
+            addHandCardDeck();
+            nextPlayer();
+
+            colorGeneratorStartCard();
+
+        } else if (startCard.getKARTENWERT().equals(Kartenwert.WILD)){//falls WILD Startkarte wäre
+            colorGeneratorStartCard();
+
+        } else if (startCard.getKARTENWERT().equals(Kartenwert.RW)){
+            System.out.println("Spielrichtung hat sich geändert");
+            changeDirection();
+        } else if (startCard.getKARTENWERT().equals(Kartenwert.plus2)){
+            System.out.println("Starkarte ist: " + stack.lastElement().toString());
+
+        } else if (startCard.getKARTENWERT().equals(Kartenwert.OUT)){
+            nextPlayer();
         }
+    }
+
+    public void colorGeneratorStartCard() {
+        ArrayList<String> colors = new ArrayList<>(Arrays.asList(
+                String.valueOf(Farbe.ROT),
+                String.valueOf(Farbe.BLAU),
+                String.valueOf(Farbe.GRÜN),
+                String.valueOf(Farbe.YELLOW)));
+        Random rand = new Random();
+        String selectedColor = colors.get(rand.nextInt(3)+1);
+        stack.lastElement().setFARBE(Farbe.valueOf(selectedColor));
+        System.out.println("Die Startkarte ist" + selectedColor);
+    }
+
+
+    public void addHandCardDeck(){ //Karten vom Nachziehstapel hinzufügen
+        playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+
     }
 
     // Methode: Bot macht seinen Zug
@@ -632,15 +680,21 @@ public class App {
     }
 
     // abbruch der runde, wenn keine karten mehr im handkartenset vorhanden ist
-    private boolean roundEnded() {
+    private boolean roundEnded() throws SQLException {
 
         if (playersList.get(indexCurrentPlayer).getHandCardDeck().size() != 0)
             return false;
         else {
-            System.out.println(playersList.get(indexCurrentPlayer).getName() + " hat die Runde gewonnen - eine neue Runde beginnt.");
+            roundCounter++;
+            System.out.println(playersList.get(indexCurrentPlayer).getName() + " hat die " + roundCounter + " Runde gewonnen."
+                    + getCardCount() + "Punkte erreicht! - eine neue Runde beginnt.");
+            insertAndPrintScore();
             return true;
         }
     }
+
+
+
 
     private boolean gameEnded() {
 
@@ -649,5 +703,31 @@ public class App {
 
     private void printFinalScore() {
 
+    }
+
+
+
+    public void insertAndPrintScore() throws SQLException {
+
+            client.executeStatement(String.format(INSERT_TEMPLATE,
+                    playersList.get(indexCurrentPlayer).getName() , 1, roundCounter, getCardCount()));
+
+            ArrayList<HashMap<String, String>> results = client.executeQuery(String.format(SELECT_BYPLAYERANDSESSION, ));
+
+            for (HashMap<String, String> map : results) {
+                System.out.println(map.get("Player") + " hat derzeit:  " + map.get("Score") + " Punkte");
+            }
+
+    }
+
+    private int getCardCount() {
+    int playersPoints = 0 ;
+    for (Spieler s : playersList){
+        for (UnoKarte k : s.getHandCardDeck()){
+            playersPoints += k.getKARTENWERT().points;
+        }
+
+
+    }return playersPoints;
     }
 }
