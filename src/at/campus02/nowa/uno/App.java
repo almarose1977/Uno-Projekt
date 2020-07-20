@@ -15,6 +15,7 @@ public class App {
     private int indexCurrentPlayer;
     private int direction = 1;
     private int counterPlus2 = 1;
+    private int roundCounter = 0;
 
 
     public App(Scanner input, PrintStream output) {
@@ -23,8 +24,8 @@ public class App {
     }
 
     public void Run() {
-        initializeGame();
         try {
+            initializeGame();
             do {
                 initializeRound();
                 //printState();
@@ -111,7 +112,7 @@ public class App {
         indexCurrentPlayer = random.nextInt((max - min) + 1) + min;
         //System.out.println(playersList.toString());       // zur Ausgabe der Spielerliste
         Spieler s = playersList.get(indexCurrentPlayer);
-        System.out.println("[INFO] Startspieler ist: " + s.getName());
+        System.out.println("[iNFO] Startspieler ist: " + s.getName());
         System.out.println("Los geht's!");
     }
 
@@ -420,8 +421,7 @@ public class App {
     private void updateState() {
 
         if (playersList.get(indexCurrentPlayer).getHandCardDeck().size() == 0) {
-            makeNewDeckWhenRoundEnded();
-            roundEnded();
+            return;
 
         } else {
 
@@ -451,7 +451,7 @@ public class App {
                 // Richtungswechsel
 
                 else if (stack.lastElement().getKARTENWERT() == Kartenwert.RW) {
-                    System.out.println("[INFO-UpdateState] Spielrichtung wird geändert");
+                    System.out.println("[iNFO] Spielrichtung wird geändert");
 
                     changeDirection();
                     nextPlayer();
@@ -645,12 +645,37 @@ public class App {
     // abbruch der runde, wenn keine karten mehr im handkartenset vorhanden ist
     private boolean roundEnded() {
 
-        if (playersList.get(indexCurrentPlayer).getHandCardDeck().size() != 0)
+        if (playersList.get(indexCurrentPlayer).getHandCardDeck().size() != 0) {
             return false;
-        else {
-            System.out.println(playersList.get(indexCurrentPlayer).getName() + " hat die Runde gewonnen - eine neue Runde beginnt.");
+        } else {
+            Spieler winnerRound = playersList.get(indexCurrentPlayer);
+            roundCounter++;
+            System.out.println("*********************************************************");
+            System.out.println(winnerRound.getName() + " hat die " + roundCounter + ". Runde gewonnen und " +
+                    getCardCount() + " Punkte erreicht!!!");
+            System.out.println("Eine neue Runde beginnt.");
+            for (Spieler s : playersList) {                      // todo: um die punkte zu prüfen
+                System.out.println(s.getName() + s.getPoints());
+                System.out.println(s.getHandCardDeck().toString());
+            }
+            System.out.println("*********************************************************");
+            makeNewDeckWhenRoundEnded();
             return true;
         }
+    }
+
+    private int getCardCount() {
+        int playersPoints = 0;
+        int winnersPoints = 0;
+        for (Spieler s : playersList) {
+            for (UnoKarte k : s.getHandCardDeck()) {
+                playersPoints += k.getKARTENWERT().cardPoints;
+            }
+            s.setPoints(playersPoints);
+            winnersPoints += playersPoints;
+            playersPoints = 0;
+        }
+        return winnersPoints;
     }
 
     private boolean gameEnded() {

@@ -17,12 +17,9 @@ etc.
 auf die Fehlerausgaben achten --> passen die mit dem Spielzug überein?
 
 __________________________________________________________________________________
-
-__________________________________________________________________________________
 Hilfe nur 1x einlesen --> in Stringbuilder abspeichern und nur mehr Stringbuilder ausgeben lassen
 --> ressourcenschonender als jedes Mal BufferedReader aufzurufen
 TODO: Stringbuilder implementieren
-
 
 __________________________________________________________________________________
 todo: Uno rufen: wenn nur mehr 1 Karte im Handkartenset eines Spielers vorhanden ist, muss er die Möglichkeit haben, "UNO
