@@ -3,6 +3,7 @@ Sie haben nicht die Möglichkeit, nach dem Heben einer Karte nochmals zu prüfen
 sie dann legen könnten
 TODO: implementieren
 
+BOTS: UNO-Ruf implementieren todo
 __________________________________________________________________________________
 
 todo: TESTEN:
@@ -16,9 +17,7 @@ etc.
 auf die Fehlerausgaben achten --> passen die mit dem Spielzug überein?
 
 __________________________________________________________________________________
-+2:
-was ist, wenn der nächste Spieler eine weitere +2 drauflegen kann... todo: implementieren
-Detailanforderung 21+22
+
 __________________________________________________________________________________
 Hilfe nur 1x einlesen --> in Stringbuilder abspeichern und nur mehr Stringbuilder ausgeben lassen
 --> ressourcenschonender als jedes Mal BufferedReader aufzurufen
@@ -41,6 +40,7 @@ Ablagestapel von Linked List zu Stack geändert
 UNO rufen beim menschlichen Spieler integriert
 Hilfe erweitert
 Plus2 auf Plus2 funktioniert sowohl bei Bot als auch Mensch
+
 _______________
 
 wenn die Eingabe falsch erfolgt ohne Bindestrich, dann ist das Stringarray nur bei index[0] gefüllt,
@@ -53,7 +53,10 @@ ________________________________________________________________________________
 nächste spieler wird ebenfalls übersprungen und bekommt 2 karten
 --> ACHTUNG passiert bei jeder Sonderkarte!!!! --> ERLEDIGT: playedAlready
 __________________________________________________________________________________
-
++2:
+was ist, wenn der nächste Spieler eine weitere +2 drauflegen kann...
+Detailanforderung 21+22
+__________________________________________________________________________________
 RichtungsWechsel
 -----
 Detailanforderung 28

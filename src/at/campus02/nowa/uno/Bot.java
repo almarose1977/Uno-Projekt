@@ -15,13 +15,13 @@ public class Bot extends Spieler {
         return null;
     }
 
-    public UnoKarte getFirstPlus2(UnoKarte previousCard) {
+    /*public UnoKarte getFirstPlus2(UnoKarte previousCard) {
         for (UnoKarte u : getHandCardDeck()) {
             if (App.validPlus2(u, previousCard))
                 return u;
         }
         return null;
-    }
+    }*/
 
     @Override
     public String toString() {
