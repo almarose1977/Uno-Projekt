@@ -429,12 +429,10 @@ public class App {
                     System.out.println("[iNFO] Der nächste Spieler wird übersprungen.");
                     nextPlayer();
                     skip();
-                }
-                else if (stack.lastElement().getKARTENWERT() == Kartenwert.plus2) {
+                } else if (stack.lastElement().getKARTENWERT() == Kartenwert.plus2) {
                     nextPlayer();
                     plus2();
-                }
-                else if (stack.lastElement().getKARTENWERT() == Kartenwert.plus4) {
+                } else if (stack.lastElement().getKARTENWERT() == Kartenwert.plus4) {
                     chooseColor();
                     nextPlayer();   // zuerst einen Spieler weiterspringen
                     System.out.println("[iNFO] Der nächste Spieler " + playersList.get(indexCurrentPlayer).getName() + " hebt vier Karten.");
@@ -682,7 +680,17 @@ public class App {
 
     private boolean gameEnded() {
 
-        return false;
+        if (playersList.get(indexCurrentPlayer).getPoints() < 500)
+            return false;
+        else {
+            System.out.println("*********************************************************");
+            System.out.println("Das Spiel ist beendet!");
+            System.out.println("Der Gewinner ist: " + playersList.get(indexCurrentPlayer).getName() + "!!!!!!!");
+            System.out.println("GRATULATION");
+
+            System.out.println("*********************************************************");
+            return true;
+        }
     }
 
     private void printFinalScore() {
