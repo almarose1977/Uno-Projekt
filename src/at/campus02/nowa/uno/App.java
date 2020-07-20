@@ -439,7 +439,7 @@ public class App {
     }
 
     // hier werden die Sonderkarten implementiert
-    private void updateState() {
+    private void updateState() throws SQLException {
 
         if (playersList.get(indexCurrentPlayer).getHandCardDeck().size() == 0) {
             makeNewDeckWhenRoundEnded();
