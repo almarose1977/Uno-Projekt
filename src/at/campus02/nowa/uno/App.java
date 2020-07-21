@@ -442,28 +442,80 @@ public class App {
                     System.out.println("[iNFO] Der nächste Spieler wird übersprungen.");
                     nextPlayer();
                     skip();
+                } else if (stack.lastElement().getKARTENWERT() == Kartenwert.RW) {
+                    System.out.println("[iNFO] Spielrichtung wird geändert");
+                    changeDirection();
+                    nextPlayer();
                 } else if (stack.lastElement().getKARTENWERT() == Kartenwert.plus2) {
                     nextPlayer();
                     plus2();
+                } else if (stack.lastElement().getKARTENWERT() == Kartenwert.WILD) {
+                    chooseColor();
+                    nextPlayer();
                 } else if (stack.lastElement().getKARTENWERT() == Kartenwert.plus4) {
                     chooseColor();
-                    nextPlayer();   // zuerst einen Spieler weiterspringen
-                    System.out.println("[iNFO] Der nächste Spieler " + playersList.get(indexCurrentPlayer).getName() + " hebt vier Karten.");
-                    plus4();
-                }
-                // Farbwunsch
-                else if (stack.lastElement().getKARTENWERT() == Kartenwert.WILD) {
-                    chooseColor();
-                    nextPlayer();
-                }
+                    if (playersList.get(indexCurrentPlayer).isBot()) {
+                        nextPlayer();
+                        System.out.println("[iNFO] Der nächste Spieler " + playersList.get(indexCurrentPlayer).getName() + " hebt vier Karten.");
+                        plus4();
 
-                // Richtungswechsel
+                    } else {
+                        UnoKarte lastCard = stack.pop();
+                        UnoKarte secondToLast = stack.pop();
 
-                else if (stack.lastElement().getKARTENWERT() == Kartenwert.RW) {
-                    System.out.println("[iNFO] Spielrichtung wird geändert");
+                        Spieler currentMinus1Player = playersList.get(indexCurrentPlayer);
+                        nextPlayer();   // zuerst einen Spieler weiterspringen
 
-                    changeDirection();
-                    nextPlayer();
+                        System.out.println("[ACHTUNG] Nächster Spieler " + playersList.get(indexCurrentPlayer).getName() + ": willst du deinen Vorgänger herausfordern?");
+                        System.out.println("Gib ja oder nein ein:");
+                        String consoleInput = input.next();
+                        String userInput = consoleInput.toUpperCase();
+                        while (!userInput.equals("NEIN") && !userInput.equals("JA")) {
+                            System.out.println("Falsche Eingabe! Es ist nur \"ja\" oder \"nein\" erlaubt!");
+                            consoleInput = input.next();
+                            userInput = consoleInput.toUpperCase();
+                        }
+                        if (userInput.equals("NEIN")) {
+                            System.out.println("[iNFO] Spieler " + playersList.get(indexCurrentPlayer).getName() + " hebt vier Karten.");
+                            plus4();
+                            stack.push(secondToLast);
+                            stack.push(lastCard);
+                        } else if (userInput.equals("JA")) {
+                            UnoKarte u = currentMinus1Player.validPlus4Turn(secondToLast.getFARBE(), secondToLast.getKARTENWERT());
+                            if (u != null) {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                System.out.println("[BöSE] " + currentMinus1Player.getName() + ", du hast geschummelt und hättest eine Karte legen können!");
+                                System.out.println("[iNFO] Der Spieler " + currentMinus1Player.getName() + " hebt vier Karten.");
+                                stack.push(lastCard);
+                                stack.push(secondToLast);
+                                if (spielKarten.drawPile.size() <= 4) {  // falls der Nachziehstapel zu wenig Karten beinhaltet
+                                    makeNewDeckWhenPileIsEmpty();
+                                }
+                                for (int i = 0; i < 4; i++) {
+                                    currentMinus1Player.getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
+                                }
+                                System.out.println("[iNFO] Spieler " + playersList.get(indexCurrentPlayer).getName() + ": du bist an der Reihe.");
+                                printState();
+                                readUserInput();
+                            } else {
+                                System.out.println("[iNFO]" + currentMinus1Player.getName() + " hat nicht geschummelt!");
+                                System.out.println("[iNFO]" + playersList.get(indexCurrentPlayer).getName() + " muss 6 Karten aufnehmen!");
+                                if (spielKarten.drawPile.size() <= 6) {
+                                    makeNewDeckWhenPileIsEmpty();
+                                }
+                                for (int i = 0; i < 6; i++) {
+                                    playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+                                }
+                                stack.push(secondToLast);
+                                stack.push(lastCard);
+                                nextPlayer();
+                            }
+                        }
+                    }
                 }
                 // falls "normale" Karte gespielt wurde
                 else
@@ -473,8 +525,6 @@ public class App {
             else
                 nextPlayer();
         }
-        //System.out.println("[iNFO-Schluss UpdateState] Der nächste Spieler ist dran...");
-
     }
 
     private void plus4() {
@@ -484,11 +534,11 @@ public class App {
         for (int i = 0; i < 4; i++) {
             playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
         }
-        nextPlayer();   // noch einen Spieler weiter gehen
+        nextPlayer();
     }
 
     private void plus2() { //bei Plus2 Karte
-        //nextPlayer();     // rausgenommen, damit ich die methode auch bei der startkarte anwenden kann
+
         printState();
         Spieler currentPlayer = playersList.get(indexCurrentPlayer);
 

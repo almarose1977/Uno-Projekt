@@ -24,6 +24,15 @@ public class Spieler {
         return null;
     }
 
+    public UnoKarte validPlus4Turn(Farbe f, Kartenwert kw) {
+        for (UnoKarte handKarte : handCardDeck) {
+            if (handKarte.getFARBE() == f || handKarte.getKARTENWERT() == kw) {
+                return handKarte;
+            }
+        }
+        return null;
+    }
+
     public UnoKarte getFirstPlus2(UnoKarte previousCard) {
         for (UnoKarte u : getHandCardDeck()) {
             if (App.validPlus2(u, previousCard))
