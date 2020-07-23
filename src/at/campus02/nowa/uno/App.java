@@ -781,39 +781,45 @@ public class App {
 
             System.out.println("*********************************************************");
 
-            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyso+++osyhdhhhhhhhhh");
-            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyo:          -/shhhhhhhh");
-            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhy+..    .ooo.    .:shhhhhh");
-            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhy:    -/osysso+:.   .+hhhhh");
-            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyso/-.shhhhh:    /yddmddhhys+-    /hhhh");
-            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhys:    -yhhds-   -ydhhhhddmhyho-    shhh");
-            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyyhhhhhhhdhs+-    /hddo.   -hhhhhhhhhmmdh/    :hhh");
-            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhys+:-.-+shhhhdmys+.    +dds-   .shhhhhhhhhmmd/    -hhh");
-            System.out.println("hhhhhhhhhhhhhhhhhhhyso/:shs/-      -+shhdmhy/.   .hhy/   .-yhhhhhhhhdmh-    /hhh");
-            System.out.println("hhhhhhhhhhhhhhhhhhy/-   -hso:         -+sdmhh/    -hs+:.    oyhhhhhhhy:     yhhh");
-            System.out.println("hhhhhhhhyyhhhhhhhdso:    :hs+:    -.`   `-oyhy:    /so+/    -:/oooo/:     /shhhh");
-            System.out.println("hhhhys+:--yhhhhhhmhs+-    oys+-    :/:.    .-+/:    os+++/              /oyhhhhh");
-            System.out.println("hhhhs:   ./hhhhhhdmys/.   .yys/.   .+so+/           -yhssso++         /+shhhhhhh");
-            System.out.println("hhdhy+-   .+hhhhhhdmys:    -hyy/    -yyysso/          dddhyyyyyssssyhdddhhhhhhhh");
-            System.out.println("hhdmhy/-   -shhhhhhddys:    :dys:    :dddhhyyo+/      /hddddddmdmmmmddhhhhhhhhhh");
-            System.out.println("hhhdmys:.   -yhhhhhhmdhs:    .odho    -+hdmmdddhyo+    /shhhhdddddhhhhhhhhhhhhhh");
-            System.out.println("hhhhddyo:.   :hhhhhhdmdd+     .mhh+    -ohhddmmdddhysyyhhhhhhhhhhhhhhhhhhhhhhhhh");
-            System.out.println("hhhhhmhy+:    .+hhhhhhdmd+    .hmdh/    -yhhhhddmmdddddhhhhhhhhhhhhhhhhhhhhhhhhh");
-            System.out.println("hhhhhdmhy+:     +yhhhhhds-     hdmdh/:/++ohhhhhhhddhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-            System.out.println("hhhhhhdms++:     /+o+/:-     shhmddyyhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-            System.out.println("hhhhhhhddoo+/              /+yhhhdmdmmddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-            System.out.println("hhhhhhhhddysso//..      //+shhhhhhhddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-            System.out.println("hhhhhhhhhdmdddhhyyyyyhhdmdhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-            System.out.println("hhhhhhhhhhhdhhhhhhhhhhddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-            System.out.println("hhhhhhhhhhhhhhhdddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+
 
             return true;
         }
     }
 
     private void printFinalScore() {
+
+        System.out.println("Endpunktestand:");
+        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::");
         getPlayersPoints();
+
+        System.out.println("");
+        System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyso+++osyhdhhhhhhhhh");
+        System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyo:          -/shhhhhhhh");
+        System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhy+..    .ooo.    .:shhhhhh");
+        System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhy:    -/osysso+:.   .+hhhhh");
+        System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyso/-.shhhhh:    /yddmddhhys+-    /hhhh");
+        System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhys:    -yhhds-   -ydhhhhddmhyho-    shhh");
+        System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyyhhhhhhhdhs+-    /hddo.   -hhhhhhhhhmmdh/    :hhh");
+        System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhys+:-.-+shhhhdmys+.    +dds-   .shhhhhhhhhmmd/    -hhh");
+        System.out.println("hhhhhhhhhhhhhhhhhhhyso/:shs/-      -+shhdmhy/.   .hhy/   .-yhhhhhhhhdmh-    /hhh");
+        System.out.println("hhhhhhhhhhhhhhhhhhy/-   -hso:         -+sdmhh/    -hs+:.    oyhhhhhhhy:     yhhh");
+        System.out.println("hhhhhhhhyyhhhhhhhdso:    :hs+:    -.`   `-oyhy:    /so+/    -:/oooo/:     /shhhh");
+        System.out.println("hhhhys+:--yhhhhhhmhs+-    oys+-    :/:.    .-+/:    os+++/              /oyhhhhh");
+        System.out.println("hhhhs:   ./hhhhhhdmys/.   .yys/.   .+so+/           -yhssso++         /+shhhhhhh");
+        System.out.println("hhdhy+-   .+hhhhhhdmys:    -hyy/    -yyysso/          dddhyyyyyssssyhdddhhhhhhhh");
+        System.out.println("hhdmhy/-   -shhhhhhddys:    :dys:    :dddhhyyo+/      /hddddddmdmmmmddhhhhhhhhhh");
+        System.out.println("hhhdmys:.   -yhhhhhhmdhs:    .odho    -+hdmmdddhyo+    /shhhhdddddhhhhhhhhhhhhhh");
+        System.out.println("hhhhddyo:.   :hhhhhhdmdd+     .mhh+    -ohhddmmdddhysyyhhhhhhhhhhhhhhhhhhhhhhhhh");
+        System.out.println("hhhhhmhy+:    .+hhhhhhdmd+    .hmdh/    -yhhhhddmmdddddhhhhhhhhhhhhhhhhhhhhhhhhh");
+        System.out.println("hhhhhdmhy+:     +yhhhhhds-     hdmdh/:/++ohhhhhhhddhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        System.out.println("hhhhhhdms++:     /+o+/:-     shhmddyyhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        System.out.println("hhhhhhhddoo+/              /+yhhhdmdmmddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        System.out.println("hhhhhhhhddysso//..      //+shhhhhhhddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        System.out.println("hhhhhhhhhdmdddhhyyyyyhhdmdhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        System.out.println("hhhhhhhhhhhdhhhhhhhhhhddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        System.out.println("hhhhhhhhhhhhhhhdddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
 
     }
 }
