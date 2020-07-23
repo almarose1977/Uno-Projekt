@@ -14,21 +14,37 @@ Dann die Karten implementiert und angefangen _Kartendecks_ zu erstellen:
  zu wählen, wir haben uns für ArrayList für das gesamte Kartendeck entschieden,  
 der Nachziehstapel ist eine LinkedList(Queue) da es gut ist zum Einfügen und Löschen,
  Ablagestapel ist ein Stack weil wir nur
- auf die letzte Karten zugreifen müssen (außer beim herausfordern des +4 Legers P#5)
+ auf die letzte Karten zugreifen müssen (außer beim herausfordern des +4 Legers s.P#5)
  und Spielerhandkarten sind in einer LinkedList gespeichert. 
  
- 4 Spielerliste in einer ArrayList erstellt und ein Zufallsgenerator "Random" eingebaut.
+ 4 _Spielerliste_ in einer ArrayList erstellt und ein Zufallsgenerator "Random" eingebaut.
+ 
+ Wir sind mit 9 Klassen ausgekommen und unsere Hauptmethoden haben wir in der 
+ _App Klasse_ verpackt. 
  
  Im ReadUserInput() Methode haben wir den eigentlichen Spielablauf für den menschlichen Spieler 
- implementiert: Benutzereingabe wird eingelesen, Hilfe Stellung angeboten, Korrekte Eingabe
-  abgeglichen.  
+ implementiert: Benutzereingabe wird eingelesen, Hilfestellung angeboten, Korrekte Eingabe
+  abgeglichen. 
+ 
+ Im updateState() Methode haben wir die Sonderkarten und Sonderfunktionen implementiert.
+ 
+ Wenn die Karten neu gemischt werden wird die playedAlready() (s.P#6) Funktion wieder auf false gesetzt. 
+ 
+ makeNewDeck() die davor gewählten Farben bei WILD und +4 werden wieder auf Schwarz gesetzt. 
+ 
+ Die Runde endet wenn Spieler keine Handkarten mehr hat. 
+ 
+ Das Spiel endet wenn ein Spieler 500 Punkte gesammelt hat. 
+ 
+ Viel Spaß! 
+    
  
 
 # _**Probleme & Bugs:**_
 
 1. Die passenden Datenstrukturen für Listen zu wählen. 
 2. User input durch den Separator zu spliten. 
-3. Zusammenfügen der verschiedenen Versionen (aktuellisierte).  
+3. Zusammenfügen der verschiedenen Versionen (aktuallisierte) und nicht am Master zu arbeiten.  
 4. Arbeit aufteilen, Kolleginnen den Code und die Logik zu erklären. 
 Sich für einen Strukturaufbau zu enstcheiden. Änderungen vornehmen und zusammenfügen. 
 5. Bei +4 Herausforderung auf die vorletzte Karte im Stack zugreifen. 
@@ -48,10 +64,11 @@ haben wir in der Exception "catch" Block ausführbaren Code eingebaut.
 Der Austausch mit Kolleginnen anderer Gruppen durch Onlinelehre hat massiv gefehlt. 
 Wir würden uns gleich in Person treffen und Anforderungen priorisieren, das Projekt besser 
 strukturieren, weil jetzt wissen wir was wichtig ist und was nicht. 
+Die Methoden aus der App Klasse in andere Klassen auslagern. 
 
 
 # **Highlights** 
-* Daily Scrum
+* Daily Scrums
 * Tatsächliches Spielen: das erste mal z.B. r-3 eingeben und sehen, dass es funktioniert. 
 * Pair- & Groupprogramming Erkenntnisse.
 * Gemeinsames Brainstorming.
