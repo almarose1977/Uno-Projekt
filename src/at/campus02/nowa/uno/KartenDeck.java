@@ -76,18 +76,5 @@ public class KartenDeck {
 
         return handCards;
     }
-
-    // todo: für später
-        /*if (spielKartenDeck.isEmpty()){              // wenn der Stapel leer ist
-            throw new IllegalArgumentException("Kartenstapel ist leer, mischen Sie die Karten des Ablagestapels neu.");
-        }
-        if (count > spielKartenDeck.size()){         // wenn der Stapel nicht mehr genug Karten hat
-            throw new IllegalArgumentException("Es sind nicht genug Karten am Stapel. Mischen Sie die Karten des " +
-                    "Ablagestapels neu.");
-        }*/
-
-    public int lengthOfCardDeck() {
-        return CardDeck.size();
-    }
 }
 

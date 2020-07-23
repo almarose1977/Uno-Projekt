@@ -35,7 +35,6 @@ public class App {
             initializeGame();
             do {
                 initializeRound();
-                //printState();
 
                 while (!roundEnded()) {
                     printState();                   // Ausgabe der aktuellen Situation: welcher Spieler ist dran, welche Karte liegt oben
@@ -69,26 +68,26 @@ public class App {
 
         spielKarten.makeDeck();
         spielKarten.shuffleDeck();
+        initializePlayer();
+    }
 
-        // Spieler eingeben
+    // Spieler eingeben
+    private void initializePlayer() {
         System.out.println("Bitte gib die Anzahl der Bots ein (0-4): ");
         int botCount = input.nextInt();
         while (botCount < 0 || botCount > 4) {
             System.out.println("Anzahl muss zwischen 0 und 4 sein. Gib die Anzahl erneut ein:");
             botCount = input.nextInt();
         }
-
         for (int i = 0; i < botCount; i++) {
             System.out.println("Name Bot " + (i + 1) + ": ");
             String name = input.next();
             Bot b = new Bot(name);
             addSpieler(b);
         }
-
         int playerCount = 4 - botCount;
         for (int i = 0; i < playerCount; i++) {
             System.out.println("Name Spieler " + (i + 1) + ": ");
-
             String name = input.next();
             Spieler s = new Spieler(name);
             addSpieler(s);
@@ -96,11 +95,9 @@ public class App {
     }
 
     private void initializeRound() {    // 4x 7 Karten verteilen, 1 Karte aufdecken, Aktionskarte prüfen, Startspieler auslosen
-
         dealOutCards();
         chooseRandomPlayer();
         determineStartCard();
-
     }
 
     // Methode, um die Spieler der Spielerliste hinzuzufügen
@@ -121,7 +118,6 @@ public class App {
         int max = playersList.size() - 1;
         int min = 0;
         indexCurrentPlayer = random.nextInt((max - min) + 1) + min;
-        //System.out.println(playersList.toString());       // zur Ausgabe der Spielerliste
         Spieler s = playersList.get(indexCurrentPlayer);
         System.out.println("[iNFO] Startspieler ist: " + s.getName());
         System.out.println("Los geht's!");
@@ -144,7 +140,7 @@ public class App {
         else if (startCard.getKARTENWERT().equals(Kartenwert.plus4)) {
             System.out.println("[iNFO] Die Startkarte hat die Farbe " + colorGenerator() + ".");
             System.out.println("[iNFO] Der Start-Spieler " + playersList.get(indexCurrentPlayer).getName() + " hebt vier Karten. Der nächste Spieler ist dran.");
-            plus4();
+            drawCardsPlus4();
         } else if (startCard.getKARTENWERT().equals(Kartenwert.WILD))
             System.out.println("[iNFO] Die Startkarte hat die Farbe " + colorGenerator() + ".");
     }
@@ -180,7 +176,6 @@ public class App {
                 makeNewDeckWhenPileIsEmpty();
             }
             b.getHandCardDeck().add(spielKarten.drawPile.remove()); // bot bekommt 1 Karte vom Pile in sein Hand-deck
-            //spielKarten.stack.getLast().setPlayedAlready();                     // Funktion playedAlready wird aktiviert
             stack.lastElement().setPlayedAlready();                     // Funktion playedAlready wird aktiviert
 
             // Bot prüft ob er jetzt eine Karte spielen darf
@@ -193,13 +188,28 @@ public class App {
         }
         // Bot soll UNO sagen
         if (b.getHandCardDeck().size() == 1) {
-            System.out.println("Bot ruft UNOoooo");
+            System.out.println("Bot ruft UNOoooo!");
+        }
+
+    }
+
+    private void getPlayersPoints() {
+
+        for (Spieler s : playersList) {
+            try {
+                ArrayList<HashMap<String, String>> results = client.executeQuery(String.format(SELECT_BYPLAYERANDSESSION, s.getName(), sessionCounter));
+                for (HashMap<String, String> map : results) {
+                    System.out.println(map.get("Player") + " hat derzeit:  " + map.get("Score") + " Punkte");
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
 
     }
 
     // Methode, um die Karteneingabe des menschlichen Spielers zu verarbeiten
-    private void readUserInput() { //    makeUserTurn()
+    private void readUserInput() {
 
         Farbe f = null;
         Kartenwert kW = null;
@@ -210,11 +220,13 @@ public class App {
         while (!correctInput) {
             System.out.println("Wähle eine Karte aus deiner Hand oder hebe eine Karte vom Nachziehstapel...");
             System.out.println("Wenn du dir nicht sicher bist, gib \"Hilfe\" ein.");
+            System.out.println("Wenn du den aktuellen Punktestand wissen willst, gib \"Punkte\" ein");
             String consoleInput = input.next();
             String userInput = consoleInput.toUpperCase();
-            //BufferedReader helpReader = null;
 
-            if (userInput.equals("HILFE")) {
+            if (userInput.equals("PUNKTE")) {
+                getPlayersPoints();
+            } else if (userInput.equals("HILFE")) {
                 callHelp();
             } else if (userInput.equals("HEBEN")) {
                 drawCardCounter = drawCard(drawCardCounter);
@@ -222,7 +234,6 @@ public class App {
                 if (drawCardCounter >= 1) {
                     correctInput = true;
                     stack.lastElement().setPlayedAlready();
-                    //spielKarten.stack.getLast().setPlayedAlready();
                     drawCardCounter = 0;
                 } else
                     System.out.println("Du musst erst eine Karte vom Nachziehstapel nehmen, bevor du \"weiter\" sagen kannst.");
@@ -232,7 +243,6 @@ public class App {
 
                 try {                           // IndexOutOfBoundsException wird geworfen, wenn die Eingabe nicht richtig erfolgt
                     // z.B. nur R anstelle von R-9, dann ist das values[] nicht vollständig
-
 
                     switch (values[0]) {
                         case "R":
@@ -318,11 +328,9 @@ public class App {
                 } catch (IndexOutOfBoundsException e) {
                     //System.out.println("Du hast die Karte falsch eingegeben. Richtige Eingabe z.B. \"R-7\". ");
                 }
-
                 correctInput = isInputCorrectWithUNO(f, kW, correctInput, values);
             }
         }
-
     }
 
     private boolean isInputCorrectWithUNO(Farbe f, Kartenwert kW, boolean korrekteEingabe, String[] values) {
@@ -470,64 +478,10 @@ public class App {
                     if (playersList.get(indexCurrentPlayer).isBot()) {
                         nextPlayer();
                         System.out.println("[iNFO] Der nächste Spieler " + playersList.get(indexCurrentPlayer).getName() + " hebt vier Karten.");
-                        plus4();
+                        drawCardsPlus4();
 
                     } else {
-                        UnoKarte lastCard = stack.pop();
-                        UnoKarte secondToLast = stack.pop();
-
-                        Spieler currentMinus1Player = playersList.get(indexCurrentPlayer);
-                        nextPlayer();   // zuerst einen Spieler weiterspringen
-
-                        System.out.println("[ACHTUNG] Nächster Spieler " + playersList.get(indexCurrentPlayer).getName() + ": willst du deinen Vorgänger herausfordern?");
-                        System.out.println("Gib ja oder nein ein:");
-                        String consoleInput = input.next();
-                        String userInput = consoleInput.toUpperCase();
-                        while (!userInput.equals("NEIN") && !userInput.equals("JA")) {
-                            System.out.println("Falsche Eingabe! Es ist nur \"ja\" oder \"nein\" erlaubt!");
-                            consoleInput = input.next();
-                            userInput = consoleInput.toUpperCase();
-                        }
-                        if (userInput.equals("NEIN")) {
-                            System.out.println("[iNFO] Spieler " + playersList.get(indexCurrentPlayer).getName() + " hebt vier Karten.");
-                            plus4();
-                            stack.push(secondToLast);
-                            stack.push(lastCard);
-                        } else if (userInput.equals("JA")) {
-                            UnoKarte u = currentMinus1Player.validPlus4Turn(secondToLast.getFARBE(), secondToLast.getKARTENWERT());
-                            if (u != null) {
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                System.out.println("[BöSE] " + currentMinus1Player.getName() + ", du hast geschummelt und hättest eine Karte legen können!");
-                                System.out.println("[iNFO] Der Spieler " + currentMinus1Player.getName() + " hebt vier Karten.");
-                                stack.push(lastCard);
-                                stack.push(secondToLast);
-                                if (spielKarten.drawPile.size() <= 4) {  // falls der Nachziehstapel zu wenig Karten beinhaltet
-                                    makeNewDeckWhenPileIsEmpty();
-                                }
-                                for (int i = 0; i < 4; i++) {
-                                    currentMinus1Player.getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
-                                }
-                                System.out.println("[iNFO] Spieler " + playersList.get(indexCurrentPlayer).getName() + ": du bist an der Reihe.");
-                                printState();
-                                readUserInput();
-                            } else {
-                                System.out.println("[iNFO]" + currentMinus1Player.getName() + " hat nicht geschummelt!");
-                                System.out.println("[iNFO]" + playersList.get(indexCurrentPlayer).getName() + " muss 6 Karten aufnehmen!");
-                                if (spielKarten.drawPile.size() <= 6) {
-                                    makeNewDeckWhenPileIsEmpty();
-                                }
-                                for (int i = 0; i < 6; i++) {
-                                    playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
-                                }
-                                stack.push(secondToLast);
-                                stack.push(lastCard);
-                                nextPlayer();
-                            }
-                        }
+                        plus4();
                     }
                 }
                 // falls "normale" Karte gespielt wurde
@@ -541,6 +495,64 @@ public class App {
     }
 
     private void plus4() {
+        UnoKarte lastCard = stack.pop();
+        UnoKarte secondToLast = stack.pop();
+
+        Spieler currentMinus1Player = playersList.get(indexCurrentPlayer);
+        nextPlayer();   // zuerst einen Spieler weiterspringen
+
+        System.out.println("[ACHTUNG] Nächster Spieler " + playersList.get(indexCurrentPlayer).getName() + ": willst du deinen Vorgänger herausfordern?");
+        System.out.println("Gib ja oder nein ein:");
+        String consoleInput = input.next();
+        String userInput = consoleInput.toUpperCase();
+        while (!userInput.equals("NEIN") && !userInput.equals("JA")) {
+            System.out.println("Falsche Eingabe! Es ist nur \"ja\" oder \"nein\" erlaubt!");
+            consoleInput = input.next();
+            userInput = consoleInput.toUpperCase();
+        }
+        if (userInput.equals("NEIN")) {
+            System.out.println("[iNFO] Spieler " + playersList.get(indexCurrentPlayer).getName() + " hebt vier Karten.");
+            drawCardsPlus4();
+            stack.push(secondToLast);
+            stack.push(lastCard);
+        } else if (userInput.equals("JA")) {
+            UnoKarte u = currentMinus1Player.validPlus4Turn(secondToLast.getFARBE(), secondToLast.getKARTENWERT());
+            if (u != null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("[BöSE] " + currentMinus1Player.getName() + ", du hast geschummelt und hättest eine Karte legen können!");
+                System.out.println("[iNFO] Der Spieler " + currentMinus1Player.getName() + " hebt vier Karten.");
+                stack.push(lastCard);
+                stack.push(secondToLast);
+                if (spielKarten.drawPile.size() <= 4) {  // falls der Nachziehstapel zu wenig Karten beinhaltet
+                    makeNewDeckWhenPileIsEmpty();
+                }
+                for (int i = 0; i < 4; i++) {
+                    currentMinus1Player.getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
+                }
+                System.out.println("[iNFO] Spieler " + playersList.get(indexCurrentPlayer).getName() + ": du bist an der Reihe.");
+                printState();
+                readUserInput();
+            } else {
+                System.out.println("[iNFO]" + currentMinus1Player.getName() + " hat nicht geschummelt!");
+                System.out.println("[iNFO]" + playersList.get(indexCurrentPlayer).getName() + " muss 6 Karten aufnehmen!");
+                if (spielKarten.drawPile.size() <= 6) {
+                    makeNewDeckWhenPileIsEmpty();
+                }
+                for (int i = 0; i < 6; i++) {
+                    playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+                }
+                stack.push(secondToLast);
+                stack.push(lastCard);
+                nextPlayer();
+            }
+        }
+    }
+
+    private void drawCardsPlus4() {
         if (spielKarten.drawPile.size() <= 4) {  // falls der Nachziehstapel weniger/gleich 4 Karten beinhaltet
             makeNewDeckWhenPileIsEmpty();
         }
@@ -551,7 +563,6 @@ public class App {
     }
 
     private void plus2() { //bei Plus2 Karte
-
         printState();
         Spieler currentPlayer = playersList.get(indexCurrentPlayer);
 
@@ -559,8 +570,10 @@ public class App {
             playAnotherPlus2(currentPlayer);
         } else {
             System.out.println("Hast du eine Plus2 oder hebst du 2 Karten? Dann gib entweder die Karte ein oder \"heben\":");
+
             String consoleInput = input.next();
             String userInput2 = consoleInput.toUpperCase();
+
             if (userInput2.equals("HEBEN")) {
                 drawCardsPlus2();
             } else
@@ -590,7 +603,7 @@ public class App {
         for (int i = 0; i < (counterPlus2 * 2); i++) {
             playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
         }
-        System.out.println("[INFO-UpdateState] Spieler " + playersList.get(indexCurrentPlayer).getName() + " muss " + (counterPlus2 * 2) + " Karten heben.");
+        System.out.println("[iNFO] Spieler " + playersList.get(indexCurrentPlayer).getName() + " muss " + (counterPlus2 * 2) + " Karten heben.");
         //nextPlayer(); rausgenommen wegen startkarte
         counterPlus2 = 1;
     }
@@ -758,7 +771,7 @@ public class App {
 
     private boolean gameEnded() {
 
-        if (playersList.get(indexCurrentPlayer).getPoints() < 100)
+        if (playersList.get(indexCurrentPlayer).getPoints() < 500)
             return false;
         else {
             System.out.println("*********************************************************");
@@ -800,6 +813,7 @@ public class App {
     }
 
     private void printFinalScore() {
+        getPlayersPoints();
 
     }
 }
