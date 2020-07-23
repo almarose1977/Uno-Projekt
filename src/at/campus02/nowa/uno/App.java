@@ -64,7 +64,7 @@ public class App {
             sessionCounter = 0;
         }
         sessionCounter++;
-        System.out.println(sessionCounter);
+        //System.out.println(sessionCounter);
 
         spielKarten.makeDeck();
         spielKarten.shuffleDeck();
@@ -160,7 +160,7 @@ public class App {
         return selectedColor;
     }
 
-    public void addCardToHandcardDeck() { //Karten vom Nachziehstapel hinzufügen
+    private void addCardToHandcardDeck() { //Karten vom Nachziehstapel hinzufügen
         playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
 
     }
@@ -225,7 +225,7 @@ public class App {
         while (!correctInput) {
             System.out.println("Wähle eine Karte aus deiner Hand oder hebe eine Karte vom Nachziehstapel...");
             System.out.println("Wenn du dir nicht sicher bist, gib \"Hilfe\" ein.");
-            System.out.println("Wenn du den aktuellen Punktestand wissen willst, gib \"Punkte\" ein");
+            System.out.println("Wenn du den aktuellen Punktestand wissen willst, gib \"Punkte\" ein.");
             String consoleInput = input.next();
             String userInput = consoleInput.toUpperCase();
 
@@ -354,20 +354,19 @@ public class App {
 
                     try {
                         if ((playersList.get(indexCurrentPlayer).getHandCardDeck().size() == 1) && values[2].isEmpty()) {
-                            //System.out.println("hier landets wenn ich was anderes als u oder uno eingebe");
+
                         }
 
-                    } catch (ArrayIndexOutOfBoundsException e) {
+                    } catch (ArrayIndexOutOfBoundsException e) {    // wenn kein uno eingegeben wurde
                         System.out.println("Du hast vergessen, UNO zu rufen und erhälst eine Strafkarte!");
                         addCardToHandcardDeck();
-                    } catch (NullPointerException nullPointerException) {
+                    } catch (NullPointerException nullPointerException) { // wenn was anderes als uno eingegeben wurde
                         System.out.println("Du hast vergessen, UNO zu rufen und erhälst eine Strafkarte!");
                         addCardToHandcardDeck();
                     }
 
                 } else {
                     System.out.println("Diese Karte darf nicht gespielt werden. Du bekommst eine Strafkarte. ");
-                    // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
                     addCardToHandcardDeck();
                     korrekteEingabe = true;
 
@@ -795,7 +794,7 @@ public class App {
         System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::");
         getPlayersPoints();
 
-        System.out.println("");
+        System.out.println();
         System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
         System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyso+++osyhdhhhhhhhhh");
         System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhyo:          -/shhhhhhhh");

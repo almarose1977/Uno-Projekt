@@ -44,7 +44,7 @@ der Nachziehstapel ist eine LinkedList(Queue), da sie gut geeignet ist, um Eleme
 
 1. Die passenden Datenstrukturen für Listen zu wählen. 
 2. User input durch den Separator zu spliten. 
-3. GITHUB: Zusammenfügen der verschiedenen Versionen (aktualisierte) und nicht am Master zu arbeiten. 
+3. Die verschiedenen Fehlermöglichkeiten bei der Karten-Eingabe zu "lokalisieren" --> welche Fehlerausgabe soll bei welcher Eingabe passieren
 4. Arbeit aufteilen, Kolleginnen den Code und die Logik zu erklären. 
  Änderungen vornehmen und zusammenfügen. 
 5. Bei +4 Herausforderung auf die vorletzte Karte im Stack zugreifen. 
@@ -59,6 +59,7 @@ einmal gelegte Aktionskarte nicht mehrmals in Aktion tritt.
 11. Plus2 auf Plus2 legen eine Rekursion implementieren. 
 12. Beim "UNO" rufen das Array von 2 auf 3 Elemente erweitern müssen und damit es funktioniert, 
 haben wir in der Exception "catch" Block ausführbaren Code eingebaut. 
+13. GITHUB: Zusammenfügen der verschiedenen Versionen (aktualisierte) und nicht am Master zu arbeiten.
 
 # **Was wir jetzt anders machen würden**
 * Der Austausch mit Kolleginnen anderer Gruppen durch Onlinelehre hat massiv gefehlt. 
