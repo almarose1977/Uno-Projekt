@@ -160,6 +160,11 @@ public class App {
         return selectedColor;
     }
 
+    public void addCardToHandcardDeck() { //Karten vom Nachziehstapel hinzufügen
+        playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+
+    }
+
     // Methode: Bot macht seinen Zug
     private void makeBotTurn() {
         Bot b = (Bot) playersList.get(indexCurrentPlayer);
@@ -353,17 +358,17 @@ public class App {
                         }
 
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        System.out.println("A- Du hast vergessen, UNO zu rufen und erhälst eine Strafkarte!");
-                        playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+                        System.out.println("Du hast vergessen, UNO zu rufen und erhälst eine Strafkarte!");
+                        addCardToHandcardDeck();
                     } catch (NullPointerException nullPointerException) {
-                        System.out.println("N - Du hast vergessen, UNO zu rufen und erhälst eine Strafkarte!");
-                        playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+                        System.out.println("Du hast vergessen, UNO zu rufen und erhälst eine Strafkarte!");
+                        addCardToHandcardDeck();
                     }
 
                 } else {
                     System.out.println("Diese Karte darf nicht gespielt werden. Du bekommst eine Strafkarte. ");
                     // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
-                    playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+                    addCardToHandcardDeck();
                     korrekteEingabe = true;
 
                 }
@@ -418,7 +423,7 @@ public class App {
                 makeNewDeckWhenPileIsEmpty();
             }
             // die oberste Karte vom Nachziehstapel wird zu den Handkarten hinzugefügt
-            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+            addCardToHandcardDeck();
             // die aktuellen Karten werden angezeigt
             System.out.println("Deine " + playersList.get(indexCurrentPlayer).getHandCardDeck().size() + " aktuellen Karten: " + playersList.get(indexCurrentPlayer).getHandCardDeck());
 
@@ -543,7 +548,7 @@ public class App {
                     makeNewDeckWhenPileIsEmpty();
                 }
                 for (int i = 0; i < 6; i++) {
-                    playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+                    addCardToHandcardDeck();
                 }
                 stack.push(secondToLast);
                 stack.push(lastCard);
@@ -557,7 +562,7 @@ public class App {
             makeNewDeckWhenPileIsEmpty();
         }
         for (int i = 0; i < 4; i++) {
-            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());  //  4 Karten vom Nachziehstapel hinzufügen
+            addCardToHandcardDeck();
         }
         nextPlayer();
     }
@@ -601,7 +606,7 @@ public class App {
             makeNewDeckWhenPileIsEmpty();
         }
         for (int i = 0; i < (counterPlus2 * 2); i++) {
-            playersList.get(indexCurrentPlayer).getHandCardDeck().add(spielKarten.drawPile.remove());
+            addCardToHandcardDeck();
         }
         System.out.println("[iNFO] Spieler " + playersList.get(indexCurrentPlayer).getName() + " muss " + (counterPlus2 * 2) + " Karten heben.");
         //nextPlayer(); rausgenommen wegen startkarte
@@ -780,9 +785,6 @@ public class App {
             System.out.println("GRATULATION");
 
             System.out.println("*********************************************************");
-
-
-
             return true;
         }
     }
