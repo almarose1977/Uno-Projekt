@@ -182,7 +182,20 @@ public class App {
             b.getHandCardDeck().add(spielKarten.drawPile.remove()); // bot bekommt 1 Karte vom Pile in sein Hand-deck
             //spielKarten.stack.getLast().setPlayedAlready();                     // Funktion playedAlready wird aktiviert
             stack.lastElement().setPlayedAlready();                     // Funktion playedAlready wird aktiviert
+
+            // Bot prüft ob er jetzt eine Karte spielen darf
+            UnoKarte un = b.getFirstValidCard(stack.lastElement());
+            if (un != null) {
+                System.out.println(b.getName() + " legt " + un.toString());
+                b.getHandCardDeck().remove(un);
+                stack.push(un);
+            }
         }
+        // Bot soll UNO sagen
+        if (b.getHandCardDeck().size() == 1) {
+            System.out.println("Bot ruft UNOoooo");
+        }
+
     }
 
     // Methode, um die Karteneingabe des menschlichen Spielers zu verarbeiten
