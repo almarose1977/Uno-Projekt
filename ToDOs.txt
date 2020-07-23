@@ -1,11 +1,5 @@
-BOTs haben nur die Möglichkeit, eine Karte zu legen oder zu heben.
-Sie haben nicht die Möglichkeit, nach dem Heben einer Karte nochmals zu prüfen, ob
-sie dann legen könnten
 
-BOTS: UNO-Ruf implementieren
-__________________________________________________________________________________
-
-todo: TESTEN:
+TESTEN:
 alle möglichen abwegigen kombinationen
 b4
 B4
@@ -18,16 +12,21 @@ auf die Fehlerausgaben achten --> passen die mit dem Spielzug überein?
 __________________________________________________________________________________
 Hilfe nur 1x einlesen --> in Stringbuilder abspeichern und nur mehr Stringbuilder ausgeben lassen
 --> ressourcenschonender als jedes Mal BufferedReader aufzurufen
-TODO: Stringbuilder implementieren
+__________________________________________________________________________________
+__________________________________________________________________________________
+BEREITS ERLEDIGT/IMPLEMENTIERT
+
+BOTs haben nur die Möglichkeit, eine Karte zu legen oder zu heben.
+Sie haben nicht die Möglichkeit, nach dem Heben einer Karte nochmals zu prüfen, ob
+sie dann legen könnten
+
+BOTS: UNO-Ruf implementieren
 
 __________________________________________________________________________________
 Uno rufen: wenn nur mehr 1 Karte im Handkartenset eines Spielers vorhanden ist, muss er die Möglichkeit haben, "UNO
 zu rufen". --> UserInput erweitern
 Strafe für nicht UNO rufen folgt automatisch
-
 __________________________________________________________________________________
-__________________________________________________________________________________
-BEREITS ERLEDIGT/IMPLEMENTIERT
 
 18.07.
 Rundenende implementiert,

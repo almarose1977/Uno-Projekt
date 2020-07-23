@@ -22,7 +22,7 @@ der Nachziehstapel ist eine LinkedList(Queue), da sie gut geeignet ist, um Eleme
  Wir sind mit 9 Klassen ausgekommen und unsere Hauptmethoden haben wir in der 
  _App Klasse_ verpackt. 
  
- Im ReadUserInput() Methode haben wir den eigentlichen Spielablauf für den menschlichen Spieler 
+ In der ReadUserInput() Methode haben wir den eigentlichen Spielablauf für den menschlichen Spieler 
  implementiert: Benutzereingabe wird eingelesen, Hilfestellung angeboten, Korrekte Eingabe
   abgeglichen. 
  
@@ -44,9 +44,9 @@ der Nachziehstapel ist eine LinkedList(Queue), da sie gut geeignet ist, um Eleme
 
 1. Die passenden Datenstrukturen für Listen zu wählen. 
 2. User input durch den Separator zu spliten. 
-3. Zusammenfügen der verschiedenen Versionen (aktuallisierte) und nicht am Master zu arbeiten. GITHUB
+3. GITHUB: Zusammenfügen der verschiedenen Versionen (aktualisierte) und nicht am Master zu arbeiten. 
 4. Arbeit aufteilen, Kolleginnen den Code und die Logik zu erklären. 
-Sich für einen Strukturaufbau zu entscheiden. Änderungen vornehmen und zusammenfügen. 
+ Änderungen vornehmen und zusammenfügen. 
 5. Bei +4 Herausforderung auf die vorletzte Karte im Stack zugreifen. 
 6. Aktionskarte tritt mehrmals in Aktion --> setPlayedAlready() zu vermeiden, dass
 einmal gelegte Aktionskarte nicht mehrmals in Aktion tritt. 
@@ -55,7 +55,7 @@ einmal gelegte Aktionskarte nicht mehrmals in Aktion tritt.
  um die Richtung zu verändern.
 8. NextPlayer() mit +1 oder -1 implementiert. 
 9. Als bei den Bots der Nachziestapel leer war, hat das Spiel nicht mehr ausgeteilt. 
-10. Beim neuen Stapel machen mussten wir alle Karten(Aktionskarten) in ihrem Wert zurücksetzen. 
+10. Beim neuen Stapel machen mussten wir alle Karten(Aktionskarten) in ihrem Wert zurücksetzen. (Grün "wild") 
 11. Plus2 auf Plus2 legen eine Rekursion implementieren. 
 12. Beim "UNO" rufen das Array von 2 auf 3 Elemente erweitern müssen und damit es funktioniert, 
 haben wir in der Exception "catch" Block ausführbaren Code eingebaut. 
